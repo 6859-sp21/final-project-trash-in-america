@@ -1,0 +1,76 @@
+.trash-container {
+    display: flex;
+    justify-content: center;
+    width: 400px;
+    height: 400px;
+    position: relative;
+    background-color: #f5efe3;
+    border-radius: 8px;
+    margin: 40px 0;
+    padding: 1rem;
+    flex-wrap: wrap;
+}
+
+.trash-types {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.drag-drop-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.unsorted-region {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.trash-category {
+    width: 200px;
+    height: 300px;
+    margin: 0 20px;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    flex-wrap: wrap;
+}
+
+.compost {
+    background-color: #70af85;
+}
+
+.trash {
+    background-color: #52524e;
+}
+
+.recycle {
+    background-color: #87a8d0;
+}
+
+.trash-category span {
+    position: absolute;
+    bottom: 0;
+    color: #f9f9f9;
+    font-size: 2rem;
+    padding: 0 0 1rem 0;
+}
+
+.trash-item {
+    width: 80px;
+    height: 80px;
+    /*position: absolute;*/
+}
+
+.hide {
+    display: none;
+}
+
+.drag-over {
+    border: dashed 2px #ffeb99;
+}
