@@ -125,7 +125,7 @@ d3.csv("data_resources/country_level_data.csv", function(error, data) {
   document.getElementById('totalMsw').innerHTML=total_msw.toLocaleString()
   document.getElementById('modalButton').click()
   drawPolarAreaChart();
-  initInfoCards()
+  initInfoCards();
 });
 /************* INFO MODAL HERE **************/
 function handleNextClick() {
@@ -416,6 +416,9 @@ function drawInfoCards2(d) {
       .text("#" + (i+1) + " " + c[0] + ": " + c[1] + " tons")
   })
 }
+
+
+
 </script>
 </body>
 </html>
