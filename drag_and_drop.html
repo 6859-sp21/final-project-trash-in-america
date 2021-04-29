@@ -9,29 +9,90 @@
     rel="stylesheet"
     type="text/css"
   />
-  <style></style>
-  
+
   <body>
     <div class="drag-drop-container">
+      <p class="explanation">
+        Drag each trash item in the box below to its appropriate bin.
+        <br>
+        Once done, click on the "Check" button to see how you did in sorting
+        these trash items!
+      </p>
       <div class="unsorted-region">
         <div class="trash-container">
-          <img class="trash-item" id="kiwi-bird" draggable="true" src="/images/kiwi-bird.svg" />
-          <img class="trash-item" id="cat" draggable="true" src="/images/cat.svg" />
-          <img class="trash-item" id="horse" draggable="true" src="/images/horse.svg" />
-          <img class="trash-item" id="bread-slice" draggable="true" src="/images/bread-slice.svg" />
-          <img class="trash-item" id="hamburger" draggable="true" src="/images/hamburger.svg" />
-          <img class="trash-item" id="drumstick-bite" draggable="true" src="/images/drumstick-bite.svg" />
-          <img class="trash-item" id="car" draggable="true" src="/images/car.svg" />
-          <img class="trash-item" id="bus" draggable="true" src="/images/bus.svg" />
-          <img class="trash-item" id="ambulance" draggable="true" src="/images/ambulance.svg" />
+          <img
+            class="trash-item"
+            id="kiwi-bird"
+            draggable="true"
+            src="/images/kiwi-bird.svg"
+          />
+          <img
+            class="trash-item"
+            id="cat"
+            draggable="true"
+            src="/images/cat.svg"
+          />
+          <img
+            class="trash-item"
+            id="horse"
+            draggable="true"
+            src="/images/horse.svg"
+          />
+          <img
+            class="trash-item"
+            id="bread-slice"
+            draggable="true"
+            src="/images/bread-slice.svg"
+          />
+          <img
+            class="trash-item"
+            id="hamburger"
+            draggable="true"
+            src="/images/hamburger.svg"
+          />
+          <img
+            class="trash-item"
+            id="drumstick-bite"
+            draggable="true"
+            src="/images/drumstick-bite.svg"
+          />
+          <img
+            class="trash-item"
+            id="car"
+            draggable="true"
+            src="/images/car.svg"
+          />
+          <img
+            class="trash-item"
+            id="bus"
+            draggable="true"
+            src="/images/bus.svg"
+          />
+          <img
+            class="trash-item"
+            id="ambulance"
+            draggable="true"
+            src="/images/ambulance.svg"
+          />
         </div>
       </div>
       <div class="trash-types">
-        <div class="trash-category compost"><span>Compost</span></div>
-        <div class="trash-category trash"><span>Trash</span></div>
-        <div class="trash-category recycle"><span>Recycling</span></div>
+        <div class="trash-category compost" id="compostable">
+          <span>Compost</span>
+        </div>
+        <div class="trash-category trash" id="trashable"><span>Trash</span></div>
+        <div class="trash-category recycle" id="recyclable">
+          <span>Recycling</span>
+        </div>
       </div>
+      <div class="buttons">
+        <button class="check" id="trash-test-submit" type="button">
+          Check
+        </button>
+      </div>
+      <div class="answers" id="answers"></div>
     </div>
-  <script src="drag_and_drop.js"></script>
+
+    <script src="drag_and_drop.js"></script>
   </body>
 </html>
