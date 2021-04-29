@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="polar_area_chart.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -31,10 +30,34 @@ body {
   padding-left: 0px;
   margin-left: 0px;
 }
+
+#allCharts {
+  display: flex;
+  flex-direction: column;
+}
+
+#step1 {
+  display: flex;
+  flex-direction: row;
+}
+
+#step2 {
+  display: flex;
+  flex-direction: row;
+}
+
+#regionInfo {
+  display: none;
+}
+
+#countryInfo {
+  display: none;
+}
+
 </style>
 
 <body>
-    <h1>Pickup Yo Trash</h1>
+    <h1>Pickup Yo Trash World</h1>
   
     <div class="container" id="modalContainer">
       <!-- Trigger the modal with a button -->
@@ -63,24 +86,41 @@ body {
       </div>
       
     </div>
-    <div id="polarAreaChart"></div>
+    <br>
+    <div id="allCharts">
+      <div id="step1">
+        <div>1. Select a region in that world that you'd like to learn more about<div id="polarAreaChart"></div></div>
+        <div id="regionInfo">
+          <h3 id="regionName">Region Name</h3>
+          <h3 id="regionPopulation">Population</h3>
+          <h2 id="regionTotalMsw">Tons of MSW</h1>
+          <h1 id="regionPerPerson">Per person<h1>
+        </div>
+      </div>
 
-    <div id="regionBarGraph"></div>
+      <div id="rightCharts">
+        <div id="step2">
+          <div>2. Here are the top ten countries in that region with most trash<div id="countryInfoChart"></div></div>
+          <div id="countryInfo">
+            <h3 id="countryName">Country Name</h3>
+            <h3 id="countryPopulation">Population</h3>
+            <h2 id="countryTotalMsw">Tons of MSW</h1>
+            <h1 id="countryPerPerson">Per person<h1>
+          </div>
+        </div>
+
+        <div id="step3">3. Click to learn more about the breakdown of trash<div id="polarAreaChart"></div></div>
+      </div>
+      <div id="regionBarGraph"></div>
+    </div>
+   
 
     <p id = "datacite">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
 
    
 <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
 <script src="//d3js.org/queue.v1.min.js"></script>
-<!-- <script src="d3-legend.min.js"></script>
-<script src="d3.slider.min.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
-<script src="https://raw.githack.com/jamesleesaunders/d3-ez/master/dist/d3-ez.js"></script>
-
 <script src="https://d3js.org/d3.v3.min.js"></script>
-<!-- <script src="https://raw.githack.com/jamesleesaunders/d3-ez/master/dist/d3-ez.js"></script>
-<link rel="stylesheet" type="text/css" href="https://rawgit.com/jamesleesaunders/d3.ez/master/dist/d3-ez.css" /> -->
-<!-- <script src="../radialBarChart.js"></script> -->
 </head>
 
 <script>
@@ -99,7 +139,7 @@ landfill_by_region = {}
 global_trash_data = []
 landfill_by_region_list = []
 
-var width = 1200, height = 600;
+var width = 700, height = 500;
 barHeight = height / 2 - 40
 total_msw = 0
 modal_text_index = 0
@@ -114,6 +154,8 @@ d3.csv("data_resources/country_level_data.csv", function(error, data) {
     landfill_by_region[region_name]['total_msw'] += d.total_msw_total_msw_generated_tons_year ? parseInt(d.total_msw_total_msw_generated_tons_year) : 0;
     total_msw += d.total_msw_total_msw_generated_tons_year ? parseInt(d.total_msw_total_msw_generated_tons_year) : 0;
     landfill_by_region[region_name]['population'] += parseInt(d.population_population_number_of_people);
+    d.total_msw = parseInt(d.total_msw_total_msw_generated_tons_year)
+    d.population = parseInt(d.population_population_number_of_people)
     landfill_by_region[region_name]['countries'].push(d)
   })
   console.log(total_msw)
@@ -124,8 +166,10 @@ d3.csv("data_resources/country_level_data.csv", function(error, data) {
   })
   document.getElementById('totalMsw').innerHTML=total_msw.toLocaleString()
   document.getElementById('modalButton').click()
-  drawPolarAreaChart();
-  initInfoCards();
+  drawPolarAreaChart(landfill_by_region_list);
+  console.log(landfill_by_region_list)
+  console.log(landfill_by_region)
+  // initInfoCards();
 });
 /************* INFO MODAL HERE **************/
 function handleNextClick() {
@@ -145,27 +189,20 @@ function handleNextClick() {
 
 }
 /************* POLAR AREA CHART STARTS HERE *************/
-var formatNumber = d3.format("s");
-
-var color = d3.scale.ordinal()
-    .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]);
-
-var svg = d3.select('#polarAreaChart').append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
-
-
-function drawPolarAreaChart() {
-  data = landfill_by_region_list
+function drawPolarAreaChart(data) {
   data.sort(function(a,b) { return b.total_msw - a.total_msw; });
 
-  // Define the div for the tooltip
-  var tooltip = d3.select('#polarAreaChart').append("div")	
-    .attr("class", "tooltip")				
-    .style("opacity", 0);
 
+  var formatNumber = d3.format("s");
+
+  var color = d3.scale.ordinal()
+      .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]);
+
+  var svg = d3.select('#polarAreaChart').append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(" + (width/2-100)+ "," + height/2 + ")");
 
   var extent = d3.extent(data, function(d) { return d.total_msw+ 20000000});
   var barScale = d3.scale.linear()
@@ -206,22 +243,13 @@ function drawPolarAreaChart() {
     .attr("d", arc)
     .on('click', function (d, i) {
       continue_display = true;
-      drawInfoCards2(d)
+      // drawInfoCards2(d);
+      drawStep2(d);
     })
     .on("mouseover", function(d) {	
-      drawInfoCards(d)
+      // drawInfoCards(d)
+      changeRegionInfo(d);
     })	
-      // tooltip.transition()		
-      //   .duration(200)		
-      //   .style("opacity", 1.0);		
-      // tooltip.html("hi")	
-      //   .style("left", (d3.event.pageX) + "px")		
-      //   .style("top", (d3.event.pageY - 28) + "px");	
-      // })					
-    // .on("mouseout", function(d) {		
-    //   tooltip.transition()		
-    //     .style("opacity", 0)
-    // })
     ;
   segments.transition().ease("elastic").duration(1000).delay(function(d,i) {return (i)*100;})
     .attrTween("d", function(d,index) {
@@ -246,6 +274,7 @@ function drawPolarAreaChart() {
 
   svg.append("g")
     .attr("class", "x axis")
+    .style('font-size', '11px')
     .call(xAxis);
 
   // Labels
@@ -264,160 +293,203 @@ function drawPolarAreaChart() {
     .enter().append("text")
     .style("text-anchor", "middle")
     .style("font-weight","bold")
+    .style('font-size', '11px')
     .style("fill", function(d, i) {return "#3e3e3e";})
     .append("textPath")
     .attr("xlink:href", "#label-path")
     .attr("startOffset", function(d, i) {return i * 100 / numBars + 50 / numBars + '%';})
     .text(function(d) {return d.toUpperCase(); });
-
 };
 
 /********* POLAR AREA CHART ENDS HERE *****************/
 
-function initInfoCards() {
-  infoG = svg.append('g').attr('id', 'infoCards')
-  // first set
-  infoG.append('rect')
-    .attr('fill', 'white')
-    .attr('stroke', 'white')
-    .attr('id', 'rect1')
-  
-  infoG.append("text")
-    .attr('id', 'text1')
-    .attr('class', 'info')
 
-  infoG.append("text")
-    .attr('id', 'text2')
-    .attr('class', 'info')
+function changeRegionInfo(d) {
 
-  // second set
-  infoG.append('rect')
-    .attr('fill', 'white')
-    .attr('stroke', 'white')
-    .attr('id', 'rect2')
-  
-  infoG.append("text")
-    .attr('id', 'text3')
-    .attr('class', 'info')
-
-  infoG.append("text")
-    .attr('id', 'text4')
-    .attr('class', 'info')
-
-  // third set
-  infoG.append('rect')
-    .attr('fill', 'white')
-    .attr('stroke', 'white')
-    .attr('id', 'rect3')
-  
-  infoG.append("text")
-    .attr('id', 'text5')
-    .attr('class', 'info')
-
-  infoG.append("text")
-    .attr('id', 'text6')
-    .attr('class', 'info')
-
-}
-
-function clearAllInfoCards() {
-  continue_display = false;
-  infoG.select('#text6').remove()
-  infoG.selectAll('rect')    
-    .attr('fill', 'white')
-    .attr('stroke', 'white');
-  
-  infoG.selectAll('.info')
-    .attr('fill-opacity', 0)
-  
-  infoG.append("text")
-    .attr('id', 'text6')
-    .attr('class', 'info')
-
-
-}
-function drawInfoCards(d) {
-  clearAllInfoCards();
-  infoG = svg.select('#infoCards')
-  infoG.select('#rect1').transition().duration(500)
-    .attr('fill', color(d.region_name))
-    .attr('stroke', 'white')
-    .attr('width', 310)
-    .attr('height', 100)
-    .attr('x', -600)            
-    .attr('y', -300);
-
-  infoG.select('#text1').transition().duration(500).delay(500)
-    .attr("x", -575)
-    .attr("y", -255)
-    .attr("dy", "0em")
-    .attr("fill", "black")
-    .attr('fill-opacity', 1)
-    .text(d.region_name);
-
-  infoG.select('#text2').transition().duration(500).delay(500)
-    .attr("x", -575)
-    .attr("y", -255)
-    .attr("dy", "2em")
-    .attr("fill", "black")
-    .attr('fill-opacity', 1)
-    .text("Total Population: " + d.population.toLocaleString())
-
-  infoG.select('#rect2').transition().duration(500)
-    .attr('fill', color(d.region_name))
-    .attr('stroke', 'white')
-    .attr('width', 310)
-    .attr('height', 100)
-    .attr('x', -600)            
-    .attr('y', -150);
-
-  infoG.select('#text3').transition().duration(500).delay(500)
-    .attr("x", -575)
-    .attr("y", -105)
-    .attr("dy", "0em")
-    .attr("fill", "black")
-    .attr('fill-opacity', 1)
-    .text("Tons MSW per year: " + d.total_msw.toLocaleString() + " tons")
-
-  infoG.select('#text4').transition().duration(500).delay(500)
-    .attr("x", -575)
-    .attr("y", -105)
-    .attr("dy", "2em")
-    .attr("fill", "black")
-    .attr('fill-opacity', 1)
-    .text((d.total_msw/d.population).toFixed(3).toLocaleString() + " tons of trash per person!")
-}
-
-function drawInfoCards2(d) {
-  infoG.select('#rect3').transition().duration(500).delay(500)
-    .attr('fill', color(d.region_name))
-    .attr('stroke', 'white')
-    .attr('width', 320)
-    .attr('height', 100)
-    .attr('x', 300)            
-    .attr('y', -300);
-
-  infoG.select('#text5').transition().duration(500).delay(1000)
-    .attr("x", 325)
-    .attr("y", -255)
-    .attr("dy", "0em")
-    .attr("fill", "black")
-    .text("Countries with most MSW:")
-    .attr('fill-opacity', 1)
-  infoG.select('#text6').attr("color", "black")
-
-  slicedCountries = d.countries.slice(0, 10).map(c => [c.country_name, parseInt(c.total_msw_total_msw_generated_tons_year).toLocaleString()])
-  slicedCountries.forEach((c, i) => {
-    infoG.select('#text6').transition().duration(500).delay(1500*(i+1))
-      .attr("x", 325)
-      .attr("y", -255)
-      .attr("dy", "2em")
-      .attr('fill-opacity', continue_display === true ? 1: 0)
-      .text("#" + (i+1) + " " + c[0] + ": " + c[1] + " tons")
-  })
+  document.getElementById('regionName').innerHTML =d.region_name
+  document.getElementById('regionPopulation').innerHTML = d.population.toLocaleString() + "people in the region"
+  document.getElementById('regionTotalMsw').innerHTML = "with " + d.total_msw.toLocaleString() + " of MSW"
+  document.getElementById('regionPerPerson').innerHTML = "which means " + (d.total_msw/d.population).toFixed(2).toLocaleString() + " tons of MSW per person"
+  document.getElementById('regionInfo').style.display = 'block';
 }
 
 
+function drawStep2 (d) {
+  console.log(d.countries)
+  let country = d.countries[0]
+  console.log(country)
+  document.getElementById('countryName').innerHTML =country.country_name
+  document.getElementById('countryPopulation').innerHTML = country.population.toLocaleString() + " people in the country"
+  document.getElementById('countryTotalMsw').innerHTML = "with " + country.total_msw.toLocaleString() + " of MSW"
+  document.getElementById('countryPerPerson').innerHTML = "which means " + (country.total_msw/country.population).toFixed(2).toLocaleString() + " tons of MSW per person"
+  document.getElementById('countryInfo').style.display = 'block';
+}
+
+
+
+
+
+
+
+
+// function drawStep2 () {
+//   var svg = d3.select('#step2').append("svg")
+//       .attr("width", width)
+//       .attr("height", height)
+//     .append("g")
+//       .attr("transform", "translate(" + (width/4)+ "," + height/4 + ")");
+// }
+// function initInfoCards() {
+//     // infoG.select('#step1')
+//     // .attr("x", -575)
+//     // .attr("y", -255)
+//     // .attr("dy", "0em")
+//     // .attr("fill", "black")
+//     // .attr('fill-opacity', 1)
+//     // .attr('id', "step1")
+//     // .text("1. Select a region in that world that you'd like to learn more about");
+
+
+//   // first set
+//   infoG.append('rect')
+//     .attr('fill', 'white')
+//     .attr('stroke', 'white')
+//     .attr('id', 'rect1')
+  
+//   infoG.append("text")
+//     .attr('id', 'text1')
+//     .attr('class', 'info')
+
+//   infoG.append("text")
+//     .attr('id', 'text2')
+//     .attr('class', 'info')
+
+//   // second set
+//   infoG.append('rect')
+//     .attr('fill', 'white')
+//     .attr('stroke', 'white')
+//     .attr('id', 'rect2')
+  
+//   infoG.append("text")
+//     .attr('id', 'text3')
+//     .attr('class', 'info')
+
+//   infoG.append("text")
+//     .attr('id', 'text4')
+//     .attr('class', 'info')
+
+//   // third set
+//   infoG.append('rect')
+//     .attr('fill', 'white')
+//     .attr('stroke', 'white')
+//     .attr('id', 'rect3')
+  
+//   infoG.append("text")
+//     .attr('id', 'text5')
+//     .attr('class', 'info')
+
+//   infoG.append("text")
+//     .attr('id', 'text6')
+//     .attr('class', 'info')
+
+// }
+
+// function clearAllInfoCards() {
+//   continue_display = false;
+//   infoG.select('#text6').remove()
+//   infoG.selectAll('rect')    
+//     .attr('fill', 'white')
+//     .attr('stroke', 'white');
+  
+//   infoG.selectAll('.info')
+//     .attr('fill-opacity', 0)
+  
+//   infoG.append("text")
+//     .attr('id', 'text6')
+//     .attr('class', 'info')
+
+
+// }
+// function drawInfoCards(d) {
+//   clearAllInfoCards();
+//   infoG = svg.select('#infoCards')
+//   infoG.select('#rect1').transition().duration(500)
+//     .attr('fill', color(d.region_name))
+//     .attr('stroke', 'white')
+//     .attr('width', 310)
+//     .attr('height', 100)
+//     .attr('x', -600)            
+//     .attr('y', -300);
+
+//   infoG.select('#text1').transition().duration(500).delay(500)
+//     .attr("x", -575)
+//     .attr("y", -255)
+//     .attr("dy", "0em")
+//     .attr("fill", "black")
+//     .attr('fill-opacity', 1)
+//     .text(d.region_name);
+
+//   infoG.select('#text2').transition().duration(500).delay(500)
+//     .attr("x", -575)
+//     .attr("y", -255)
+//     .attr("dy", "2em")
+//     .attr("fill", "black")
+//     .attr('fill-opacity', 1)
+//     .text("Total Population: " + d.population.toLocaleString())
+
+//   infoG.select('#rect2').transition().duration(500)
+//     .attr('fill', color(d.region_name))
+//     .attr('stroke', 'white')
+//     .attr('width', 310)
+//     .attr('height', 100)
+//     .attr('x', -600)            
+//     .attr('y', -150);
+
+//   infoG.select('#text3').transition().duration(500).delay(500)
+//     .attr("x", -575)
+//     .attr("y", -105)
+//     .attr("dy", "0em")
+//     .attr("fill", "black")
+//     .attr('fill-opacity', 1)
+//     .text("Tons MSW per year: " + d.total_msw.toLocaleString() + " tons")
+
+//   infoG.select('#text4').transition().duration(500).delay(500)
+//     .attr("x", -575)
+//     .attr("y", -105)
+//     .attr("dy", "2em")
+//     .attr("fill", "black")
+//     .attr('fill-opacity', 1)
+//     .text((d.total_msw/d.population).toFixed(3).toLocaleString() + " tons of trash per person!")
+// }
+
+// function drawInfoCards2(d) {
+//   infoG.select('#rect3').transition().duration(500).delay(500)
+//     .attr('fill', color(d.region_name))
+//     .attr('stroke', 'white')
+//     .attr('width', 320)
+//     .attr('height', 100)
+//     .attr('x', 300)            
+//     .attr('y', -300);
+
+//   infoG.select('#text5').transition().duration(500).delay(1000)
+//     .attr("x", 325)
+//     .attr("y", -255)
+//     .attr("dy", "0em")
+//     .attr("fill", "black")
+//     .text("Countries with most MSW:")
+//     .attr('fill-opacity', 1)
+//   infoG.select('#text6').attr("color", "black")
+
+//   slicedCountries = d.countries.slice(0, 10).map(c => [c.country_name, parseInt(c.total_msw_total_msw_generated_tons_year).toLocaleString()])
+//   slicedCountries.forEach((c, i) => {
+//     infoG.select('#text6').transition().duration(500).delay(1500*(i+1))
+//       .attr("x", 325)
+//       .attr("y", -255)
+//       .attr("dy", "2em")
+//       .attr('fill-opacity', continue_display === true ? 1: 0)
+//       .text("#" + (i+1) + " " + c[0] + ": " + c[1] + " tons")
+//   })
+// }
 
 </script>
 </body>
