@@ -39,21 +39,68 @@ body {
 #step1 {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 #step2 {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 #regionInfo {
   display: none;
+  padding-left: 20px;
+  align-items: center;
 }
 
 #countryInfo {
   display: none;
+  padding-left: 20px;
 }
 
+
+
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: black;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 10px;
+  font: 12px sans-serif;
+  background: #222;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.9;
+  visibility: hidden;
+}
 </style>
 
 <body>
@@ -89,7 +136,7 @@ body {
     <br>
     <div id="allCharts">
       <div id="step1">
-        <div>1. Select a region in that world that you'd like to learn more about<div id="polarAreaChart"></div></div>
+        <div><h3>1. Select a region in that world that you'd like to learn more about</h3><div id="polarAreaChart"></div></div>
         <div id="regionInfo">
           <h3 id="regionName">Region Name</h3>
           <h3 id="regionPopulation">Population</h3>
@@ -98,28 +145,26 @@ body {
         </div>
       </div>
 
-      <div id="rightCharts">
-        <div id="step2">
-          <div>2. Here are the top ten countries in that region with most trash<div id="countryInfoChart"></div></div>
-          <div id="countryInfo">
-            <h3 id="countryName">Country Name</h3>
-            <h3 id="countryPopulation">Population</h3>
-            <h2 id="countryTotalMsw">Tons of MSW</h1>
-            <h1 id="countryPerPerson">Per person<h1>
-          </div>
+      <div id="step2">
+        <div><h3>2. Here are the top ten countries in that region with most trash</h3><br><div id="countryInfoChart"></div></div>
+        <div id="countryInfo">
+          <h3 id="countryName">Country Name</h3>
+          <h3 id="countryPopulation">Population</h3>
+          <h2 id="countryTotalMsw">Tons of MSW</h1>
+          <h1 id="countryPerPerson">Per person<h1>
         </div>
-
-        <div id="step3">3. Click to learn more about the breakdown of trash<div id="polarAreaChart"></div></div>
       </div>
+
+      <div id="step3"><h3>3. Click to learn more about the breakdown of trash</h3><div id="pieChart"></div></div>
       <div id="regionBarGraph"></div>
     </div>
    
-
+    <br><br>
     <p id = "datacite">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
 
    
 <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
-<script src="//d3js.org/queue.v1.min.js"></script>
+<!-- <script src="//d3js.org/queue.v1.min.js"></script> -->
 <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
 
@@ -188,15 +233,17 @@ function handleNextClick() {
   modal_text_index += 1
 
 }
+
 /************* POLAR AREA CHART STARTS HERE *************/
+var color = d3.scale.ordinal()
+  .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]);
+
+
 function drawPolarAreaChart(data) {
   data.sort(function(a,b) { return b.total_msw - a.total_msw; });
 
 
   var formatNumber = d3.format("s");
-
-  var color = d3.scale.ordinal()
-      .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]);
 
   var svg = d3.select('#polarAreaChart').append("svg")
       .attr("width", width)
@@ -244,13 +291,21 @@ function drawPolarAreaChart(data) {
     .on('click', function (d, i) {
       continue_display = true;
       // drawInfoCards2(d);
-      drawStep2(d);
+      drawCountryInfoChart(d);
+      // drawStep2(d);
     })
     .on("mouseover", function(d) {	
       // drawInfoCards(d)
       changeRegionInfo(d);
-    })	
-    ;
+      d3.select(this)
+        .style("fill", "lightgray");
+    })
+    .on("mouseout", function(d, i) {
+        d3.select(this)
+        .style("fill", function() {
+          return color(d.region_name);
+        });
+      });
   segments.transition().ease("elastic").duration(1000).delay(function(d,i) {return (i)*100;})
     .attrTween("d", function(d,index) {
       var i = d3.interpolate(d.outerRadius, barScale(+d.total_msw));
@@ -300,37 +355,130 @@ function drawPolarAreaChart(data) {
     .attr("startOffset", function(d, i) {return i * 100 / numBars + 50 / numBars + '%';})
     .text(function(d) {return d.toUpperCase(); });
 };
-
 /********* POLAR AREA CHART ENDS HERE *****************/
+
+
+
+/********* COUNTRY BAR CHART BEGINS HERE *****************/
+
+var margin = { top: 0, right: 0, bottom: 30, left: 80 };
+
+///////////////////////
+// Chart Size Setup
+var w = width - margin.left - margin.right;
+var h = height - margin.top - margin.bottom;
+
+var chart = d3.select('#countryInfoChart').append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+
+function drawCountryInfoChart(allData) {
+
+  
+  let data = allData.countries.slice(0,10);
+  console.log(data)
+
+
+  chart.selectAll("*").remove().transition().duration(1500)
+
+
+
+  // Scales
+  var x = d3.scale.ordinal()
+      .domain(data.map(function(d) { return d.country_name; }))
+      .rangeRoundBands([0, w], .2);
+
+  var y = d3.scale.linear()
+      .domain([0, d3.max(data, function(d) { return d.total_msw; }) * 1.1])
+      .range([h, 0]);
+
+  ///////////////////////
+  // Axis
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("top");
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+
+  chart.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (height) + ")")
+      .call(xAxis);
+
+  chart.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+  ///////////////////////
+  // Title
+  chart.append("text")
+    .text('Top 10 Countries With Most Waste In ' + allData.region_name)
+    .attr("text-anchor", "middle")
+    .attr("class", "graph-title")
+    .attr("y", 15)
+    .attr("x", w / 2.0);
+
+  //add labels
+  chart
+    .append("text")
+    .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
+    .text("Total MSW (tons)");
+
+  ///////////////////////
+  // Bars
+  var bar = chart.selectAll(".bar").data(data)
+  bar.enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.country_name); })
+      .attr("y", h)
+      .attr("width", x.rangeBand())
+      .attr("height", 0)
+      .style('fill', color(allData.region_name))
+      .on("mouseover", function(d, i) {
+        drawStep2(d);
+        d3.select(this)
+        .style("fill", "lightgray");
+      })
+      .on("mouseout", function(d, i) {
+        d3.select(this)
+        .style("fill", function() {
+          return color(allData.region_name);
+        });
+      });
+
+  bar.transition()
+      .duration(1500)
+      .ease("elastic")
+      .attr("y", function(d) { return y(d.total_msw); })
+      .attr("height", function(d) { return h - y(d.total_msw); })
+  ///////////////////////
+}
+
+/********* COUNTRY BAR CHART ENDS HERE *****************/
 
 
 function changeRegionInfo(d) {
 
   document.getElementById('regionName').innerHTML =d.region_name
-  document.getElementById('regionPopulation').innerHTML = d.population.toLocaleString() + "people in the region"
+  document.getElementById('regionPopulation').innerHTML = d.population.toLocaleString() + " people in the region"
   document.getElementById('regionTotalMsw').innerHTML = "with " + d.total_msw.toLocaleString() + " of MSW"
   document.getElementById('regionPerPerson').innerHTML = "which means " + (d.total_msw/d.population).toFixed(2).toLocaleString() + " tons of MSW per person"
   document.getElementById('regionInfo').style.display = 'block';
 }
 
 
-function drawStep2 (d) {
-  console.log(d.countries)
-  let country = d.countries[0]
-  console.log(country)
+function drawStep2 (country) {
   document.getElementById('countryName').innerHTML =country.country_name
   document.getElementById('countryPopulation').innerHTML = country.population.toLocaleString() + " people in the country"
   document.getElementById('countryTotalMsw').innerHTML = "with " + country.total_msw.toLocaleString() + " of MSW"
   document.getElementById('countryPerPerson').innerHTML = "which means " + (country.total_msw/country.population).toFixed(2).toLocaleString() + " tons of MSW per person"
   document.getElementById('countryInfo').style.display = 'block';
 }
-
-
-
-
-
-
-
 
 // function drawStep2 () {
 //   var svg = d3.select('#step2').append("svg")
