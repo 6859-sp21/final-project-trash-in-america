@@ -1,3 +1,25 @@
+h1 {
+    font-size: 45px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+/*try to get auto height*/
+#wrapper{
+    height:100vh;
+  }
+  
+#clust_instruct_container{
+    display: block;
+    padding-left: 10px;
+    border-left: 0px;
+    /*border-style: solid;*/
+    /*border-width: 5px;*/
+    /*border-color: #f5f5f5;*/
+    /*set up fixed positions*/
+    position:absolute;
+    width:245px;
+  }
 
 /*title for instructions*/
 #title_viz_instruct_text{

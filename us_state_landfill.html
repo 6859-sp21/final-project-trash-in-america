@@ -18,24 +18,26 @@ body {
 </style>
 
 <body>
-    <h1>Pickup Yo Trash America!</h1>
-
-    <div id='title_viz_instruct_text'>About:</div>
-    <div class='viz_instruct_text'> This tool is to help you visualize how much trash is being hauled to landfills. The unit of measure is in tons.  Search any state and choose your metric: trash bin, dumpster or garbage truck. </div>
-
-    <!-- input box for state search -->
-  <!-- input box for gene search -->
-    <div id='state_search_container' class='row'>
-        <input id='state_search_box' type="text" class="form-control" placeholder="e.g. California" aria-describedby="sizing-addon2">
-
-        <div id='gene_search_button' class="btn-group" data-toggle="buttons" >
-        <label id='gene_search_submit' class="btn btn-primary active " onclick="return_state_info();">
-            <input type="radio" name="options" id="" autocomplete="off" checked > Search
-        </label>
+    <div id='wrapper'>
+        <h1>Pickup Yo Trash America!</h1>
+        
+        <div id='clust_instruct_container' >
+            <!-- info box for datavis  -->
+            <div id='title_viz_instruct_text'>About:</div>
+            <div class='viz_instruct_text'> This tool is to help you visualize how much trash is being hauled to landfills. The unit of measure is in tons.  Search any state and choose your metric: trash bin, dumpster or garbage truck. The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.  
         </div>
-    </div>
-      
 
+        <!-- input box for state search -->
+        <div id='state_search_container' class='row'>
+            <input id='state_search_box' type="text" class="form-control" placeholder="e.g. California" aria-describedby="sizing-addon2">
+            <div id='gene_search_button' class="btn-group" data-toggle="buttons" >
+            <label id='gene_search_submit' class="btn btn-primary active " onclick="return_state_info();">
+                <input type="radio" name="options" id="" autocomplete="off" checked > Search
+            </label>
+            </div>
+        </div>
+        </div>  
+    </div>
 
     <p id = "datacite">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
 
@@ -44,9 +46,9 @@ body {
 <script src="//d3js.org/queue.v1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
 <script src="https://raw.githack.com/jamesleesaunders/d3-ez/master/dist/d3-ez.js"></script>
-
 <script src="https://d3js.org/d3.v3.min.js"></script>
-
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 
 state_id_to_name = {
@@ -116,38 +118,69 @@ barHeight = height / 2 - 40
 total_waste = 0
 continue_display = true
 
-    /************* PROCESS DATA ***********/
+/************* PROCESS DATA ***********/
 d3.csv("data_resources/state_landfill_mar2021.csv", function(error, data) {
   data.forEach(d => {
     let state_name = state_id_to_name[d.us_state]
     let landfill = d.landfill_name
-
     if (!(state_name in landfill_by_state)) {
-      landfill_by_state[state_name] = {total_waste: 0, state_id: d.state_id, landfills: new Array(0)};
+      landfill_by_state[state_name] = {total_waste: 0, landfills: new Array(0)};
     } 
-    landfill_by_state[state_name]['total_waste'] += d.annual_waste_acceptance ? parseInt(d.annual_waste_acceptance) : 0;
-    total_waste += d.annual_waste_acceptance ? parseInt(d.annual_waste_acceptance) : 0;
+    landfill_by_state[state_name]['total_waste'] += d.annual_waste_acceptance.replace(/,/g, "") ? parseInt(d.annual_waste_acceptance.replace(/,/g, "")) : 0;
+    landfill_by_state[state_name]['daily_waste'] =  parseInt(landfill_by_state[state_name]['total_waste'] / 365);
+    landfill_by_state[state_name]['hourly_waste']= parseInt(landfill_by_state[state_name]['total_waste'] / 8760);
     landfill_by_state[state_name]['landfills'].push(d);
+
+    d3.select('#state_search_box').on("keyup", function() {
+        gSearch();
+        });
 })
-    console.log(landfill_by_state);
-    console.log(total_waste)
-    
-    Object.entries(landfill_by_state).forEach(e => {
-    let landfills_sorted = e[1].landfills
-    landfills_sorted.sort(function(a,b) { return parseInt(b.annual_waste_acceptance) - parseInt(a.annual_waste_acceptance); })
-    landfill_by_state_list.push({state_name: e[0], total_waste: e[1].total_waste, landfills: landfills_sorted})
-  })
+/************* SEARCH BOX ***********/
+//jQuery-ui auto-complete
+    function gSearch() {
+        state_list = Object.keys(landfill_by_state);
+        
+        $('#state_search_box').autocomplete({
+        source: state_list,
+        minLength: 1,      // begin auto-complete after (x) characters
+        scroll: true
+        }).focus(function() {
+        $(this).autocomplete("search", "");
+        });
+    }
+    d3.select("#gene_search_button").on("click", function() {  //Keyup function to convert user input to a filter value
+        var UserSearchBoxSelection = document.getElementById('mySearchBox').value
+            var userSelection = data.filter(function(d) {return d.State == UserSearchBoxSelection;});
+            d3.selectAll("p").remove() // remove table upon new user selection
 
-  //left off trying to figure out how to portray correct waste amount, annual waste acceptance amount is not accessing landfill specific array
+    var p = d3.select('body').append('p');
+        p.selectAll('p')
+        .data(userSelection)
+        .enter()
+        .append('p')
+        .html(function(d) { return 'State: ' + d.State + '</br>' + 'YTD Housing Starts: '+ d['YTD Housing Starts']; })
 
-//   Object.entries(landfill_by_state).forEach(e => {
-//     let countries_sorted = e[1].countries
-//     countries_sorted.sort(function(a,b) { return parseInt(b.total_msw_total_msw_generated_tons_year) - parseInt(a.total_msw_total_msw_generated_tons_year); })
-//     landfill_by_state_list.push({region_name: e[0], total_msw: e[1].total_msw, population: e[1].population, region_id: e[1].region_id, countries: countries_sorted})
-//   })
-//   document.getElementById('totalMsw').innerHTML=total_msw.toLocaleString()
+      });
 
+    console.log(landfill_by_state)
+    //console.log(total_waste)
 });
+
+
+
+// // find gene in clustergram 
+// function find_gene_in_clust(){
+//   // get the searched gene 
+//   search_gene = $('#gene_search_box').val();
+
+//   if (all_genes.indexOf(search_gene) != -1){
+//     // zoom and highlight found gene 
+//     /////////////////////////////////
+//     zoom_and_highlight_found_gene(search_gene);
+    
+//   }
+
+// };
 </script>
 
 </body>
