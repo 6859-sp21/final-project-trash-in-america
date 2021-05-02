@@ -72,7 +72,9 @@ function drop(e) {
     // add it to the drop target
     e.target.appendChild(draggable);
   } else {
-    unsorted_region.appendChild(draggable);
+    //unsorted_region.appendChild(draggable);
+    const region = document.getElementById(id + "-container");
+    region.appendChild(draggable);
   }
 
   // display the draggable element
@@ -82,15 +84,34 @@ function drop(e) {
 }
 
 const answers = {
-  "bread-slice": "compostable",
-  "hamburger": "compostable",
-  "drumstick-bite": "compostable",
-  "car":"trashable",
-  "bus": "trashable", 
-  "ambulance":"trashable",
-  "kiwi-bird": "recyclable",
-  "cat": "recyclable",
-  "horse": "recyclable"
+  pizza: [
+    "compostable",
+    "Greasy empty pizza boxes: though cardboard boxes are normally recyclable, the grease/cheese from pizza could contaminate the cardboard - however, cardboard is also compostable!",
+  ],
+  noodles: [
+    "compostable",
+    "Chinese takeout box with chopsticks: many paper food containers are compostable, inclusing Chinese takeout boxes - but please make sure to remove any metal wires. Those wooden/bamboo disposable chopsticks belong in the compost too!",
+  ],
+  "tea-bag": [
+    "compostable",
+    "Used tea bag: tea bag and tea leaves are compostable, just make sure that there are no metal staples attached to the tea bag.",
+  ],
+  banana: ["compostable", "Banana peel: this is not a trick question, it's food/plant, therefore is compostable :)"],
+  sauce: [
+    "trashable",
+    "Empty condiment packet: these small packets are usually contaminated with food, and they are usually too small to be recycled either way.",
+  ],
+  "shopping-bag": [
+    "trashable",
+    "Plastic grocery bag: it's plastic, so it must be recyclable - WRONG! The thin plastic easily gets caught in recycling machines, resulting in serious damage to the machines. Please do not throw away recyclables in plastic bags either.",
+  ],
+  "drinking-straw": [
+    "trashable",
+    "Used, cleaned drinking straws: they're plastic, but they're too small and flexible to be recycled. Always remove your straw from your cup before throwing the cup into the recycle bin.",
+  ],
+  eggs: ["recyclable", "Empty plastic egg carton (without the eggs): it's a clean plastic container - therefore recyclable. If the egg carton were not plastic/paper, throw it into the trash."],
+  fruit: ["recyclable", "Empty, cleaned ice cream pints: though the inside of ice cream pints might look waxy, as long as they have been cleaned and dried, ice cream pints are recyclable."],
+  "paper-bag": ["recyclable", "Paper grocery bag: though some may say paper bags are compostable (and they are right), paper bags are preferred to be recycled rather than composted. When possible, pick paper bags over plastic bags at the grocery store for sustainability reasons (or even better, bring your own bag!)"],
 };
 
 document.getElementById("trash-test-submit").onclick = function checkSorting() {
@@ -99,7 +120,7 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
   for (let key in answers) {
     const trashItem = document.getElementById(key);
     const parent = trashItem.parentElement;
-    if (parent.id === answers[key]) {
+    if (parent.id === answers[key][0]) {
       score += 1;
     } else {
       wrongItemIds.push(key);
@@ -107,31 +128,77 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
   }
   const answersDiv = document.getElementById("answers");
   answersDiv.innerHTML = "";
-  let p1 = document.createElement('p');
-  p1.textContent = `You got ${score} out of ${Object.keys(answers).length} items correct`;
-  let p2 = document.createElement('p');
-  if (score === 9) {
+  let p1 = document.createElement("p");
+  p1.textContent = `You got ${score} out of ${
+    Object.keys(answers).length
+  } items correct`;
+  let p2 = document.createElement("p");
+  let p3 = document.createElement("p");
+  if (score === Object.keys(answers).length) {
     p2.textContent = "Wow, you sorted everything correctly!";
   } else {
     p2.textContent = "Let's learn how to sort the items you sorted incorrectly";
+    p3.textContent = "Mouse over on the trash item images below for more information"
   }
   answersDiv.appendChild(p1);
   answersDiv.appendChild(p2);
+  answersDiv.appendChild(p3);
   for (let i = 0; i < wrongItemIds.length; i++) {
-    let span = document.createElement('span');
-    let img = document.createElement('img');
+    let span = document.createElement("span");
+    let img = document.createElement("img");
     img.src = "images/" + wrongItemIds[i] + ".svg";
     img.classList.add("wrong-trash-item");
-    span.appendChild(img);
+    let div = document.createElement("div");
+    div.appendChild(img);
+    div.classList.add("tooltip");
+    let span2 = document.createElement("span");
+    span2.classList.add("tooltiptext2");
+    span2.innerText = answers[wrongItemIds[i]][1];
+    div.appendChild(span2);
+    span.appendChild(div);
     span.innerHTML += "is&nbsp;";
-    let font = document.createElement('font');
-    font.innerText = answers[wrongItemIds[i]];
-    font.classList.add(answers[wrongItemIds[i]]);
+    let font = document.createElement("font");
+    font.innerText = answers[wrongItemIds[i]][0];
+    font.classList.add(answers[wrongItemIds[i]][0]);
     span.appendChild(font);
     span.classList.add("wrongItem");
     answersDiv.appendChild(span);
   }
-  answersDiv.scrollIntoView({behavior: "smooth"});
+  answersDiv.scrollIntoView({ behavior: "smooth" });
+  const learnDiv = document.getElementById("trash-learn-more");
+  learnDiv.style.display = "block";
 };
 
 // look at this later https://www.sfweekly.com/news/which-bin-does-it-go-in/
+// <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+// <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+// https://www.recology.com/recology-san-francisco/your-three-carts/
+// https://ecology.wa.gov/recycleright#:~:text=Recycling%20helps%20reduce%20pollution%2C%20contribute,support%20local%20jobs%20and%20businesses.
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("trash-learn-more");
+
+// Get the <span> element that closes the modal
+var span = document.getElementById("close");
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+  const learnDiv = document.getElementById("trash-learn-more");
+  learnDiv.style.animation = "none";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}

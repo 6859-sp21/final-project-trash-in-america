@@ -1,134 +1,289 @@
 .trash-container {
-    display: flex;
-    justify-content: center;
-    width: 400px;
-    height: 250px;
-    position: relative;
-    background-color: #f5efe3;
-    border-radius: 8px;
-    margin: 20px 0;
-    padding: 1rem;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  width: 400px;
+  height: 250px;
+  position: relative;
+  background-color: #f5efe3;
+  border-radius: 8px;
+  margin: 20px 0;
+  padding: 1rem;
+  flex-wrap: wrap;
 }
 
 p {
-    text-align: center;
+  text-align: center;
+  margin: 0.5rem;
 }
 
 .explanation {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .trash-types {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .drag-drop-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .unsorted-region {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .trash-category {
-    width: 200px;
-    height: 300px;
-    margin: 0 20px 20px 20px;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    flex-wrap: wrap;
+  width: 200px;
+  height: 300px;
+  margin: 0 20px 20px 20px;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  flex-wrap: wrap;
 }
 
 .compost {
-    background-color: #70af85;
+  background-color: #70af85;
 }
 
 .trash {
-    background-color: #52524e;
+  background-color: #52524e;
 }
 
 .recycle {
-    background-color: #87a8d0;
+  background-color: #87a8d0;
 }
 
-
 .compostable {
-    color: #70af85;
+  color: #70af85;
 }
 
 .trashable {
-    color: #52524e;
+  color: #52524e;
 }
 
 .recyclable {
-    color: #87a8d0;
+  color: #87a8d0;
 }
 
 .trash-category span {
-    position: absolute;
-    bottom: 0;
-    color: #f9f9f9;
-    font-size: 2rem;
-    padding: 0 0 1rem 0;
+  position: absolute;
+  bottom: 0;
+  color: #f9f9f9;
+  font-size: 2rem;
+  padding: 0 0 1rem 0;
 }
 
 .trash-item {
-    width: 70px;
-    height: 70px;
-    /*position: absolute;*/
+  width: 70px;
+  height: 70px;
+  /*position: absolute;*/
 }
 
 .wrong-trash-item {
-    width: 50px;
-    height: 50px;
-    margin-right: 16px;
+  width: 50px;
+  height: 50px;
+  margin-right: 16px;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .drag-over {
-    border: dashed 2px #ffeb99;
+  border: dashed 2px #ffeb99;
 }
 
 .buttons {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .check {
-    width: 200px;
-    height: 75px;
-    font-size: 2rem;
-    font-family: inherit;
-    border-radius: 8px;
-    border: none;
-    background-color: #3b5360;
-    color: #f9f9f9;
-    margin-bottom: 40px;
+  width: 200px;
+  height: 75px;
+  font-size: 2rem;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #3b5360;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+}
+
+.learn {
+  display: none;
+  height: 75px;
+  font-size: 2rem;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #3b5360;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+  padding: 0 2rem;
+  animation: glowing 1300ms infinite;
 }
 
 .answers {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 24px;
 }
 
 .wrongItem {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #52524e;
+  color: #f9f9f9;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  font-size: 1rem;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  width: 200px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -100px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext2 {
+  visibility: hidden;
+  width: 350px;
+  background-color: #52524e;
+  color: #f9f9f9;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 1rem;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext2 {
+  visibility: visible;
+  width: 350px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -175px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.tooltip .tooltiptext2::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+@keyframes glowing {
+  0% {
+    background-color: #3b5360;
+    box-shadow: 0 0 3px #3b5360;
+  }
+  50% {
+    background-color: #3d84b8;
+    box-shadow: 0 0 10px #3d84b8;
+  }
+  100% {
+    background-color: #3b5360;
+    box-shadow: 0 0 3px #3b5360;
+  }
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  height: 50%;
+  border-radius: 1rem;
+  overflow-y: scroll;
+}
+
+.modal-content p {
+  font-size: 20px;
+  text-align: left;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.modal-img {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+}
+
+.sources {
+  font-size: 12px;
+  text-align: center;
 }

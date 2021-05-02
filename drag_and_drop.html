@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <meta charset="UTF-8" />
-  <title>Page Title</title>
+  <title>Trash Sorting Activity</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="./drag_and_drop.css" />
   <link
@@ -14,73 +14,129 @@
     <div class="drag-drop-container">
       <p class="explanation">
         Drag each trash item in the box below to its appropriate bin.
-        <br>
+        <br />
         Once done, click on the "Check" button to see how you did in sorting
         these trash items!
       </p>
       <div class="unsorted-region">
         <div class="trash-container">
-          <img
-            class="trash-item"
-            id="kiwi-bird"
-            draggable="true"
-            src="/images/kiwi-bird.svg"
-          />
-          <img
-            class="trash-item"
-            id="cat"
-            draggable="true"
-            src="/images/cat.svg"
-          />
-          <img
-            class="trash-item"
-            id="horse"
-            draggable="true"
-            src="/images/horse.svg"
-          />
-          <img
-            class="trash-item"
-            id="bread-slice"
-            draggable="true"
-            src="/images/bread-slice.svg"
-          />
-          <img
-            class="trash-item"
-            id="hamburger"
-            draggable="true"
-            src="/images/hamburger.svg"
-          />
-          <img
-            class="trash-item"
-            id="drumstick-bite"
-            draggable="true"
-            src="/images/drumstick-bite.svg"
-          />
-          <img
-            class="trash-item"
-            id="car"
-            draggable="true"
-            src="/images/car.svg"
-          />
-          <img
-            class="trash-item"
-            id="bus"
-            draggable="true"
-            src="/images/bus.svg"
-          />
-          <img
-            class="trash-item"
-            id="ambulance"
-            draggable="true"
-            src="/images/ambulance.svg"
-          />
+          <div class="tooltip" id="pizza-container">
+            <img
+              class="trash-item"
+              id="pizza"
+              draggable="true"
+              src="/images/pizza.svg"
+            />
+            <span class="tooltiptext">Greasy empty pizza boxes</span>
+            <span></span>
+          </div>
+          <div class="tooltip" id="sauce-container">
+            <img
+              class="trash-item"
+              id="sauce"
+              draggable="true"
+              src="/images/sauce.svg"
+            />
+            <span class="tooltiptext">Empty condiment packet</span>
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="shopping-bag-container">
+            <img
+              class="trash-item"
+              id="shopping-bag"
+              draggable="true"
+              src="/images/shopping-bag.svg"
+            />
+            <span class="tooltiptext">Plastic grocery bag</span>
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="drinking-straw-container">
+            <img
+              class="trash-item"
+              id="drinking-straw"
+              draggable="true"
+              src="/images/drinking-straw.svg"
+            />
+            <span class="tooltiptext">Used, cleaned drinking straws</span>
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="noodles-container">
+            <img
+              class="trash-item"
+              id="noodles"
+              draggable="true"
+              src="/images/noodles.svg"
+            />
+            <span class="tooltiptext">Chinese takeout box with chopsticks</span>
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="eggs-container">
+            <img
+              class="trash-item"
+              id="eggs"
+              draggable="true"
+              src="/images/eggs.svg"
+            />
+            <span class="tooltiptext"
+              >Empty plastic egg carton (without the eggs)</span
+            >
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="tea-bag-container">
+            <img
+              class="trash-item"
+              id="tea-bag"
+              draggable="true"
+              src="/images/tea-bag.svg"
+            />
+            <span class="tooltiptext">Used tea bag</span>
+            <span></span>
+          </div>
+
+          <div class="tooltip" id="fruit-container">
+            <img
+              class="trash-item"
+              id="fruit"
+              draggable="true"
+              src="/images/fruit.svg"
+            />
+            <span class="tooltiptext">Empty, cleaned ice cream pints</span>
+            <span></span>
+          </div>
+          <div class="tooltip" id="paper-bag-container">
+            <img
+              class="trash-item"
+              id="paper-bag"
+              draggable="true"
+              src="/images/paper-bag.svg"
+            />
+            <span class="tooltiptext">Paper grocery bag</span>
+            <span></span>
+          </div>
+          <div class="tooltip" id="banana-container">
+            <img
+              class="trash-item"
+              id="banana"
+              draggable="true"
+              src="/images/banana.svg"
+            />
+            <span class="tooltiptext">Banana peel</span>
+            <span></span>
+          </div>
         </div>
       </div>
       <div class="trash-types">
         <div class="trash-category compost" id="compostable">
           <span>Compost</span>
         </div>
-        <div class="trash-category trash" id="trashable"><span>Trash</span></div>
+        <div class="trash-category trash" id="trashable">
+          <span>Trash</span>
+        </div>
         <div class="trash-category recycle" id="recyclable">
           <span>Recycling</span>
         </div>
@@ -91,8 +147,80 @@
         </button>
       </div>
       <div class="answers" id="answers"></div>
+      <div class="buttons">
+        <button class="learn" id="trash-learn-more" type="button">
+          Learn More About Waste Sorting
+        </button>
+      </div>
     </div>
-
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span id="close">&times;</span>
+        <p>
+          Even though there have been great efforts to promote and encourage
+          recycling and composting in the past decade, there could be better
+          support on educating the public about <i>how</i> to recycle/compost. This is
+          not just about having a list of items above each bin of three-stream
+          waste bins. Even if something is considered recyclable, for example, a
+          specific item might not be if it was not properly cleaned out.
+        </p>
+        <br />
+        <p>
+          In general, if an item can be recycled or composted, it is considered
+          better to recycle the item rather than compost it since recycling an
+          item reduces the amount of new natural resources that need to be
+          extracted. However, even if an item is recyclable—such as a plastic
+          bottle, for example—it has to be empty, clean, and dry. If you throw
+          your boba cup with some tapioca balls and even a little bit of milk
+          tea into the recycling bin, not only is the cup no longer recyclable
+          <img align="right" class="modal-img" src="/images/recycle-bin.svg" />
+          but everything that the remaining liquid spilled onto would also no
+          longer be recyclable. If you take one thing away from this pop-up,
+          please remember to empty, clean, and dry anything you put into the
+          recycling bin. In addition, sending non-recyclable items into
+          recycling centers could end up in damaging their machines; for
+          example, plastic bags and greasy pizza boxes could shut down some
+          recycling machines for days. Though recycling is good, it’s only good
+          if you do it right.
+        </p>
+        <br />
+        <p>
+          Though recycling is good, there is a limit to how many times some
+          material can be recycled and reused (for example, paper can usually
+          only be recycled 5-7 times), and this is when composting comes in
+          handy. In California, ⅓ of all landfill waste was actually
+          compostable. Some people think that this is not a big issue, since<img
+            align="right"
+            class="modal-img"
+            src="/images/compost.svg"
+          />
+          wouldn’t it just decompose in the land anyways? Yes, it would
+          decompose—in a bad way. Not only does organic waste in the landfill
+          take up space for other trash that cannot be recycled or composted, it
+          also emits methane gas while decomposing, which is a big source of
+          greenhouse gas emission today. Throwing away organic waste into
+          compost bins rather than normal trash bins and properly degrading the
+          waste would eliminate these greenhouse gases emitted to the
+          environment.
+        </p>
+        <br />
+        <p>
+          <div class="sources">
+            Sources: https://www.calrecycle.ca.gov/climate/organics<br>
+            https://www.epa.gov/sustainable-management-food/reducing-impact-wasted-food-feeding-soil-and-composting<br>
+            https://www.dakotavalleyrecycling.org/recycling-news/328-when-is-composting-better-than-recycling<br>
+            https://ecology.wa.gov/recycleright
+          </div>
+          
+        </p>
+      </div>
+    </div>
+    <div class="sources flaticon">Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    <div class="sources">
+      Sources: https://www.sfweekly.com/news/which-bin-does-it-go-in/<br>
+      https://www.recology.com/recology-san-francisco/your-three-carts/<br>
+    </div>
     <script src="drag_and_drop.js"></script>
   </body>
 </html>
