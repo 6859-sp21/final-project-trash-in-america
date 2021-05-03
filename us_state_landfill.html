@@ -36,11 +36,10 @@ body {
     <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Global Waste</button>
     <div id='wrapper'>
         <h1>Pickup Yo Trash America!</h1>
-        
-        <div id='clust_instruct_container' >
+        <div id='side_bar' >
             <!-- info box for datavis  -->
             <div id='title_viz_instruct_text'>About:</div>
-            <div class='viz_instruct_text'> This tool is to help you visualize how much trash is being hauled to landfills. The unit of measure is in tons.  Search any state and choose your metric: trash bin, dumpster or garbage truck. The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.</div>
+            <div class='viz_instruct_text'> The United States is the 3rd largest producer of trash in the world! This tool is to help you visualize how many tons of trash are being hauled to landfills in each state. The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.</div>
   
         <!-- input box for state search -->
             <div id='state_search_container' class='row'>
@@ -50,8 +49,22 @@ body {
                     <input type="radio" name="options" id="" autocomplete="off" checked > Search
                 </label> -->
             </div>
-            <input id = "state_search_submit" type = "submit">     
+            <input id = "state_search_submit" type = "submit">  
+            <div id="trash_legend">
+                <div id="garbage_bin" class="row">
+                    <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
+                    <h3> Garbage Bin</h3>
+                    <p> 32 gallons = 1 ton </p>
+                </div>
+                <div id="garbage_bin" class="row">
+                    <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
+                    <h3>Dumpster</h3>
+                    <p> 32 gallons = 1 ton </p>
+                </div>
+            </div>   
         </div>
+        
+        <!-- TRASH DUMP ZONE -->
         <div id='trash_dump_container' display="block">
             <div id="svg_id"></div>
         </div>
@@ -207,7 +220,12 @@ d3.select("#state_search_submit").on("click", function() {  //Keyup function to 
     document.getElementById("trash_dump_container").appendChild(listItem);
     // console.log(i)
 }); 
+<<<<<<< Updated upstream
 // d3.select(listItem).selectAll("*").remove();
+=======
+d3.select(listItem).remove(); //very confused as to where to put this to EMPTy div after user searches a new state
+
+>>>>>>> Stashed changes
 
 
 </script>
