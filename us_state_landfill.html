@@ -53,13 +53,13 @@ body {
             <div id="trash_legend">
                 <div id="garbage_bin" class="row">
                     <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
-                    <h3> Garbage Bin</h3>
-                    <p> 32 gallons = 1 ton </p>
+                    <p> Garbage Bin</p>
+                    <p> 0.008 ton </p>
                 </div>
-                <div id="garbage_bin" class="row">
-                    <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
-                    <h3>Dumpster</h3>
-                    <p> 32 gallons = 1 ton </p>
+                <div id="dumpster" class="row">
+                    <img id= "legend_img" src= "images/dumpster.png" alt= "standard garbage bin">
+                    <p>Dumpster</p>
+                    <p> 0.6 ton  </p>
                 </div>
             </div>   
         </div>
@@ -205,7 +205,7 @@ function gSearch() {
 /************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
 d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
     var UserSearchBoxSelection = document.getElementById('state_search_box').value
-    var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['hourly_waste'] / 31.75);
+    var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['hourly_waste'] / 133);
     var img = document.createElement('img')
     img.setAttribute("src", "images/smelly_trash.png");
     img.setAttribute("style", "width:60px");
@@ -220,8 +220,6 @@ d3.select("#state_search_submit").on("click", function() {  //Keyup function to 
     document.getElementById("trash_dump_container").appendChild(listItem);
     // console.log(i)
 }); 
-// d3.select(listItem).selectAll("*").remove();
-
 
 </script>
 
