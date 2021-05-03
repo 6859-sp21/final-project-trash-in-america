@@ -45,20 +45,21 @@ body {
         <!-- input box for state search -->
             <div id='state_search_container' class='row'>
                 <input id='state_search_box' type="text" placeholder="e.g. California" aria-describedby="sizing-addon2">
-                <div id='gene_search_button' class="btn-group" data-toggle="buttons" >
-                <label id='state_search_submit' class="btn btn-primary active">
+                <!-- <div id='gene_search_button' class="btn-group" data-toggle="buttons" >  -->
+                <!-- <label id='state_search_submit' class="btn btn-primary active">
                     <input type="radio" name="options" id="" autocomplete="off" checked > Search
-                </label>
-                </div>
+                </label> -->
             </div>
-        </div>  
-        <div id='trash_dump_container' style="width: 738.889px; height: 768.889px; display: block;">
-            <!-- <div id= "filter">Trash Bag Dumping Zone</div> -->
+            <input id = "state_search_submit" type = "submit">     
+        </div>
+        <div id='trash_dump_container' display="block">
             <div id="svg_id"></div>
         </div>
+    </div>  
+        
     </div>
 
-    <p id = "datacite">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
+    <p id = "datacite" style= "font-size: 11px;" text-align="center">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
 
    
 <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
@@ -159,11 +160,12 @@ d3.csv("data_resources/state_landfill_mar2021.csv", function(error, data) {
     d3.select('#state_search_box').on("keyup", function() {
         gSearch();
         });
-    })
-})
+    });
+});
+
 
 /************* SEARCH BOX ***********/
-//jQuery-ui auto-complete
+// jQuery-ui auto-complete;
 function gSearch() {
     state_list = Object.keys(landfill_by_state);
     $('#state_search_box').autocomplete({
@@ -171,40 +173,30 @@ function gSearch() {
         minLength: 1,      // begin auto-complete after (x) characters
         scroll: true
     })
-    .focus(function() {
-        $(this).autocomplete("search", "");
-    });
+    window.search = function () {
+        var a = document.getElementById('input').value;
+    }
+    // .focus(function() {
+    //     $(this).autocomplete("search", "");
+    // });
 }
+
+/************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
 d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
     var UserSearchBoxSelection = document.getElementById('state_search_box').value
         var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['hourly_waste'] / 31.75);
-
-    // ADD IMAGES BASED ON STATE LANDFILLS NUM
-    var img = document.createElement('img');
+    var img = document.createElement('img')
     img.setAttribute("src", "images/smelly_trash.png");
-    img.setAttribute("style", "width:100px");
-    //document.getElementById("trash_dump_container").appendChild(img);
+    img.setAttribute("style", "width:60px");
+    
+    var listItem = document.createElement("div");
     for(i = 0; i < trash_can_num; i++){
-        document.getElementById("trash_dump_container").appendChild(img);
+        listItem.innerHTML += img.outerHTML;
     }
+    document.getElementById("trash_dump_container").appendChild(listItem);
     console.log(i)
-    //document.body.appendChild(fragment);
 }); 
-
-
-/************* SETTING UP CANVAS ***********/
-// var svg = d3.select("body")
-//     .append("svg")
-//     .attr("width", 200)
-//     .attr("height", 100)
-//     .style("border", "1px solid black");
-
-// svg.append("svg:image")
-//     .attr('x', -9)
-//     .attr('y', -12)
-//     .attr('width', 20)
-//     .attr('height', 24)
-//     .attr("xlink:href", "images/smelly_trash_bin.png")
+d3.select(listItem).selectAll("*").remove();
 
 
 </script>
