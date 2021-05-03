@@ -184,19 +184,22 @@ function gSearch() {
 /************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
 d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
     var UserSearchBoxSelection = document.getElementById('state_search_box').value
-        var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['hourly_waste'] / 31.75);
+    var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['hourly_waste'] / 31.75);
     var img = document.createElement('img')
     img.setAttribute("src", "images/smelly_trash.png");
     img.setAttribute("style", "width:60px");
-    
+
+    var node= document.getElementById("trash_dump_container"); // delete all child trash cans of this parent div
+    node.querySelectorAll('*').forEach(n => n.remove());
+
     var listItem = document.createElement("div");
     for(i = 0; i < trash_can_num; i++){
         listItem.innerHTML += img.outerHTML;
     }
     document.getElementById("trash_dump_container").appendChild(listItem);
-    console.log(i)
+    // console.log(i)
 }); 
-d3.select(listItem).selectAll("*").remove();
+// d3.select(listItem).selectAll("*").remove();
 
 
 </script>
