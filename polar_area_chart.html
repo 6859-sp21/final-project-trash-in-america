@@ -12,6 +12,34 @@ body {
   padding: 20px;
 }
 
+#nextPage {
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  width: 180px;
+  height: 40px;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #794d93;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+}
+
+#backPage {
+  position: absolute;
+  right: 190px;
+  font-size: 14px;
+  width: 180px;
+  height: 40px;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #794d93;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+}
+
 .legendLinear text {
     font-size: 12px;
 }
@@ -104,6 +132,8 @@ text {
 </style>
 
 <body>
+    <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Waste Sorting</button>
+    <button id="nextPage" onclick="handleNextPageClick()">Explore USA Waste &#8594;</button>
     <h1>Pickup Yo Trash World</h1>
   
     <div class="container" id="modalContainer">
@@ -159,9 +189,6 @@ text {
       <div id="regionBarGraph"></div>
     </div>
    
-    <br><br>
-    <p id = "datacite">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p>
-
    
 <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
 <!-- <script src="//d3js.org/queue.v1.min.js"></script> -->
@@ -169,6 +196,18 @@ text {
 </head>
 
 <script>
+function handleNextPageClick() {
+  url = window.location.href
+  newurl = url.split('/').slice(0,-1).join('/')+'/us_state_landfill.html'
+  window.location.href = newurl
+}
+
+function handleBackPageClick() {
+  url = window.location.href
+  newurl = url.split('/').slice(0,-1).join('/')+'/drag_and_drop.html'
+  window.location.href = newurl
+}
+
 /************* genetic data here *************/
 region_id_to_to_name = {
   LCN: "Latin America & Caribbean",
@@ -179,6 +218,7 @@ region_id_to_to_name = {
   SSF: "Sub-Saharan Africa",
   NAC: "North America"
 }
+
 /************* general GLOBAL variables here *************/
 landfill_by_region = {}
 global_trash_data = []
@@ -189,6 +229,7 @@ barHeight = height / 2 - 40
 total_msw = 0
 modal_text_index = 0
 continue_display = true
+
 /************* PROCESS DATA ***********/
 d3.csv("data_resources/country_level_data.csv", function(error, data) {
   data.forEach(d => {
@@ -216,6 +257,7 @@ d3.csv("data_resources/country_level_data.csv", function(error, data) {
   console.log(landfill_by_region)
   // initInfoCards();
 });
+
 /************* INFO MODAL HERE **************/
 function handleNextClick() {
   if (modal_text_index === 0) {

@@ -15,9 +15,25 @@ body {
   font-size: 16px;
   padding: 20px;
 }
+
+#backPage {
+  position: absolute;
+  right: 0px;
+  font-size: 14px;
+  width: 180px;
+  height: 40px;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #794d93;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+}
+
 </style>
 
 <body>
+    <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Global Waste</button>
     <div id='wrapper'>
         <h1>Pickup Yo Trash America!</h1>
         
@@ -109,6 +125,13 @@ state_id_to_name = {
     WI: "Wisconsin",
     WY: "Wyoming"
 }
+
+function handleBackPageClick() { // handling the back button to the global page
+  url = window.location.href
+  newurl = url.split('/').slice(0,-1).join('/')+'/polar_area_chart.html'
+  window.location.href = newurl
+}
+
 /************* general GLOBAL variables here *************/
 landfill_by_state = {} //total landfills in each state (Arkansa: 4)
 landfill_by_state_list = []

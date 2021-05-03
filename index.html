@@ -35,9 +35,7 @@
         </div>
         <div class="modal-footer">
             <!-- <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Close</button> -->
-            <a href="./drag_and_drop.html">
-                <button type="button" class="btn btn-info" id="modalButtonNext" data-dismiss="modal" onclick="handleNextClick()">Let's go!</button>
-            </a>
+            <button type="button" class="btn btn-info" id="modalButtonNext" data-dismiss="modal" onclick="handleNextPageClick()">Let's go!</button>
         </div>
         </div>
         
@@ -48,9 +46,10 @@
 <script>
   document.getElementById('modalButton').click()
   
-  function handleNextClick() {
-    window.location.href = '/drag_and_drop.html'; //relative to domain
-
+  function handleNextPageClick() {
+    url = window.location.href
+    newurl = url.split('/').slice(0,-1).join('/')+'/drag_and_drop.html'
+    window.location.href = newurl
   }
 
 </script>

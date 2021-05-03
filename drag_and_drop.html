@@ -9,8 +9,16 @@
     rel="stylesheet"
     type="text/css"
   />
+  <script>
+    function handleNextPageClick() {
+      url = window.location.href
+      newurl = url.split('/').slice(0,-1).join('/')+'/polar_area_chart.html'
+      window.location.href = newurl
+    }
+  </script>
 
   <body>
+    <button id="nextPage" onclick="handleNextPageClick()">Explore Global Waste &#8594;</button>
     <div class="drag-drop-container">
       <p class="explanation">
         Drag each trash item in the box below to its appropriate bin.
