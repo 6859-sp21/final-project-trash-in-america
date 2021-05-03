@@ -103,7 +103,7 @@ body {
 }
 
 text {
-  font: 12px sans-serif;
+  font: 14px sans-serif;
 }
 
 .axis path,
@@ -134,7 +134,7 @@ text {
 <body>
     <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Waste Sorting</button>
     <button id="nextPage" onclick="handleNextPageClick()">Explore USA Waste &#8594;</button>
-    <h1>Pickup Yo Trash World</h1>
+    <h1>Pickup Yo Trash World (2018)</h1>
   
     <div class="container" id="modalContainer">
       <!-- Trigger the modal with a button -->
@@ -148,7 +148,7 @@ text {
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Hello there!</h4>
+              <h4 class="modal-title">Globally...</h4>
             </div>
             <div class="modal-body">
               <p id="modalBodyText">Did you know that in 2018, the world measured to have generated <span id="totalMsw"></span> tons of trash?</p>
@@ -166,7 +166,7 @@ text {
     <br>
     <div id="allCharts">
       <div id="step1">
-        <div><h3>1. Select a region in that world that you'd like to learn more about</h3><div id="polarAreaChart"></div></div>
+        <div><h4>1. Select a region that you'd like to learn more about</h4><div id="polarAreaChart"></div></div>
         <div id="regionInfo">
           <h3 id="regionName">Region Name</h3>
           <h3 id="regionPopulation">Population</h3>
@@ -176,7 +176,7 @@ text {
       </div>
 
       <div id="step2">
-        <div><h3>2. Here are the top ten countries in that region with most trash</h3><br><div id="countryInfoChart"></div></div>
+        <div><h4>2. Here are the top ten countries in that region with most trash.<br>Click a country to learn more</h4><br><div id="countryInfoChart"></div></div>
         <div id="countryInfo">
           <h3 id="countryName">Country Name</h3>
           <h3 id="countryPopulation">Population</h3>
@@ -185,7 +185,7 @@ text {
         </div>
       </div>
 
-      <div id="step3"><h3>3. Click to learn more about the breakdown of trash</h3><div id="pieChart"></div></div>
+      <div id="step3"><h4>3. Click to learn more about the breakdown of trash</h4><div id="pieChart"></div></div>
       <div id="regionBarGraph"></div>
     </div>
    
@@ -224,7 +224,7 @@ landfill_by_region = {}
 global_trash_data = []
 landfill_by_region_list = []
 
-var width = 700, height = 500;
+var width = 625, height = 400;
 barHeight = height / 2 - 40
 total_msw = 0
 modal_text_index = 0
@@ -262,10 +262,10 @@ d3.csv("data_resources/country_level_data.csv", function(error, data) {
 function handleNextClick() {
   if (modal_text_index === 0) {
     document.getElementById('modalBodyText').innerHTML = 
-    "If an average bulldozer can push 10,000 pounds of trash, then it would take <span id='bulldozerPush'></span> bulldozers to push all that trash out.<br><br>Now that's <b>a lot</b>. Think about how many buildings or infrastructure can be build with that!"
+    "If an average bulldozer can push 10,000 pounds of trash, then it would take <span id='bulldozerPush'></span> bulldozers to push all that trash out.<br><br>Now that's <b>a lot</b>. Think about how many buildings or infrastructure can be built with that!"
     document.getElementById('bulldozerPush').innerHTML = Math.ceil((total_msw * 2000 / 10000)).toLocaleString()
   } else if (modal_text_index === 1) {
-    document.getElementById('modalBodyText').innerHTML = "Explore our diagram to learn more about the global MSW waste. Feel free to click on a sector to explore more about it as well."
+    document.getElementById('modalBodyText').innerHTML = "Explore our diagram to learn more about the global waste. Feel free to click on a sector to explore more about it as well."
 
     document.getElementById('modalButtonNext').innerHTML = "Wow, I want to learn more"
 
@@ -390,7 +390,7 @@ function drawPolarAreaChart(data) {
     .enter().append("text")
     .style("text-anchor", "middle")
     .style("font-weight","bold")
-    .style('font-size', '11px')
+    .style('font-size', '9px')
     .style("fill", function(d, i) {return "#3e3e3e";})
     .append("textPath")
     .attr("xlink:href", "#label-path")
@@ -469,7 +469,7 @@ function drawCountryInfoChart(allData) {
   chart
     .append("text")
     .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
-    .text("Total MSW (tons)");
+    .text("Total Waste (tons)");
 
   ///////////////////////
   // Bars
@@ -508,8 +508,8 @@ function changeRegionInfo(d) {
 
   document.getElementById('regionName').innerHTML =d.region_name
   document.getElementById('regionPopulation').innerHTML = d.population.toLocaleString() + " people in the region"
-  document.getElementById('regionTotalMsw').innerHTML = "with " + d.total_msw.toLocaleString() + " of MSW"
-  document.getElementById('regionPerPerson').innerHTML = "which means " + (d.total_msw/d.population).toFixed(2).toLocaleString() + " tons of MSW per person"
+  document.getElementById('regionTotalMsw').innerHTML = "with " + d.total_msw.toLocaleString() + " tons of waste"
+  document.getElementById('regionPerPerson').innerHTML = "which means " + (d.total_msw/d.population).toFixed(2).toLocaleString() + " tons of waste per person"
   document.getElementById('regionInfo').style.display = 'block';
 }
 
@@ -517,8 +517,8 @@ function changeRegionInfo(d) {
 function drawStep2 (country) {
   document.getElementById('countryName').innerHTML =country.country_name
   document.getElementById('countryPopulation').innerHTML = country.population.toLocaleString() + " people in the country"
-  document.getElementById('countryTotalMsw').innerHTML = "with " + country.total_msw.toLocaleString() + " of MSW"
-  document.getElementById('countryPerPerson').innerHTML = "which means " + (country.total_msw/country.population).toFixed(2).toLocaleString() + " tons of MSW per person"
+  document.getElementById('countryTotalMsw').innerHTML = "with " + country.total_msw.toLocaleString() + " tons of waste"
+  document.getElementById('countryPerPerson').innerHTML = "which means " + (country.total_msw/country.population).toFixed(2).toLocaleString() + " tons of waste per person"
   document.getElementById('countryInfo').style.display = 'block';
 }
 
