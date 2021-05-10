@@ -4,12 +4,15 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.js"></script>
 
 <style>
 body {
   font-family: "Open Sans", sans-serif;
   font-size: 16px;
   padding: 20px;
+  scroll-behavior: smooth;
+
 }
 
 #nextPage {
@@ -85,6 +88,10 @@ body {
 #countryInfo {
   display: none;
   padding-left: 20px;
+}
+
+#selections {
+  display: none;
 }
 
 
@@ -178,7 +185,7 @@ text {
       <div id="step2">
         <div><h4>2. Here are the top ten countries in that region with most trash.<br>
           Click a country to learn more</h4><br>
-          <div>
+          <div id="selections">
             Top <select name="number" id="selectNumber" onchange="onNumberChange()">
               <option value="3">3</option>
               <option value="5" selected>5</option>
@@ -448,6 +455,7 @@ var chart = d3.select('#countryInfoChart').append("svg")
 
 function drawCountryInfoChart() {
   chart.selectAll("*").remove().transition().duration(1500)
+  document.getElementById('selections').style.display = 'block';
   sortValue = document.getElementById("selectSort").value
   numberValue = document.getElementById("selectNumber").value
   
