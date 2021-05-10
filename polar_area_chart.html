@@ -176,7 +176,23 @@ text {
       </div>
 
       <div id="step2">
-        <div><h4>2. Here are the top ten countries in that region with most trash.<br>Click a country to learn more</h4><br><div id="countryInfoChart"></div></div>
+        <div><h4>2. Here are the top ten countries in that region with most trash.<br>
+          Click a country to learn more</h4><br>
+          <div>
+            Top <select name="number" id="selectNumber" onchange="onNumberChange()">
+              <option value="3">3</option>
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+            </select>
+            Countries With Most
+            <select name="sort" id="selectSort" onchange="onSortChange()">
+              <option value="totalMsw">Total Tons of Waste</option>
+              <option value="perPerson">Tons of Waste Per Person</option>
+            </select>
+          </div>
+          <br>
+          <div id="countryInfoChart"></div>
+        </div>
         <div id="countryInfo">
           <h3 id="countryName">Country Name</h3>
           <h3 id="countryPopulation">Population</h3>
@@ -220,11 +236,13 @@ region_id_to_to_name = {
 }
 
 /************* general GLOBAL variables here *************/
-landfill_by_region = {}
-global_trash_data = []
-landfill_by_region_list = []
+landfill_by_region = {};
+global_trash_data = [];
+landfill_by_region_list = [];
+allData = {};
+maxMsw = 0;
 
-var width = 625, height = 400;
+var width = 900, height = 500;
 barHeight = height / 2 - 40
 total_msw = 0
 modal_text_index = 0
@@ -232,6 +250,7 @@ continue_display = true
 
 /************* PROCESS DATA ***********/
 d3.csv("data_resources/country_level_data.csv", function(error, data) {
+  console.log(data)
   data.forEach(d => {
     let region_name = region_id_to_to_name[d.region_id]
     if (!(region_name in landfill_by_region)) {
@@ -274,6 +293,15 @@ function handleNextClick() {
   }
   modal_text_index += 1
 
+}
+
+/************* SELECT DROPDOWN CHANGES HERE **************/
+function onSortChange () {
+  drawCountryInfoChart()
+}
+
+function onNumberChange () {
+  drawCountryInfoChart()
 }
 
 /************* POLAR AREA CHART STARTS HERE *************/
@@ -333,7 +361,8 @@ function drawPolarAreaChart(data) {
     .on('click', function (d, i) {
       continue_display = true;
       // drawInfoCards2(d);
-      drawCountryInfoChart(d);
+      allData = d;
+      drawCountryInfoChart();
       // drawStep2(d);
     })
     .on("mouseover", function(d) {	
@@ -417,21 +446,25 @@ var chart = d3.select('#countryInfoChart').append("svg")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 
-function drawCountryInfoChart(allData) {
-
-  
-  let data = allData.countries.slice(0,10);
-  console.log(data)
-
-
+function drawCountryInfoChart() {
   chart.selectAll("*").remove().transition().duration(1500)
-
+  sortValue = document.getElementById("selectSort").value
+  numberValue = document.getElementById("selectNumber").value
+  
+  let countries_sorted = allData.countries
+  if (sortValue === "totalMsw") { // sort by total msw
+    countries_sorted.sort(function(a,b) { return parseInt(b.total_msw_total_msw_generated_tons_year) - parseInt(a.total_msw_total_msw_generated_tons_year); }) 
+  } else { // sort by msw per person
+    countries_sorted.sort(function(a,b) { return (parseInt(b.total_msw_total_msw_generated_tons_year)/b.population) - (parseInt(a.total_msw_total_msw_generated_tons_year)/a.population); }) 
+  }
+  let data = countries_sorted.slice(0,numberValue);
+  console.log(data)
 
 
   // Scales
   var x = d3.scale.ordinal()
-      .domain(data.map(function(d) { return d.country_name; }))
-      .rangeRoundBands([0, w], .2);
+      .domain(data.map(function(d) { return d.country_name.split(",")[0].slice(0, 18); }))
+      .rangeRoundBands([0, w], .1);
 
   var y = d3.scale.linear()
       .domain([0, d3.max(data, function(d) { return d.total_msw; }) * 1.1])
@@ -458,12 +491,12 @@ function drawCountryInfoChart(allData) {
 
   ///////////////////////
   // Title
-  chart.append("text")
-    .text('Top 10 Countries With Most Waste In ' + allData.region_name)
-    .attr("text-anchor", "middle")
-    .attr("class", "graph-title")
-    .attr("y", 15)
-    .attr("x", w / 2.0);
+  // chart.append("text")
+  //   .text('Top 10 Countries With Most Waste In ' + allData.region_name)
+  //   .attr("text-anchor", "middle")
+  //   .attr("class", "graph-title")
+  //   .attr("y", 15)
+  //   .attr("x", w / 2.0);
 
   //add labels
   chart
@@ -476,7 +509,7 @@ function drawCountryInfoChart(allData) {
   var bar = chart.selectAll(".bar").data(data)
   bar.enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.country_name); })
+      .attr("x", function(d) { return x(d.country_name.split(",")[0]); })
       .attr("y", h)
       .attr("width", x.rangeBand())
       .attr("height", 0)
