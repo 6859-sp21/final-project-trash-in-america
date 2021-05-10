@@ -44,12 +44,8 @@ body {
         <!-- input box for state search -->
             <div id='state_search_container' class='row'>
                 <input id='state_search_box' type="text" placeholder="State" aria-describedby="sizing-addon2">
-                <!-- <div id='gene_search_button' class="btn-group" data-toggle="buttons" >  -->
-                <!-- <label id='state_search_submit' class="btn btn-primary active">
-                    <input type="radio" name="options" id="" autocomplete="off" checked > Search
-                </label> -->
+                <input id = "state_search_submit" type = "submit">  
             </div>
-            <input id = "state_search_submit" type = "submit">  
             <div id="trash_legend">
                 <div id="garbage_bin" class="row">
                     <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
@@ -90,6 +86,7 @@ body {
   src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"
   integrity="sha256-ugED92WALymbx9ylw12aADWaCrsQysE29DyvnAv5i3w="
   crossorigin="anonymous"></script>
+  
 <script>
 
 state_id_to_name = {
@@ -200,29 +197,34 @@ function gSearch() {
     window.search = function () {
         var a = document.getElementById('input').value;
     }
-    // .focus(function() {
-    //     $(this).autocomplete("search", "");
-    // });
 }
 
 /************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
 d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
-    var UserSearchBoxSelection = document.getElementById('state_search_box').value
+    var UserSearchBoxSelection = document.getElementById('state_search_box').value;
     var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 133);
     var img = document.createElement('img')
         img.setAttribute("src", "images/smelly_trash.png");
         img.setAttribute("style", "width:60px");
+    var w = window,
+        x = w.innerWidth,  //|| e.clientWidth || g.clientWidth,
+        y = w.innerHeight; //|| e.clientHeight || g.clientHeight;
     //console.log(trash_can_num)
     var node= document.getElementById("trash_dump_container"); // delete all child trash cans of this parent div
     node.querySelectorAll('*').forEach(n => n.remove());
-    var listStatement = document.createElement("h1");
+    var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
     for(i = 0; i < trash_can_num; i++){
+        var listItemSize = d3.select('body').append('svg')
+                           .attr("width", x)
+                           .attr("height", y);
+                           //.append("g");
         listItem.innerHTML += img.outerHTML;
     }
+    
     listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_can_num + " bins of garbage a minute!";
-    document.getElementById("trash_dump_container").appendChild(listItem);
     document.getElementById("trash_dump_container").appendChild(listStatement);
+    document.getElementById("trash_dump_container").appendChild(listItem);
 
     //console.log(i)
 }); 
