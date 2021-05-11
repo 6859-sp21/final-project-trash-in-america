@@ -12,7 +12,7 @@ body {
   font-size: 16px;
   padding: 20px;
   scroll-behavior: smooth;
-
+  background: lightgray;
 }
 
 #nextPage {
@@ -221,7 +221,7 @@ text {
 <script>
 function handleNextPageClick() {
   url = window.location.href
-  newurl = url.split('/').slice(0,-1).join('/')+'/us_state_landfill.html'
+  newurl = url.split('/').slice(0,-1).join('/')+'/world.html'
   window.location.href = newurl
 }
 
@@ -368,6 +368,7 @@ function drawPolarAreaChart(data) {
     .on('click', function (d, i) {
       continue_display = true;
       // drawInfoCards2(d);
+      console.log(d)
       allData = d;
       drawCountryInfoChart();
       // drawStep2(d);
@@ -376,7 +377,7 @@ function drawPolarAreaChart(data) {
       // drawInfoCards(d)
       changeRegionInfo(d);
       d3.select(this)
-        .style("fill", "lightgray");
+        .style("fill", "purple");
     })
     .on("mouseout", function(d, i) {
         d3.select(this)
@@ -525,7 +526,7 @@ function drawCountryInfoChart() {
       .on("mouseover", function(d, i) {
         drawStep2(d);
         d3.select(this)
-        .style("fill", "lightgray");
+        .style("fill", "purple");
       })
       .on("mouseout", function(d, i) {
         d3.select(this)
