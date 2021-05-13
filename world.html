@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <style>
   .countries {
     fill: none;
@@ -20,7 +23,7 @@
     font-size: 16px;
     padding: 20px;
     scroll-behavior: smooth;
-    background-color: lightgray
+    /* background-color: lightgray */
   }
 
   #selections {
@@ -51,18 +54,59 @@
     align-items: center;
     flex-direction: column;
   }
+
+  #overallSelection {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  #selectSort {
+    font-size: 20px;
+  }
+
+  #selectedText {
+    overflow: auto;
+    height: 50%;
+    padding-bottom: 20px;
+  }
+
+  .countryButton {
+    background-color: white; /* Green */
+    /* border: none; */
+    color: white;
+    padding: 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    color: black;
+    border-radius: 10px;
+    border-width: thin;
+  }
 </style>
 <body>
 <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Waste Sorting</button>
 <button id="nextPage" onclick="handleNextPageClick()">Explore USA Waste &#8594;</button>
 <h1>Pickup Yo Trash World (2018)</h1>
+<br><br>
+<div id="overallSelection">
+  <span>
+    Show Countries By
+    <select name="sort" id="selectSort" onchange="onSortChange()">
+      <option value="totalMsw" >Total Tons of Waste</option>
+      <option value="perPerson">Tons of Waste Per Person</option>
+    </select>
+  </span>
+</div>
 <div id="zero">
   <div id="circularPacking"></div>
   <div id="tooltip"></div>
 </div>
 <div id="first">
-    <div><svg width="1100" height="800"></svg></div>
-    <div id="list"><p id="selectedText"></p>
+    <div><svg width="1000" height="800"></svg></div>
+    <div id="list"><div id="selectedText"></div>
       <button onclick="drawCountryInfoChart()">Show!</button>
       <button onclick="clearList()">Clear List</button>
     </div>
@@ -70,16 +114,14 @@
 
 <div>
   <div id="selections">
-    Top <select name="number" id="selectNumber" onchange="onNumberChange()">
+    Show Top <select name="number" id="selectNumber" onchange="onNumberChange()"> Countries
       <option value="3">3</option>
       <option value="5" selected>5</option>
       <option value="10">10</option>
+      <!-- <option value="all">All</option> -->
     </select>
-    Countries With Most
-    <select name="sort" id="selectSort" onchange="onSortChange()">
-      <option value="totalMsw">Total Tons of Waste</option>
-      <option value="perPerson">Tons of Waste Per Person</option>
-    </select>
+    
+
   </div>
   <br>
   <div id="countryInfoChart"></div>
@@ -104,7 +146,9 @@ function handleBackPageClick() {
 }
 
 function onSortChange () {
-  drawCountryInfoChart()
+  // drawCountryInfoChart()
+  drawCircularPacking()
+  drawMap()
 }
 
 function onNumberChange () {
@@ -112,8 +156,11 @@ function onNumberChange () {
 }
 
 var allData = {}
-var selectedCircles = []
+var selectedCountries = []
 var circleVisCountryNames = new Set([]);
+var globalTopo = null;
+var sortValue = document.getElementById("selectSort").value
+var selectedCountryCircle = null
 
 region_id_to_to_name = {
   LCN: "Latin America & Caribbean",
@@ -133,13 +180,18 @@ var svg = d3.select("svg"),
 
 var colorScale = d3.scaleThreshold()
     .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
-    .range(d3.schemeBlues[7]);
+    .range(d3.schemeYlOrBr[7]);
 
-function drawMap(topo) {
+var colorScalePopulation = d3.scaleThreshold()
+    .domain([0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    .range(d3.schemeYlOrBr[7]);
+
+function drawMap() {
     // Map and projection
+    topo = globalTopo
     var path = d3.geoPath();
     var projection = d3.geoNaturalEarth()
-        .scale(width / 2 / Math.PI)
+        .scale(width /1.8/ Math.PI)
         .translate([width / 2, height / 2])
     var path = d3.geoPath()
         .projection(projection);
@@ -151,15 +203,31 @@ function drawMap(topo) {
     // Legend
     var g = svg.append("g")
         .attr("class", "legendThreshold")
-        .attr("transform", "translate(20,20)");
-    g.append("text")
+        .attr("transform", "translate(20,40)");
+    if (sortValue === "totalMsw") {
+      g.append("text")
         .attr("class", "caption")
         .attr("x", 0)
         .attr("y", -6)
         .text("Total Waste (Tons)");
+    } else {
+      g.append("text")
+        .attr("class", "caption")
+        .attr("x", 0)
+        .attr("y", -6)
+        .text("Total Waste Per Person(Tons)");
+    }
+
     var labels = ['0-10K', '10K-100K', '100K-1M', '1M-3M', '3M-10M', '10M-50M', '> 1000'];
+    var labelsPopulation = ["0.0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"]
     var legend = d3.legendColor()
-        .labels(function (d) { return labels[d.i]; })
+        .labels(function (d) { 
+          if (sortValue === "totalMsw") {
+            return labels[d.i]; 
+          } else {
+            return labelsPopulation[d.i]
+          }
+        })
         .shapePadding(4)
         .scale(colorScale);
     svg.select(".legendThreshold")
@@ -177,42 +245,112 @@ function drawMap(topo) {
               d.country_name = allData[d.id] ? allData[d.id].country_name : ""
               d.total_msw = allData[d.id] ? allData[d.id].total_msw : 0;
               d.region_name = allData[d.id] ? allData[d.id].region_name : ""
+              d.total_per_person = allData[d.id] ? allData[d.id].total_per_person : 0
+              d.country_code = allData[d.id] ? allData[d.id].country_code : ""
               // Set the color
-              return colorScale(d.total);
+              if (sortValue === "totalMsw") {
+                return colorScale(d.total);
+
+              } else {
+                return colorScalePopulation(d.total);
+              }
           })
+          .attr('id', function (d) { return d.id})
           .attr("d", path)
           .on("click", function(d) {
-            if (circleVisCountryNames.has(d.country_name )) {
-              d3.select(this)
-              .style("fill", colorScale(d.total));
+            if (circleVisCountryNames.has(d.country_name)) {
+              if (sortValue === "totalMsw") {
+                d3.select(this)
+                .style("fill", colorScale(d.total));
+              } else {
+                d3.select(this)
+                .style("fill", colorScalePopulation(d.total_per_person));
+              }
+
             } else {
               d3.select(this)
-              .style("fill", "purple");
+              .style("fill", "gray");
             }
 
-            clicked(d)
+            clicked(allData[d.country_code])
           })
 
 } 
-function clicked(d) {
+function clickedCircle(d) {
+  let selection = ".countries #" + d.country_code
+  d3.select(selection).style("fill", "gray")
+  // selectedCountries = selectedCountries.filter(c => {
+  //   return c.country_name !== d.country_name
+  // })
+
+  selectedCountries.forEach(c => {
+    country_code_selection2 = ".countries #" + c.country_code //unselect the current country removed (button.id == country_code)
+    d3.select(country_code_selection2).style("fill", function(d){ 
+      if (sortValue === "totalMsw") {
+        return colorScale(c.total_msw)
+      } else {
+        return colorScalePopulation(c.total_msw)
+      }            
+    })
+  })
+  selectedCountries = [allData[d.country_code]]
+  circleVisCountryNames = new Set([d.country_name])
+  displayList()
+
+  document.getElementById('first').scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'center'
+  });
+}
+
+function clicked(dAllDataFormat) {
+  d = dAllDataFormat
+
+  // if (! isCircleClick) { // if not circle click, reset the circle color
+  //   let selection = ".node#" + d.country_code
+  //   d3.select(selection).style("fill", color(d.region_name))
+  // }
+
+
   if (circleVisCountryNames.has(d.country_name)) {
     circleVisCountryNames.delete(d.country_name)
-    let index = selectedCircles.indexOf(d);
-    if (index > -1) {
-      selectedCircles.splice(index, 1);
-    }  
+    selectedCountries = selectedCountries.filter(c => {return c.country_name !== d.country_name})
   } else {
     circleVisCountryNames.add(d.country_name)
-    selectedCircles.push(d)
+    selectedCountries.push(allData[d.country_code])
   }
-  text = "<ul>"
-  selectedCircles.forEach(d=> {
+  displayList()
+}
+
+function displayList() {
+  text = ""
+  selectedCountries.forEach(d=> {
     if (d.country_name && d.country_name.length > 0) {
-      text += "<li>" + d.country_name +"</li>"
+      // funcCall = "removeCountryFromList(" + d.country_name + ")"
+      text += "<button class='countryButton' onclick=removeCountryFromList(this) id='"  + d.country_code + "'>x&nbsp;&nbsp;&nbsp;" + d.country_name +"</button><br>"
     }
   })
-  text+="</ul>"
   document.getElementById("selectedText").innerHTML = text
+  // var element = document.getElementById("selectedText");
+  // element.scrollTop = element.scrollHeight;
+  var objDiv = document.getElementById("selectedText");
+  objDiv.scrollTop = objDiv.scrollHeight;
+}
+
+function removeCountryFromList(button) {
+  const found = selectedCountries.find(c => c.country_code === button.id);
+  selectedCountries = selectedCountries.filter(c => c.country_code !== button.id);
+  displayList()
+
+  country_code_selection2 = ".countries #" + button.id //unselect the current country removed (button.id == country_code)
+  d3.select(country_code_selection2).style("fill", function(d){ 
+    if (sortValue === "totalMsw") {
+      return colorScale(found.total_msw)
+    } else {
+      return colorScalePopulation(found.total_msw)
+    }            
+  })
 }
 
 // set the dimensions and margins of the bar graph
@@ -224,9 +362,10 @@ var circleVis = d3.select("#circularPacking")
   .append("svg")
     .attr("width", width2)
     .attr("height", height2)
+    .attr('class', "circularPackingClass")
 
 function clearList() {
-  selectedCircles = []
+  selectedCountries = []
   document.getElementById("selectedText").innerHTML = ""
   svg.selectAll("path").style("fill", function (d){
     return colorScale(d.total);
@@ -235,13 +374,13 @@ function clearList() {
 
 var color = d3.scaleOrdinal()
     .domain(Object.values(region_id_to_to_name))
-    .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3"]);
+    // .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#b3b3b3", "#e5c494"]);
+    .range(d3.schemeSet1)
 
 function drawCircularPacking() {
 
   // Color palette for continents?
-  circleVis.selectAll("*").remove()
-  console.log(circleData)
+  d3.select(".circularPackingClass").selectAll("*").remove()
   circleData = circleData.sort(function(a,b){ return b.region_name - a.region_name; });
 
 
@@ -249,6 +388,9 @@ function drawCircularPacking() {
   var size = d3.scaleLinear()
     .domain([0, 140000000])
     .range([15, 50])  // circle will be between 7 and 55 px wide
+
+  var sizePopulation = d3.scaleLinear()
+    .range([15, 50])
 
   // create a tooltip
   var Tooltip = d3.select("#tooltip")
@@ -292,7 +434,14 @@ function drawCircularPacking() {
   var node = elemEnter
     .append("circle")
       .attr("class", "node")
-      .attr("r", function(d){ return size(d.total_msw ? d.total_msw : 0)})
+      .attr("id", function(d) { return d.country_code})
+      .attr("r", function(d){ 
+        if (sortValue === "totalMsw") {
+          return size(d.total_msw ? d.total_msw : 0)
+        } else {
+          return sizePopulation(d.total_per_person ? d.total_per_person : 0)
+        }
+      })
       .attr("cx", width2 / 2)
       .attr("cy", height2 / 2)
       .style("fill", function(d){ return color(d.region_name)})
@@ -302,6 +451,39 @@ function drawCircularPacking() {
       .on("mouseover", mouseover) // What to do when hovered
       .on("mousemove", mousemove)
       .on("mouseleave", mouseleave)
+      .on("click", function(d) {
+        if (selectedCountryCircle !== null && selectedCountryCircle.country_code === d.country_code) {
+          d3.select(this)
+          .style("fill", color(d.region_name));
+
+          country_code_selection2 = ".countries #" + selectedCountryCircle.country_code //unselect the current country in map selected
+            d3.select(country_code_selection2).style("fill", function(d){ 
+              if (sortValue === "totalMsw") {
+                return colorScale(d.total)
+              } else {
+                return colorScalePopulation(d.total_per_person)
+              }            
+            })
+            selectedCountryCircle = null
+        } else {
+          if (selectedCountryCircle !== null) { // unselect the current circle selected 
+            country_code_selection = ".node#" + selectedCountryCircle.country_code
+            d3.select(country_code_selection).style("fill", function(d){ return color(selectedCountryCircle.region_name)})
+            country_code_selection2 = ".countries #" + selectedCountryCircle.country_code //unselect the current country in map selected
+            d3.select(country_code_selection2).style("fill", function(d){ 
+              if (sortValue === "totalMsw") {
+                return colorScale(d.total)
+              } else {
+                return colorScalePopulation(d.total_per_person)
+              }            
+            })
+          }
+          d3.select(this)
+            .style("fill", "gray");
+          clickedCircle(d)
+          selectedCountryCircle = d
+        }
+      })
       .call(d3.drag() // call specific function when circle is dragged
            .on("start", dragstarted)
            .on("drag", dragged)
@@ -322,7 +504,13 @@ function drawCircularPacking() {
   var simulation = d3.forceSimulation()
       .force("center", d3.forceCenter().x(width2 / 2).y(height2/ 2)) // Attraction to the center of the svg area
       .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
-      .force("collide", d3.forceCollide().strength(.2).radius(function(d){ return (size(d.total_msw)+3) }).iterations(1)) // Force that avoids circle overlapping
+      .force("collide", d3.forceCollide().strength(.2).radius(function(d){ 
+        if (sortValue === "totalMsw") {
+          return (size(d.total_msw)+3) 
+        } else {
+          return (sizePopulation(d.total_per_person)+3)
+        }
+      }).iterations(1)) // Force that avoids circle overlapping
 
   // Apply these forces to the nodes and update their positions.
   // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
@@ -355,6 +543,27 @@ function drawCircularPacking() {
     d.fx = null;
     d.fy = null;
   }
+
+  var g = circleVis.append("g")
+        .attr("class", "legendThreshold")
+        .attr("transform", "translate(20,40)");
+  g.append("text")
+    .attr("class", "caption")
+    .attr("x", 0)
+    .attr("y", -6)
+    .text("Region In the World");
+
+
+    var labels = Object.values(region_id_to_to_name);
+    var labelsPopulation = ["0.0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1.0"]
+    var legend = d3.legendColor()
+        .labels(function (d) { 
+          return labels[d.i]; 
+        })
+        .shapePadding(4)
+        .scale(color);
+    circleVis.select(".legendThreshold")
+        .call(legend);
 }
 
 /********* COUNTRY BAR CHART BEGINS HERE *****************/
@@ -375,7 +584,7 @@ var chart = d3.select('#countryInfoChart').append("svg")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 function drawCountryInfoChart() {
-  if (selectedCircles.length == 0) {
+  if (selectedCountries.length == 0) {
     alert("Please select some countries on the map to compare")
     return
   }
@@ -385,19 +594,20 @@ function drawCountryInfoChart() {
     inline: 'center'
   });
   chart.selectAll("*").remove().transition().duration(1500)
-  console.log(selectedCircles)
   document.getElementById('selections').style.display = 'block';
   sortValue = document.getElementById("selectSort").value
   numberValue = document.getElementById("selectNumber").value
   
-  let countries_sorted = selectedCircles
+  let countries_sorted = selectedCountries
   if (sortValue === "totalMsw") { // sort by total msw
-    countries_sorted.sort(function(a,b) { return b.total - a.total; }) 
+    countries_sorted.sort(function(a,b) { return b.total_msw - a.total_msw; }) 
   } else { // sort by msw per person
-    countries_sorted.sort(function(a,b) { return (b.total/b.population) - (a.total/a.population); }) 
+    countries_sorted.sort(function(a,b) { return (b.total_msw/b.population) - (a.total_msw/a.population); }) 
   }
-  let data = countries_sorted.slice(0,numberValue);
-  console.log(data)
+  data = countries_sorted
+  if (numberValue !== "all") {
+    data = countries_sorted.slice(0,numberValue); 
+  }
 
 
   // Scales
@@ -414,7 +624,7 @@ function drawCountryInfoChart() {
   // Axis
     // Scale the range of the data in the domains
   x.domain(data.map(function(d) { return d.country_name; }));
-  y.domain([0, d3.max(data, function(d) { return d.total * 1.1; })]);
+  y.domain([0, d3.max(data, function(d) { return d.total_msw * 1.1; })]);
 
   // append the rectangles for the bar chart
   var bar = chart.selectAll(".bar").data(data)
@@ -423,15 +633,15 @@ function drawCountryInfoChart() {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.country_name); })
       .attr("width", x.bandwidth())
-      .attr("y", function (d) { return y(d.total);})
-      .attr("height", function(d) { return h - y(d.total); })
-      .style("fill", function(d) {return colorScale(d.total)});
+      .attr("y", function (d) { return y(d.total_msw);})
+      .attr("height", function(d) { return h - y(d.total_msw); })
+      .style("fill", function(d) {return colorScale(d.total_msw)});
   
   bar.transition()
       .duration(1500)
       .ease(d3.easeElastic)
-      .attr("y", function(d) { return y(d.total); })
-      .attr("height", function(d) { return h - y(d.total); })
+      .attr("y", function(d) { return y(d.total_msw); })
+      .attr("height", function(d) { return h - y(d.total_msw); })
   
       // add the x Axis
   chart.append("g")
@@ -470,7 +680,7 @@ function drawCountryInfoChart() {
   //     .on("mouseover", function(d, i) {
   //       drawStep2(d);
   //       d3.select(this)
-  //       .style("fill", "purple");
+  //       .style("fill", "gray");
   //     })
   //     .on("mouseout", function(d, i) {
   //       d3.select(this)
@@ -494,21 +704,21 @@ d3.queue()
     .defer(d3.csv, "data_resources/country_level_data.csv", function(d) { 
       let country_value = d.total_msw_total_msw_generated_tons_year ? parseInt(d.total_msw_total_msw_generated_tons_year) : 0
       let country_code = d.iso3c
-      let population = d.population_population_number_of_people ? parseInt(d.population_population_number_of_people) : 0
+      let population = d.population_population_number_of_people ? parseInt(d.population_population_number_of_people) : 1
       let country_name = d.country_name
+      let country_name_first = d.country_name.split(" ")[0]
       let region_name = region_id_to_to_name[d.region_id]
-      allData[country_code] = {total_msw: country_value, population: population, country_name: country_name, region_name: region_name}
-      circleData.push( {total_msw: country_value, population: population, country_name: country_name, region_name: region_name})
+      let valuePerPerson = country_value / population;
+      allData[country_code] = {total_msw: country_value, population: population, country_name: country_name, country_code: country_code, region_name: region_name, total_per_person: valuePerPerson}
+      circleData.push( {total_msw: country_value, population: population, country_name: country_name, country_code: country_code, region_name: region_name, total_per_person: valuePerPerson})
     })
     .await(ready);
 
 function ready(error, topo) {
     if (error) throw error;
-    console.log(allData)
+    globalTopo = topo 
     // Draw the map
-    drawMap(topo)
+    drawMap()
     drawCircularPacking()
-    // drawCircularPacking(circleData)
-    // console.log(circleData)
 }
 </script>
