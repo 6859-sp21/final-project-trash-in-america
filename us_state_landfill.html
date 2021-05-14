@@ -10,10 +10,11 @@
 </head>
 
 <style>
-body {
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  padding: 20px;
+
+html, body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    padding: 20px;
 }
 
 #backPage {
@@ -28,6 +29,10 @@ body {
   background-color: #794d93;
   color: #f9f9f9;
   margin-bottom: 40px;
+}
+
+p {
+    margin-bottom: 0px;
 }
 
 </style>
@@ -48,16 +53,26 @@ body {
             </div>
             <div id="trash_legend">
                 <div id="garbage_bin" class="row">
-                    <img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin">
+                    <a href = '#'><img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin"></a>
                     <p> Garbage Bin</p>
-                    <p> 0.008 ton </p>
+                    <p> 0.02 ton </p>
                 </div>
                 <div id="dumpster" class="row">
-                    <img id= "legend_img" src= "images/dumpster.png" alt= "standard garbage bin">
+                    <a href = '#'><img id= "legend_img" src= "images/dumpster.png" alt= "standard garbage bin"></a>
                     <p>Dumpster</p>
                     <p> 0.6 ton  </p>
                 </div>
-            </div>   
+            </div> 
+            <div id= 'human-height-index'>
+                <div id="human1" class="row">
+                    <img id= "black-man" src= "images/black-man.png" alt= "Black man">
+                    <p> 5'8 </p>
+                </div>
+                <div id="human2" class="row">
+                    <img id= "white-woman" src= "images/white-woman.png" alt= "White woman">
+                    <p> 5'4 </p>
+                </div>
+            </div>  
         </div>
         
         <!-- TRASH DUMP ZONE -->
@@ -202,27 +217,28 @@ function gSearch() {
 /************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
 d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
     var UserSearchBoxSelection = document.getElementById('state_search_box').value;
-    var trash_can_num = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 133);
+    // 1 ton = 2000 pounds
+    // 31 gallons per bin = 35 lbs per bin = 57 bins per ton
+    var trash_cans_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 57);
     var img = document.createElement('img')
         img.setAttribute("src", "images/smelly_trash.png");
         img.setAttribute("style", "width:60px");
-    var w = window,
-        x = w.innerWidth,  //|| e.clientWidth || g.clientWidth,
-        y = w.innerHeight; //|| e.clientHeight || g.clientHeight;
-    //console.log(trash_can_num)
+    console.log(trash_cans_min)
     var node= document.getElementById("trash_dump_container"); // delete all child trash cans of this parent div
     node.querySelectorAll('*').forEach(n => n.remove());
     var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
-    for(i = 0; i < trash_can_num; i++){
+
+    // Adds trash bins based on number count!
+    for(i = 0; i < trash_cans_min; i++){
         var listItemSize = d3.select('body').append('svg')
-                           .attr("width", x)
-                           .attr("height", y);
-                           //.append("g");
+        if (trash_cans_min >= 300) {
+            
+        }
         listItem.innerHTML += img.outerHTML;
     }
-    
-    listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_can_num + " bins of garbage a minute!";
+
+    listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_cans_min + " bins of garbage a minute!";
     document.getElementById("trash_dump_container").appendChild(listStatement);
     document.getElementById("trash_dump_container").appendChild(listItem);
 
