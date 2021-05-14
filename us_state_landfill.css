@@ -1,5 +1,6 @@
 p {
   font-size: 14px;
+  margin-bottom: 5px;
 }
 h1 {
     font-size: 45px;
@@ -73,6 +74,7 @@ h4 {
 #trash_legend {
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 #garbage_bin {
   display: block;
@@ -81,17 +83,40 @@ h4 {
   margin-right: 5px;
   text-align: center;
 }
-
 #dumpster {
   margin-left: 15px;
   text-align: center;
 }
-
 #legend_img {
-  height: 100px;
+  height: 80px;
   text-align: center;
   margin: 5px;
 }
+
+/* HUMAN HEIGHT INDEX */
+#human-height-index {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+#human1 {
+  text-align: center;
+  margin: 5px;
+}
+#human2{
+  text-align: center;
+  margin: 5px;
+  vertical-align: bottom;
+}
+#black-man {
+  height: 200px;
+}
+#white-woman {
+  height: 150px;
+  vertical-align: bottom;
+}
+
+
 
 #trash_dump_container{
   display: block;
