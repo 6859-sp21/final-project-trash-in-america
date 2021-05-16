@@ -58,7 +58,7 @@ p {
                     <p> 0.02 ton </p>
                 </div>
                 <div id="dumpster" class="row">
-                    <a href = '#'><img id= "legend_img" src= "images/dumpster.png" alt= "standard garbage bin"></a>
+                    <img id= "dumpster_img" src= "images/dumpster.png" alt= "standard dumpster">
                     <p>Dumpster</p>
                     <p> 0.6 ton  </p>
                 </div>
@@ -66,11 +66,11 @@ p {
             <div id= 'human-height-index'>
                 <div id="human1" class="row">
                     <img id= "black-man" src= "images/black-man.png" alt= "Black man">
-                    <p> 5'8 </p>
+                    <p> 5' 8 </p>
                 </div>
                 <div id="human2" class="row">
                     <img id= "white-woman" src= "images/white-woman.png" alt= "White woman">
-                    <p> 5'4 </p>
+                    <p> 5' 4 </p>
                 </div>
             </div>  
         </div>
@@ -177,8 +177,6 @@ barHeight = height / 2 - 40
 total_waste = 0
 continue_display = true
 
-// var trash_type = trash_bin
-
 /************* PROCESS DATA ***********/
 d3.csv("data_resources/state_landfill_mar2021.csv", function(error, data) {
   data.forEach(d => {
@@ -189,9 +187,9 @@ d3.csv("data_resources/state_landfill_mar2021.csv", function(error, data) {
     } 
     landfill_by_state[state_name]['total_waste'] += d.annual_waste_acceptance.replace(/,/g, "") ? parseInt(d.annual_waste_acceptance.replace(/,/g, "")) : 0;
     landfill_by_state[state_name]['daily_waste'] =  (landfill_by_state[state_name]['total_waste'] / 365);
-    landfill_by_state[state_name]['hourly_waste']= (landfill_by_state[state_name]['total_waste'] / 8760);
-    landfill_by_state[state_name]['minute_waste']= (landfill_by_state[state_name]['hourly_waste'] / 60);
-    landfill_by_state[state_name]['secondly_waste']= (landfill_by_state[state_name]['minute_waste'])/60;
+    landfill_by_state[state_name]['hourly_waste'] = (landfill_by_state[state_name]['total_waste'] / 8760);
+    landfill_by_state[state_name]['minute_waste'] = (landfill_by_state[state_name]['hourly_waste'] / 60);
+    landfill_by_state[state_name]['secondly_waste'] = (landfill_by_state[state_name]['minute_waste'])/60;
     
     landfill_by_state[state_name]['landfills'].push(d);
 
@@ -225,23 +223,20 @@ function image_out () {
     var bins = document.createElement('img')
         bins.setAttribute("src", "images/smelly_trash.png");
         bins.setAttribute("style", "width: 40px");
-    // creating dumpster imgs
-    var dumpster = document.createElement('img')
-        dumpster.setAttribute("src", "images/dumpster.png");
-        dumpster.setAttribute("style", "width: 100px");
+    
     // delete all child trash cans of this parent div
     var node= document.getElementById("trash_dump_container"); 
     node.querySelectorAll('*').forEach(n => n.remove());
     var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
     // Adds trash bins based on number count!
-    let num_trash_cans = trash_cans_min >= 200 ? trash_cans_sec : trash_cans_min;
+    let num_trash_cans = trash_cans_min >= 300 ? trash_cans_sec : trash_cans_min;
     console.log(num_trash_cans);
     for(i = 0; i < num_trash_cans; i++){
         var listItemSize = d3.select('body').append('svg')
         listItem.innerHTML += bins.outerHTML;  
     }
-    if (num_trash_cans ==trash_cans_min) {
+    if (num_trash_cans == trash_cans_min) {
             listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_cans_min + " bins of garbage a minute!";
         }
         else {
@@ -252,16 +247,35 @@ function image_out () {
 }
 
 /************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
-d3.select("#state_search_submit").on("click", function() {  //Keyup function to convert user input to a filter value
+d3.select("#state_search_submit").on("click", function() {  
     image_out();
 }); 
 
-d3.select("#dumpster").on("click", function() {
-    image_out();
+//d3.select("#dumpster").on("click", function() {
+// document.getElementById("dumpster").addEventListener("click", function() {
+$(function () {
+    $("dumpster_img").click (function() {
+        var UserSearchBoxSelection = document.getElementById('state_search_box').value;
+        // 1 ton = 2000 pounds
+        // max weight for 1 dumpster is 500 lbs = 4 bins per ton
+        var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+        var listStatement = document.createElement("h2");
+        var listItem = document.createElement("div");
+        // creating dumpster imgs
+        var dumpster = document.createElement('img')
+            dumpster.setAttribute("src", "images/dumpster.png");
+            dumpster.setAttribute("style", "width: 100px");
+        for(i = 0; i < dumpsters_min; i++){
+            var listItemSize = d3.select('body').append('svg')
+            listItem.innerHTML += dumpsters.outerHTML;  
+        }
+        listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + dumpsters_min + " dumpsters of garbage a minute!";
+        document.getElementById("trash_dump_container").appendChild(listStatement);
+        document.getElementById("trash_dump_container").appendChild(listItem);
+    });
 });
 
 
-//make click listener function out here for dumpster to run the global variable
 </script>
 
 </body>

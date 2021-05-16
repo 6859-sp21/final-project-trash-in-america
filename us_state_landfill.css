@@ -93,6 +93,12 @@ h4 {
   margin: 5px;
 }
 
+#dumpster_img {
+  height: 80px;
+  text-align: center;
+  margin: 5px;
+}
+
 /* HUMAN HEIGHT INDEX */
 #human-height-index {
   display: flex;
