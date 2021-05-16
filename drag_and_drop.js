@@ -138,16 +138,14 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
     Object.keys(answers).length
   } items correct`;
   let p2 = document.createElement("p");
-  let p3 = document.createElement("p");
   if (score === Object.keys(answers).length) {
     p2.textContent = "Wow, you sorted everything correctly!";
   } else {
     p2.textContent = "Let's learn how to sort the items you sorted incorrectly";
-    p3.textContent = "Mouse over on the trash item images below for more information"
   }
+  answersDiv.classList.add("center-explanation");
   answersDiv.appendChild(p1);
   answersDiv.appendChild(p2);
-  answersDiv.appendChild(p3);
   for (let i = 0; i < wrongItemIds.length; i++) {
     let span = document.createElement("span");
     let img = document.createElement("img");
@@ -156,10 +154,6 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
     let div = document.createElement("div");
     div.appendChild(img);
     div.classList.add("tooltip");
-    let span2 = document.createElement("span");
-    span2.classList.add("tooltiptext2");
-    span2.innerText = answers[wrongItemIds[i]][1];
-    div.appendChild(span2);
     span.appendChild(div);
     span.innerHTML += "is&nbsp;";
     let font = document.createElement("font");
@@ -168,6 +162,10 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
     span.appendChild(font);
     span.classList.add("wrongItem");
     answersDiv.appendChild(span);
+    let span3 = document.createElement("span");
+    span3.classList.add("explanation2");
+    span3.innerText += answers[wrongItemIds[i]][1];
+    answersDiv.appendChild(span3);
   }
   answersDiv.scrollIntoView({ behavior: "smooth" });
   const learnDiv = document.getElementById("trash-learn-more");
