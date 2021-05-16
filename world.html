@@ -86,13 +86,13 @@
     border-width: thin;
   }
   .mapTooltip{ 
-  background-color:rgba(0,0,0,0.5);
-  color:#fff;
-  padding: 10px;
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  border-radius:10px;
-}
+    background-color:rgba(0,0,0,0.5);
+    color:#fff;
+    padding: 10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+  }
   
 </style>
 <body>
@@ -169,6 +169,9 @@ function onSortChange () {
     block: 'center',
     inline: 'center'
   });
+  if (selectedCountries.length > 0) {
+    drawCountryInfoChart()
+  }
 }
 
 function onNumberChange () {
@@ -181,7 +184,10 @@ var circleVisCountryNames = new Set([]);
 var globalTopo = null;
 var sortValue = document.getElementById("selectSort").value
 var selectedCountryCircle = null
-
+var maxTotal = 0;
+var maxPerPerson = 0;
+var minTotal = Infinity;
+var minPerPerson = Infinity
 region_id_to_to_name = {
   LCN: "Latin America & Caribbean",
   SAS: "South Asia",
@@ -202,27 +208,30 @@ var legend_g = svg.append("g").attr("class", "legendThreshold").attr("transform"
 var zoom = d3.zoom()
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
-svg.call(zoom);
+svg.call(zoom).on("wheel.zoom", null); // allow to drag map around but disable zoom
 
 var colorScale = d3.scaleThreshold()
     .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+    // .domain([Math.log(minTotal), Math.log(maxTotal)])
     .range(d3.schemeYlOrBr[7]);
 
-var colorScalePopulation = d3.scaleOrdinal()
-    .domain([0, 2.0])
-    .range(d3.schemeYlOrBr[5]);
+var colorScalePopulation = d3.scaleThreshold()
+    // .domain([0, 2.0])
+    .domain([minPerPerson, maxPerPerson])
+    .range(d3.schemeYlOrBr[7]);
 
+var projection = d3.geoNaturalEarth()
+    .scale(width /1.8/ Math.PI)
+    .translate([width / 2, height / 2])
+var path = d3.geoPath()
+    .projection(projection);
 function drawMap() {
-  countries_g.selectAll("*").remove()
-  legend_g.selectAll("*").remove()
+    countries_g.selectAll("*").remove()
+    legend_g.selectAll("*").remove()
     // Map and projection
     topo = globalTopo
-    var path = d3.geoPath();
-    var projection = d3.geoNaturalEarth()
-        .scale(width /1.8/ Math.PI)
-        .translate([width / 2, height / 2])
-    var path = d3.geoPath()
-        .projection(projection);
+    // var path = d3.geoPath();
+
 
     // Data and color scale
 
@@ -263,6 +272,7 @@ function drawMap() {
       .data(topo.features)
       .enter().append("path")
           .attr("fill", function (d){
+
               // Pull data for this country
               d.total = allData[d.id] ? allData[d.id].total_msw : 0;
               d.population = allData[d.id] ? allData[d.id].population : 0;
@@ -272,6 +282,9 @@ function drawMap() {
               d.total_per_person = allData[d.id] ? allData[d.id].total_per_person : 0
               d.country_code = allData[d.id] ? allData[d.id].country_code : ""
               // Set the color
+              if (circleVisCountryNames.has(d.country_name)) {
+                return "gray"
+              }
               if (sortValue === "totalMsw") {
                 return colorScale(d.total);
 
@@ -282,6 +295,7 @@ function drawMap() {
           .attr('id', function (d) { return d.id})
           .attr("d", path)
           .on("click", function(d) {
+            console.log(d)
             if (circleVisCountryNames.has(d.country_name)) {
               if (sortValue === "totalMsw") {
                 d3.select(this)
@@ -342,6 +356,7 @@ function clickedCircle(d) {
   selectedCountries = [allData[d.country_code]]
   circleVisCountryNames = new Set([d.country_name])
   displayList()
+  zoomOnCountry(d)
 
   document.getElementById('first').scrollIntoView({
     behavior: 'smooth',
@@ -357,7 +372,6 @@ function clicked(dAllDataFormat) {
   //   let selection = ".node#" + d.country_code
   //   d3.select(selection).style("fill", color(d.region_name))
   // }
-
 
   if (circleVisCountryNames.has(d.country_name)) {
     circleVisCountryNames.delete(d.country_name)
@@ -382,6 +396,28 @@ function displayList() {
   // element.scrollTop = element.scrollHeight;
   var objDiv = document.getElementById("selectedText");
   objDiv.scrollTop = objDiv.scrollHeight;
+}
+
+
+function zoomOnCountry(d) {
+  selection = "path#"+d.country_code
+  d = null
+  d3.select(selection).attr("class", function (datum) { d = datum})
+  console.log(d)
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+  svg.transition()
+      .duration(2000)
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ) 
+      .transition()
+      .duration(2000)
+      .call( zoom.transform, d3.zoomIdentity) 
 }
 
 function removeCountryFromList(button) {
@@ -420,35 +456,25 @@ function clearList() {
 
 var color = d3.scaleOrdinal()
     .domain(Object.values(region_id_to_to_name))
-    // .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#b3b3b3", "#e5c494"]);
-    .range(d3.schemeSet1)
+    .range(d3.schemeSet3)
 
 function drawCircularPacking() {
   console.log(sortValue)
   // Color palette for continents?
   d3.select(".circularPackingClass").selectAll("*").remove()
   circleData = circleData.sort(function(a,b){ return b.region_name - a.region_name; });
-  maxTotal = 0;
-  maxPerPerson = 0;
-  circleData.forEach(c => {
-    if (c.total_msw > maxTotal) {
-      maxTotal = c.total_msw
-    }
-    if (c.total_per_person > maxPerPerson) {
-      maxPerPerson = c.total_per_person
-    }
-  })
-  console.log(maxTotal)
-  console.log(maxPerPerson)
+
   // Size scale for countries
   var size = d3.scaleLinear()
-    .domain([0, maxTotal])
+  // var size = d3.scaleQuantize()
+    .domain([minTotal, maxTotal])
     .range([15, 50])  // circle will be between 7 and 55 px wide
-
+    // .range([10,  20, 30, 40, 50])
   var sizePopulation = d3.scaleLinear()
-    .domain([0, maxPerPerson])
+    .domain([minPerPerson, maxPerPerson])
     .range([15,50])
-
+    // .range([10,  20, 30, 40, 50])
+    
   // create a tooltip
   var Tooltip = d3.select("#tooltip")
     .style("opacity", 0)
@@ -477,8 +503,9 @@ function drawCircularPacking() {
       .style("left", (d3.mouse(this)[0]+20) + "px")
       .style("top", (d3.mouse(this)[1]) + "px")
   }
+
   var mouseleave = function(d) {
-    Tooltip
+    // Tooltip
     //   .style("opacity", 0)
   }
   var elemEnter = 
@@ -501,7 +528,12 @@ function drawCircularPacking() {
       })
       .attr("cx", width2 / 2)
       .attr("cy", height2 / 2)
-      .style("fill", function(d){ return color(d.region_name)})
+      .style("fill", function(d){ 
+        if (selectedCountryCircle !== null && selectedCountryCircle.country_code === d.country_code) {
+          return "gray"
+        }
+        return color(d.region_name)
+      })
       .style("fill-opacity", 0.8)
       .attr("stroke", "black")
       .style("stroke-width", 1)
@@ -522,6 +554,15 @@ function drawCircularPacking() {
               }            
             })
             selectedCountryCircle = null
+            
+          selectedCountries = selectedCountries.filter(c => c.country_name !== d.country_name)
+          circleVisCountryNames.delete(d.country_name)
+          displayList()
+          document.getElementById('first').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+          });
         } else {
           if (selectedCountryCircle !== null) { // unselect the current circle selected 
             country_code_selection = ".node#" + selectedCountryCircle.country_code
@@ -544,18 +585,13 @@ function drawCircularPacking() {
       .call(d3.drag() // call specific function when circle is dragged
            .on("start", dragstarted)
            .on("drag", dragged)
-           .on("end", dragended));
-    
-    // elemEnter.append("text")
-    //     .attr('x', function (d) {
-    //         return d.x;
-    //     })
-    //     .attr('y', function (d) {
-    //         return d.y;
-    //     })
-    //     .text(function(d){return "hello world"})
-    //     .style("fill", "black")
-    //     .attr('text-anchor', "middle")
+           .on("end", dragended))
+
+      .call(d3.helper.tooltip( // toltip
+        function(d,i){ return "<b>" + d.country_name + "</b>";
+            }, true
+      ))
+
 
   // Features of the forces applied to the nodes:
   var simulation = d3.forceSimulation()
@@ -621,7 +657,7 @@ function drawCircularPacking() {
         .shapePadding(4)
         .scale(color);
     circleVis.select(".legendThreshold")
-        .call(legend);
+        .call(legend, true);
 }
 
 /********* COUNTRY BAR CHART BEGINS HERE *****************/
@@ -655,14 +691,15 @@ function drawCountryInfoChart() {
   document.getElementById('selections').style.display = 'block';
   sortValue = document.getElementById("selectSort").value
   numberValue = document.getElementById("selectNumber").value
-  
   let countries_sorted = selectedCountries
   if (sortValue === "totalMsw") { // sort by total msw
     countries_sorted.sort(function(a,b) { return b.total_msw - a.total_msw; }) 
   } else { // sort by msw per person
-    countries_sorted.sort(function(a,b) { return (b.total_msw/b.population) - (a.total_msw/a.population); }) 
+    countries_sorted.sort(function(a,b) { return b.total_per_person - a.total_per_person; }) 
   }
   data = countries_sorted
+  console.log(data)
+
   if (numberValue !== "all") {
     data = countries_sorted.slice(0,numberValue); 
   }
@@ -674,15 +711,23 @@ function drawCountryInfoChart() {
       .range([0, w])
       .padding(0.2);
 
-  var y = d3.scaleLinear()
-      .domain([0, d3.max(data, function(d) { return d.total_msw; }) * 1.1])
+  let y = 
+    d3.scaleLinear()
+      // .domain([0, d3.max(data, function(d) { return maxTotal }) * 1.1])
+      .domain([0, maxTotal])
+      .range([h, 0]);
+
+  let yPopulation=
+      d3.scaleLinear()
+      // .domain([0, d3.max(data, function(d) { return maxPerPerson}) * 1.1])
+      .domain([0, maxPerPerson])
       .range([h, 0]);
 
   ///////////////////////
   // Axis
     // Scale the range of the data in the domains
-  x.domain(data.map(function(d) { return d.country_name; }));
-  y.domain([0, d3.max(data, function(d) { return d.total_msw * 1.1; })]);
+  // x.domain(data.map(function(d) { return d.country_name; }));
+  // y.domain([0, d3.max(data, function(d) { return d.total_msw * 1.1; })]);
 
   // append the rectangles for the bar chart
   var bar = chart.selectAll(".bar").data(data)
@@ -691,24 +736,70 @@ function drawCountryInfoChart() {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.country_name); })
       .attr("width", x.bandwidth())
-      .attr("y", function (d) { return y(d.total_msw);})
-      .attr("height", function(d) { return h - y(d.total_msw); })
-      .style("fill", function(d) {return colorScale(d.total_msw)});
+      .attr("y", function (d) { 
+        if (sortValue === "totalMsw") {
+          return y(d.total_msw); 
+        } else {
+          return yPopulation(d.total_per_person);
+        }         
+      })
+      .attr("height", function(d) { 
+        if (sortValue === "totalMsw") {
+          return h - y(d.total_msw); 
+        } else {
+          return h - yPopulation(d.total_per_person);
+        }
+      })
+      .style("fill", function(d) {
+        if (sortValue === "totalMsw") {
+          return colorScale(d.total_msw) 
+        } else {
+          return colorScalePopulation(d.total_per_person)
+        }
+      });
   
   bar.transition()
       .duration(1500)
       .ease(d3.easeElastic)
-      .attr("y", function(d) { return y(d.total_msw); })
-      .attr("height", function(d) { return h - y(d.total_msw); })
+      .attr("y", function(d) { 
+        if (sortValue === "totalMsw") {
+          return y(d.total_msw); 
+        } else {
+          return yPopulation(d.total_per_person);
+        }      
+      })
+      .attr("height", function(d) { 
+        if (sortValue === "totalMsw") {
+          return h - y(d.total_msw); 
+        } else {
+          return h - yPopulation(d.total_per_person);
+        }      
+      })
   
       // add the x Axis
   chart.append("g")
       .attr("transform", "translate(0," + h + ")")
       .call(d3.axisBottom(x));
 
-  // add the y Axis
-  chart.append("g")
+  if (sortValue === "totalMsw") {
+    chart.append("g")
     .call(d3.axisLeft(y));
+
+    chart
+    .append("text")
+    .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
+    .text("Total Waste (tons)");
+
+  } else {
+    chart.append("g")
+    .call(d3.axisLeft(yPopulation));
+
+    chart
+    .append("text")
+    .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
+    .text("Total Waste (tons) per person");
+
+  }
 
   ///////////////////////
   // Title
@@ -718,13 +809,7 @@ function drawCountryInfoChart() {
   //   .attr("class", "graph-title")
   //   .attr("y", 15)
   //   .attr("x", w / 2.0);
-
-  //add labels
-  chart
-    .append("text")
-    .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
-    .text("Total Waste (tons)");
-
+  
   ///////////////////////
   // Bars
   // var bar = chart.selectAll(".bar").data(data)
@@ -767,6 +852,18 @@ d3.queue()
       let country_name_first = d.country_name.split(" ")[0]
       let region_name = region_id_to_to_name[d.region_id]
       let valuePerPerson = country_value / population;
+      if (country_value > 0 && country_value < minTotal) {
+        minTotal = country_value
+      }
+      if (country_value >  maxTotal) {
+        maxTotal = country_value
+      }
+      if (valuePerPerson > 0 && valuePerPerson < minPerPerson) {
+        minPerPerson = valuePerPerson
+      }
+      if (valuePerPerson > maxPerPerson) {
+        maxPerPerson = valuePerPerson
+      }
       allData[country_code] = {total_msw: country_value, population: population, country_name: country_name, country_code: country_code, region_name: region_name, total_per_person: valuePerPerson}
       circleData.push( {total_msw: country_value, population: population, country_name: country_name, country_code: country_code, region_name: region_name, total_per_person: valuePerPerson})
     })
@@ -776,6 +873,10 @@ function ready(error, topo) {
     if (error) throw error;
     globalTopo = topo 
     // Draw the map
+    console.log(minTotal)
+    console.log(maxTotal)
+    console.log(minPerPerson)
+    console.log(maxPerPerson)
     drawMap()
     drawCircularPacking()
 }
