@@ -202,3 +202,12 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+// https://www.aluminum.org/industries/production/recycling
+// https://www.greenandgrowing.org/what-if-everyone-recycled-tips/
+// https://www.aluminum.org/aluminum-can-advantage
+// https://www.aluminum.org/sites/default/files/SustainabilityBrochure_0.pdf
+// https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator
+// https://www.aluminum.org/sites/default/files/USPrimaryProduction062020.pdf
+
+// https://www.eia.gov/tools/faqs/faq.php?id=33&t=6#:~:text=In%202020%2C%20the%20United%20States,6.63%20billion%20barrels%20of%20petroleum. for oil used per day 

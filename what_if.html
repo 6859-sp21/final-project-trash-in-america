@@ -1,0 +1,227 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>What If</title>
+    <meta name="description" content="The HTML5 Herald" />
+    <meta name="author" content="SitePoint" />
+
+    <link rel="stylesheet" href="what_if.css" />
+    <script src="what_if.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+  </head>
+
+  <body class="container">
+    <div class="half">
+      <div id="can-dumpster">
+        <div class="sub-container">
+          <h2>
+            This means that each ton of aluminum recycled (rather than produced
+            from ore) saves...
+          </h2>
+          <div class="button-container">
+            <button class="next-button" id="next-button3">Next</button>
+            <button class="next-button" id="next-button4">Next</button>
+          </div>
+          <img class="can-bin" src="images/cans-bin.svg" />
+          <span>
+            How much is a ton? It is about one (relatively small) walrus!
+            <img class="barrel" src="images/walrus.svg" />
+          </span>
+        </div>
+      </div>
+      <div id="pie-chart">
+        <div class="sub-container">
+          <h2 class="pie-title" id="pie-title">
+            Imagine this circle as the amount of emissions associated with the
+            production of aluminum from virgin ore
+          </h2>
+          <div class="button-container">
+            <button class="next-button" id="next-button">Next</button>
+          </div>
+          <div id="my_dataviz"></div>
+          <div class="button-container">
+            <button class="next-button" id="next-button2">
+              What does this mean?
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="monthly">
+        <div class="sub-container">
+          <h2>
+            That was just for one ton...in the US alone, monthly aluminum
+            production is about 1,145,600 tons (in 2019). So recycling all of
+            the aluminum produced in a month equals...
+          </h2>
+          <div class="button-container">
+            <button class="next-button" id="next-button6">Next</button>
+            <button class="next-button" id="next-button7">Next</button>
+          </div>
+          <img class="can-bin" src="images/cans-bin.svg" />
+          <span>
+            How much is a ton? It is about one (relatively small) walrus!
+            <img class="barrel" src="images/walrus.svg" />
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="half">
+      <div id="barrels">
+        <div class="sub-container">
+          <h2>24 barrels of oil equivalent of energy</h2>
+          <div class="barrel-container">
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+            <img class="barrel" src="images/oil-barrel.svg" />
+          </div>
+        </div>
+      </div>
+      <div id="co2">
+        <div class="sub-container">
+          <h2>
+            More than 9 tons of CO2 equivalent of greenhouse gas emissions
+          </h2>
+          <img class="co2" src="images/carbon-dioxide.svg" />
+          <h2>
+            ...which is equivalent to 2 passenger vehicles driven for ONE YEAR!
+          </h2>
+          <img class="calendar" src="images/calendar.svg" />
+          <div>
+            <img class="co2" src="images/eco-car.svg" />
+            <img class="co2" src="images/eco-car.svg" />
+          </div>
+          <div class="button-container">
+            <button class="next-button" id="next-button5">
+              2 cars? That's not much...
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="monthly-results">
+        <div class="sub-container">
+          <h2>
+            1.5 days worth of oil consumed in the entire US (1,145,600 * 24 /
+            18,120,000 per day)
+          </h2>
+          <img class="barrel2" src="images/oil-barrel.svg" />
+          <br /><br />
+          <h2>
+            And is also equivalent to 2,291,200 passenger vehicles driven for
+            one year — free car rides for 0.7% of the Americans for one year!
+          </h2>
+          <img class="co2" src="images/eco-car.svg" />
+          <div class="button-container">
+            <button class="next-button" id="next-button5">
+              2 cars? That's not much...
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    var alphabet = "ab".split("");
+
+    var margin = 10,
+      width = 400,
+      height = 400,
+      radius = Math.min(width, height) / 2 - margin;
+
+    var svg = d3
+      .select("#my_dataviz")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var color = d3.scaleOrdinal(["#ff8c94", "#dddddd"]);
+
+    var pie = d3
+      .pie()
+      .sort(null)
+      .value(function (d) {
+        return d.value;
+      });
+
+    var arc = d3.arc().outerRadius(radius).innerRadius(0);
+
+    redraw([
+      { name: "a", value: 100 },
+      { name: "b", value: 0 },
+    ]);
+
+    document.getElementById("next-button").onclick = function changeContent() {
+      var nextButton = document.getElementById("next-button");
+      nextButton.style.display = "none";
+      var pieTitle = document.getElementById("pie-title");
+      pieTitle.innerText =
+        "...in comparison, recycled aluminum generates only 5 percent of the emissions to produce the same amount of new aluminum";
+      redraw([
+        { name: "a", value: 5 },
+        { name: "b", value: 95 },
+      ]);
+
+      setTimeout(function () {
+        var button = document.getElementById("next-button2");
+        button.style.display = "block";
+      }, 2000);
+    };
+
+    function redraw(data) {
+      // join
+      var arcs = svg.selectAll(".arc").data(pie(data), function (d) {
+        return d.data.name;
+      });
+
+      // update
+      arcs.transition().duration(1500).attrTween("d", arcTween);
+
+      // enter
+      arcs
+        .enter()
+        .append("path")
+        .attr("class", "arc")
+        .attr("fill", function (d, i) {
+          return color(i);
+        })
+        .attr("d", arc)
+        .each(function (d) {
+          this._current = d;
+        });
+    }
+
+    function arcTween(a) {
+      var i = d3.interpolate(this._current, a);
+      this._current = i(0);
+      return function (t) {
+        return arc(i(t));
+      };
+    }
+    // https://www.d3-graph-gallery.com/graph/pie_basic.html
+    // https://bl.ocks.org/HarryStevens/e1acaf628b1693f1b32e5f2e1a7f73fb
+  </script>
+</html>
