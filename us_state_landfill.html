@@ -53,12 +53,12 @@ p {
             </div>
             <div id="trash_legend">
                 <div id="garbage_bin" class="row">
-                    <a href = '#'><img id= "legend_img" src= "images/smelly_trash.png" alt= "standard garbage bin"></a>
+                    <a href = '#'><img id= "legend_img" src= "images/garbage_bin.svg" alt= "standard garbage bin"></a>
                     <p> Garbage Bin</p>
                     <p> 0.02 ton </p>
                 </div>
                 <div id="dumpster" class="row">
-                    <img id= "dumpster_img" src= "images/dumpster.png" alt= "standard dumpster">
+                    <img id= "dumpster_img" src= "images/dumpster.svg" alt= "standard dumpster">
                     <p>Dumpster</p>
                     <p> 0.6 ton  </p>
                 </div>
@@ -221,7 +221,7 @@ function image_out () {
     var trash_cans_sec = parseInt(landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 57);
     // creating bin imgs   
     var bins = document.createElement('img')
-        bins.setAttribute("src", "images/smelly_trash.png");
+        bins.setAttribute("src", "images/garbage_bin.svg");
         bins.setAttribute("style", "width: 40px");
     
     // delete all child trash cans of this parent div
@@ -263,7 +263,7 @@ $(function () {
         var listItem = document.createElement("div");
         // creating dumpster imgs
         var dumpster = document.createElement('img')
-            dumpster.setAttribute("src", "images/dumpster.png");
+            dumpster.setAttribute("src", "images/dumpster.svg");
             dumpster.setAttribute("style", "width: 100px");
         for(i = 0; i < dumpsters_min; i++){
             var listItemSize = d3.select('body').append('svg')

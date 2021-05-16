@@ -18,8 +18,28 @@ h4 {
 #wrapper{
     height:95vh;
     flex-direction: row;
-  }
-  
+}
+
+/* DROPDOWN MENU */
+#ui-menu-item {
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  color: black;
+}
+
+.ui-id-1 {
+  left: 0;
+}
+
+.ui-corner-all {
+  color: black;
+}
+.ui-helper-hidden-accessible {
+  height: 20px;
+}
+
 #side_bar{
     display: block;
     padding-left: 10px;
