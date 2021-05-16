@@ -1,11 +1,33 @@
 //copied from http://bl.ocks.org/espinielli/4d17fa15a7a5084e217992f985fba484
 d3.helper = {};
 
-d3.helper.tooltip = function(accessor){
+d3.helper.tooltip = function(accessor, flag=false){
+    // create a tooltip
+
+    // this is for the circular packing right tooltip
+    var Tooltip = d3.select("#tooltip")
+    var mouseover = function(d) {
+        Tooltip
+          .style("opacity", 1)
+    }
+    var mousemove = function(d) {
+        let text = '<u>' + d.country_name + '</u>' 
+            + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
+            + "<br>" + d.population.toLocaleString() + " people means"
+            + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
+        Tooltip.html(text)
+    }
+
+
+
     return function(selection){
         var tooltipDiv;
         var bodyNode = d3.select('body').node();
         selection.on("mouseover", function(d, i){
+            if (flag) {
+                console.log("hello")
+                mouseover(d)
+            }
             // Clean up lost tooltips
             d3.select('body').selectAll('div.mapTooltip').remove();
             // Append tooltip
@@ -22,6 +44,9 @@ d3.helper.tooltip = function(accessor){
             //    .html(tooltipText);
         })
         .on('mousemove', function(d, i) {
+            if (flag) {
+                mousemove(d)
+            }
             // Move tooltip
             var absoluteMousePos = d3.mouse(bodyNode);
             tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
