@@ -68,10 +68,15 @@ function drop(e) {
   const id = e.dataTransfer.getData("text/plain");
   const draggable = document.getElementById(id);
   const targetClassList = e.target.classList;
+  const targetParentClassList = e.target.parentElement.classList;
   if (targetClassList.contains("trash-category")) {
     // add it to the drop target
     e.target.appendChild(draggable);
-  } else {
+  } else if (targetParentClassList.contains("trash-category")) {
+    e.target.parentElement.appendChild(draggable);
+  }
+  
+  else {
     //unsorted_region.appendChild(draggable);
     const region = document.getElementById(id + "-container");
     region.appendChild(draggable);
