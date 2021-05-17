@@ -26,9 +26,9 @@ d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePo
         var tooltipDiv;
         var bodyNode = d3.select('body').node();
         selection.on("mouseover", function(d, i){
-            if (flag) {
-                mouseover(d)
-            }
+            // if (flag) {
+            //     mouseover(d)
+            // }
             // Clean up lost tooltips
             d3.select('body').selectAll('div.mapTooltip').remove();
 
@@ -40,15 +40,24 @@ d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePo
                 .style('position', 'absolute') 
                 .style('z-index', 1001);
             // Add text using the accessor function
-            var tooltipText = accessor(d, i) || '';
-            tooltipDiv.html(tooltipText);
+            // var tooltipText = accessor(d, i) || '';
+            let text = accessor(d, i ) || "";
+            if (flag) {
+                text = '<u>' + d.country_name + '</u>' 
+                    + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
+                    + "<br>" + d.population.toLocaleString() + " people means"
+                    + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
+                    + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
+                    // + "<br><br><b>Note: One ton = 2000 lbs"
+            }
+            tooltipDiv.html(text);
         })
         .on('mousemove', function(d, i) {
             // change the according hover color to gray
             // let selection = "circle#" + d.country_code
-            if (flag) {
-                mousemove(d) // do circle selection hovering with right tooltip
-            }
+            // if (flag) {
+            //     mousemove(d) // do circle selection hovering with right tooltip
+            // }
             // } else {
             //     selection = "path#" + d.country_code   
             // }

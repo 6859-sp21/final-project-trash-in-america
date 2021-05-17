@@ -157,6 +157,11 @@
   .map:hover {
     cursor: move;
   }
+
+  #barToMap {
+    border-radius: 50%;
+    display: none;
+  }
   
 </style>
 <body>
@@ -181,7 +186,8 @@
 </div>
 <div id="overallSelection">
   <span>
-    Show Countries By
+    What are you interested in learning about today?
+    <br><br>
     <select name="sort" id="selectSort" onchange="onSortChange()">
       <option value="totalMsw" >Total Tons of Waste</option>
       <option value="perPerson">Tons of Waste Per Person</option>
@@ -195,13 +201,14 @@
 </div>
 <div id="first">
     <div>
+      <button class="zoomButtons" id="mapToCircle"><i class="far fa-arrow-alt-circle-up"></i></button>
       <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
       <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
       <button class="zoomButtons" id="zoom-reset">Reset</button>
       <svg class="map" width="1000" height="800"></svg>
     </div>
     
-
+    <br>
     <div id="list">Click on some countries to compare them!<div id="selectedText"></div>
       <button id="compare" onclick="drawCountryInfoChart()">Compare Countries</button>
       <br>
@@ -210,6 +217,8 @@
 </div>
 
 <div>
+  <button class="zoomButtons" id="barToMap"><i class="far fa-arrow-alt-circle-up"></i></button>
+
   <div id="selections">
     Show Top <select name="number" id="selectNumber" onchange="onNumberChange()">
       <option value="3">3</option>
@@ -221,7 +230,10 @@
 
   </div>
   <br>
-  <div id="countryInfoChart"></div>
+  <div>
+    <div id="countryInfoChart"></div>
+  </div>
+
 </div>
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
