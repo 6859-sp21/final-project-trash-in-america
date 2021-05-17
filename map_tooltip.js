@@ -1,7 +1,7 @@
 //copied from http://bl.ocks.org/espinielli/4d17fa15a7a5084e217992f985fba484
 d3.helper = {};
 
-d3.helper.tooltip = function(accessor, flag=false){
+d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePopulation){
     // create a tooltip
 
     // this is for the circular packing right tooltip
@@ -25,11 +25,11 @@ d3.helper.tooltip = function(accessor, flag=false){
         var bodyNode = d3.select('body').node();
         selection.on("mouseover", function(d, i){
             if (flag) {
-                console.log("hello")
                 mouseover(d)
             }
             // Clean up lost tooltips
             d3.select('body').selectAll('div.mapTooltip').remove();
+
             // Append tooltip
             tooltipDiv = d3.select('body').append('div').attr('class', 'mapTooltip');
             var absoluteMousePos = d3.mouse(bodyNode);
@@ -39,14 +39,21 @@ d3.helper.tooltip = function(accessor, flag=false){
                 .style('z-index', 1001);
             // Add text using the accessor function
             var tooltipText = accessor(d, i) || '';
-            // Crop text arbitrarily
-            //tooltipDiv.style('width', function(d, i){return (tooltipText.length > 80) ? '300px' : null;})
-            //    .html(tooltipText);
+
         })
         .on('mousemove', function(d, i) {
+            // change the according hover color to gray
+            // let selection = "circle#" + d.country_code
             if (flag) {
-                mousemove(d)
+                mousemove(d) // do circle selection hovering with right tooltip
             }
+            // } else {
+            //     selection = "path#" + d.country_code   
+            // }
+
+            // let elt = d3.select(selection)
+            // elt.style("fill", "lightgray")
+
             // Move tooltip
             var absoluteMousePos = d3.mouse(bodyNode);
             tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
@@ -55,7 +62,19 @@ d3.helper.tooltip = function(accessor, flag=false){
             tooltipDiv.html(tooltipText);
         })
         .on("mouseout", function(d, i){
-            // Remove tooltip
+            // change the according hover color back to normal
+
+            // let selection = "circle#" + d.country_code
+            // var color = "lightgray"
+            // if (flag) {
+            //     currColor = colorScale(d.region_name)
+            // } else {
+            //     currColor = sortValue === "totalMsw" ? colorScale(d.total_msw) : colorScalePopulation(d.total_per_person)
+            //     selection = "path#" + d.country_code
+            // }
+            // d3.select(selection).style("fill", currColor)
+
+            // remove tooltip
             tooltipDiv.remove();
         });
 

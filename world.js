@@ -10,23 +10,6 @@ function handleNextPageClick() {
     newurl = url.split('/').slice(0,-1).join('/')+'/polar_area_chart.html'
     window.location.href = newurl
   }
-  
-  function abbreviateNumber(value) {
-    var newValue = value;
-    if (value >= 1000) {
-        var suffixes = ["", "k", "m", "b","t"];
-        var suffixNum = Math.floor( (""+value).length/3 );
-        var shortValue = '';
-        for (var precision = 2; precision >= 1; precision--) {
-            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
-            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
-            if (dotLessShortValue.length <= 2) { break; }
-        }
-        if (shortValue % 1 != 0)  shortValue = shortValue.toFixed(1);
-        newValue = shortValue+suffixes[suffixNum];
-    }
-    return newValue;
-}
 
   function onSortChange () {
     sortValue = document.getElementById("selectSort").value
@@ -144,7 +127,7 @@ function handleNextPageClick() {
           // .scale(colorScale);
       svg.select(".mapLegendThreshold")
           .call(legend);
-  
+
       countries_g
         .selectAll("path")
         .data(topo.features)
@@ -189,11 +172,13 @@ function handleNextPageClick() {
   
               clicked(allData[d.country_code])
             })
-            .call(d3.helper.tooltip( // toltip
-              function(d,i){
-                return "<b>" + d.country_name + "</b>";
-              }
-            ))
+            .call(
+              d3.helper.tooltip( // toltip
+                function(d,i){
+                  return "<b>" + d.country_name + "</b>";
+                }, false, sortValue, colorScale, colorScalePopulation
+              )
+            )
   } 
   
   // zoom stuff for map
@@ -478,7 +463,7 @@ function handleNextPageClick() {
   
         .call(d3.helper.tooltip( // toltip
           function(d,i){ return "<b>" + d.country_name + "</b>";
-              }, true
+              }, true, sortValue, color, color
         ))
   
   
