@@ -236,7 +236,6 @@ function image_out () {
     let num_trash_cans = trash_cans_min >= 300 ? trash_cans_sec : trash_cans_min;
     console.log(num_trash_cans);
     for(i = 0; i < num_trash_cans; i++){
-        var listItemSize = d3.select('body').append('svg')
         listItem.innerHTML += bins.outerHTML;  
     }
     if (num_trash_cans == trash_cans_min) {
@@ -261,6 +260,9 @@ function dumpster_out() {
     var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
     var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
+
+    listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <b>" + dumpsters_min + "</b> <b>dumpsters of garbage a minute!</b>";
+    document.getElementById("trash_dump_container").appendChild(listStatement);
     // creating dumpster imgs
     var dumpster = document.createElement('img')
         dumpster.setAttribute("src", "images/dumpster.svg");
@@ -269,11 +271,9 @@ function dumpster_out() {
     var node= document.getElementById("trash_dump_container"); 
     node.querySelectorAll('*').forEach(n => n.remove());
     for(i = 0; i < dumpsters_min; i++){
-        var listItemSize = d3.select('body').append('svg')
         listItem.innerHTML += dumpster.outerHTML;  
     }
-    listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <b>" + dumpsters_min + "</b> <b>dumpsters of garbage a minute!</b>";
-    document.getElementById("trash_dump_container").appendChild(listStatement);
+
     document.getElementById("trash_dump_container").appendChild(listItem);
 };
 
