@@ -35,12 +35,15 @@ p {
     margin-bottom: 0px;
 }
 
+h2 {
+    font-size: 16px;
+}
 </style>
 
 <body>
     <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Global Waste</button>
     <div id='wrapper'>
-        <h1>Pickup Yo Trash America!</h1>
+        <h1>The State of Waste in the States</h1>
         <div id='side_bar' >
             <!-- info box for datavis  -->
             <div id='title_viz_instruct_text'>About:</div>
@@ -53,17 +56,17 @@ p {
             </div>
             <div id="trash_legend">
                 <div id="garbage_bin" class="row">
-                    <a href = '#'><img id= "legend_img" src= "images/garbage_bin.svg" alt= "standard garbage bin"></a>
+                    <a href = '#'><img id= "legend_img" onclick="image_out()" src= "images/trash.svg" alt= "standard garbage bin"></a>
                     <p> Garbage Bin</p>
                     <p> 0.02 ton </p>
                 </div>
                 <div id="dumpster" class="row">
-                    <img id= "dumpster_img" src= "images/dumpster.svg" alt= "standard dumpster">
+                    <a href = '#'><img id= "dumpster_img" onclick="dumpster_out()" src= "images/dumpster.svg" alt= "standard dumpster"></a>
                     <p>Dumpster</p>
                     <p> 0.6 ton  </p>
                 </div>
             </div> 
-            <div id= 'human-height-index'>
+            <!-- <div id= 'human-height-index'>
                 <div id="human1" class="row">
                     <img id= "black-man" src= "images/black-man.png" alt= "Black man">
                     <p> 5' 8 </p>
@@ -72,7 +75,7 @@ p {
                     <img id= "white-woman" src= "images/white-woman.png" alt= "White woman">
                     <p> 5' 4 </p>
                 </div>
-            </div>  
+            </div>   -->
         </div>
         
         <!-- TRASH DUMP ZONE -->
@@ -80,7 +83,7 @@ p {
             <div id="svg_id"></div>
         </div>
     </div>  
-        
+    <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </div>
 
     <!-- <p id = "datacite" style= "font-size: 11px;" text-align="center">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p> -->
@@ -221,9 +224,9 @@ function image_out () {
     var trash_cans_sec = parseInt(landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 57);
     // creating bin imgs   
     var bins = document.createElement('img')
-        bins.setAttribute("src", "images/garbage_bin.svg");
-        bins.setAttribute("style", "width: 40px");
-    
+        bins.setAttribute("src", "images/trash.svg");
+        bins.setAttribute("class", "bin_spacing");
+
     // delete all child trash cans of this parent div
     var node= document.getElementById("trash_dump_container"); 
     node.querySelectorAll('*').forEach(n => n.remove());
@@ -237,10 +240,10 @@ function image_out () {
         listItem.innerHTML += bins.outerHTML;  
     }
     if (num_trash_cans == trash_cans_min) {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_cans_min + " bins of garbage a minute!";
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_min + " bins of garbage a minute!</strong>";
         }
         else {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + trash_cans_sec + " bins of garbage every second!";
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_sec + "</strong> bins of garbage every second!</strong>";
         };
     document.getElementById("trash_dump_container").appendChild(listStatement);
     document.getElementById("trash_dump_container").appendChild(listItem);
@@ -251,29 +254,28 @@ d3.select("#state_search_submit").on("click", function() {
     image_out();
 }); 
 
-//d3.select("#dumpster").on("click", function() {
-// document.getElementById("dumpster").addEventListener("click", function() {
-$(function () {
-    $("dumpster_img").click (function() {
-        var UserSearchBoxSelection = document.getElementById('state_search_box').value;
-        // 1 ton = 2000 pounds
-        // max weight for 1 dumpster is 500 lbs = 4 bins per ton
-        var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
-        var listStatement = document.createElement("h2");
-        var listItem = document.createElement("div");
-        // creating dumpster imgs
-        var dumpster = document.createElement('img')
-            dumpster.setAttribute("src", "images/dumpster.svg");
-            dumpster.setAttribute("style", "width: 100px");
-        for(i = 0; i < dumpsters_min; i++){
-            var listItemSize = d3.select('body').append('svg')
-            listItem.innerHTML += dumpsters.outerHTML;  
-        }
-        listStatement.innerHTML += document.getElementById('state_search_box').value + " produces " + dumpsters_min + " dumpsters of garbage a minute!";
-        document.getElementById("trash_dump_container").appendChild(listStatement);
-        document.getElementById("trash_dump_container").appendChild(listItem);
-    });
-});
+function dumpster_out() {
+    var UserSearchBoxSelection = document.getElementById('state_search_box').value;
+    // 1 ton = 2000 pounds
+    // max weight for 1 dumpster is 500 lbs = 4 bins per ton
+    var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+    var listStatement = document.createElement("h2");
+    var listItem = document.createElement("div");
+    // creating dumpster imgs
+    var dumpster = document.createElement('img')
+        dumpster.setAttribute("src", "images/dumpster.svg");
+        dumpster.setAttribute("class", "dumpster_spacing");
+    
+    var node= document.getElementById("trash_dump_container"); 
+    node.querySelectorAll('*').forEach(n => n.remove());
+    for(i = 0; i < dumpsters_min; i++){
+        var listItemSize = d3.select('body').append('svg')
+        listItem.innerHTML += dumpster.outerHTML;  
+    }
+    listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <b>" + dumpsters_min + "</b> <b>dumpsters of garbage a minute!</b>";
+    document.getElementById("trash_dump_container").appendChild(listStatement);
+    document.getElementById("trash_dump_container").appendChild(listItem);
+};
 
 
 </script>
