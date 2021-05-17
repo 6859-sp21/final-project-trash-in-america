@@ -1,8 +1,20 @@
-.container {
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.what-if-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+}
+
+.what-if-outer {
+  background-color: #fdfdf6;
+}
+
+.section-color {
+  background-color: #e1f1dd;
 }
 
 #can-dumpster {
@@ -37,7 +49,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 50px;
+  padding: 0 50px 50px 50px;
 }
 
 .recycle-logo {
@@ -110,7 +122,7 @@
   border-radius: 8px;
   border: none;
   padding: 10px 30px;
-  animation: glowing 1300ms infinite;
+  animation: glowing2 1300ms infinite;
 }
 
 .button-container {
@@ -120,7 +132,11 @@
   height: 60px;
 }
 
-@keyframes glowing {
+/* .full-screen {
+  min-height: 100%;
+} */
+
+@keyframes glowing2 {
   0% {
     background-color: #cbf1f5;
     box-shadow: 0 0 3px #cbf1f5;
@@ -136,19 +152,28 @@
 }
 
 .circles {
-    width: 200px;
-    padding: 20px;
+  width: 200px;
+  padding: 20px;
 }
 
 .small-words {
-    text-align: center;
+  text-align: center;
 }
 
 .plz-recycle-txt {
-    font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .green {
-    color: #70af85;
-    font-size: 3rem;
+  color: #5aa469;
+  font-size: 3rem;
+}
+
+.arrow-container {
+  display: flex;
+  justify-content: center;
+}
+
+.arrows {
+  height: 50px;
 }

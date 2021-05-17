@@ -8,6 +8,7 @@ window.onload = function () {
   var fourthButton = document.getElementById("next-button4");
   var fifthButton = document.getElementById("next-button5");
   var sixthButton = document.getElementById("next-button6");
+  var seventhButton = document.getElementById("next-button7");
   var canDumpsterDiv = document.getElementById("can-dumpster");
   var barrelDiv = document.getElementById("barrels");
   var co2 = document.getElementById("co2");
@@ -53,5 +54,41 @@ window.onload = function () {
     canDumpsterDiv.style.display = "none";
     sixthButton.style.display = "none";
     monthlyRes.style.display = "block";
+    setTimeout(function () {
+      seventhButton.style.display = "block";
+    }, 2000);
   };
+
+  seventhButton.onclick = function changeToCans() {
+    monthlyRes.style.display = "none";
+    seventhButton.style.display = "none";
+    secondButton.style.display = "none";
+    monthly.style.display = "none";
+    pieDiv.style.display = "block";
+    changeContentBack();
+  };
+
+  var downFromDragDrop = document.getElementById("down-from-drag-drop");
+  var upFromWhatIf = document.getElementById("up-from-what-if");
+  var downFromWhatIf = document.getElementById("down-from-what-if");
+  var upFromReview = document.getElementById("up-from-review");
+
+  var dragDropView = document.getElementById("dragDropView");
+  var whatIfView = document.getElementById("whatIfView");
+  var reviewView = document.getElementById("reviewView");
+
+  downFromDragDrop.onclick = function goToWhatIf() {
+    whatIfView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  upFromWhatIf.onclick = function goToWhatIf() {
+    dragDropView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  downFromWhatIf.onclick = function goToWhatIf() {
+    reviewView.scrollIntoView({ behavior: "smooth" });
+  }
+  upFromReview.onclick = function goToWhatIf() {
+    whatIfView.scrollIntoView({ behavior: "smooth" });
+  }
 };
