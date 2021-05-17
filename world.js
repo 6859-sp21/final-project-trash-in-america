@@ -1,4 +1,14 @@
+// window.onload = function () {
+//   var bulldozer = document.createElement('img')
+//   bulldozer.setAttribute("src", "images/excavator.svg");
+//   bulldozer.setAttribute("width", "20px")
+//   bulldozer.setAttribute("height", "20px")
 
+//   bulldozerDiv = document.getElementById("bulldozer")
+//   for(let i=0; i<390; i++) {
+//     bulldozerDiv.innerHTML += bulldozer.outerHTML;
+//   }
+// }
 function handleNextPageClick() {
     url = window.location.href
     newurl = url.split('/').slice(0,-1).join('/')+'/us_state_landfill.html'
@@ -55,12 +65,11 @@ function handleNextPageClick() {
       width = +svg.attr("width"),
       height = +svg.attr("height");    
   var countries_g = svg.append("g").attr("class", "countries")
-  var legend_g = svg.append("g").attr("class", "mapLegendThreshold").attr("transform", "translate(20,40)");
+  var legend_g = svg.append("g").attr("class", "mapLegendThreshold").attr("transform", "translate(700,20)");
   var zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on("zoom", zoomed);
   svg.call(zoom).on("wheel.zoom", null); // allow to drag map around but disable zoom
-
 
   // var colorScale = d3.scaleLinear()
   var colorScale = d3.scaleQuantile()
@@ -81,8 +90,8 @@ function handleNextPageClick() {
 
   
   var projection = d3.geoNaturalEarth()
-      .scale(width /1.8/ Math.PI)
-      .translate([width / 2, height / 2])
+      .scale(width /1.6/ Math.PI)
+      .translate([width / 2-30, height / 2-20])
   var path = d3.geoPath()
       .projection(projection);
   function drawMap() {
@@ -490,11 +499,11 @@ function handleNextPageClick() {
               .attr("cy", function(d){ return d.y ? d.y : 0; })
         });
   
-      document.getElementById('circularPacking').scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
+      // document.getElementById('circularPacking').scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'center',
+      //   inline: 'center'
+      // });
      // What happens when a circle is dragged?
      function dragstarted(d) {
       if (!d3.event.active) simulation.alphaTarget(.03).restart();
@@ -513,7 +522,7 @@ function handleNextPageClick() {
   
     var g = circleVis.append("g")
       .attr("class", "legendThreshold")
-      .attr("transform", "translate(20,40)");
+      .attr("transform", "translate(700,40)");
   
     g.append("text")
       .attr("class", "caption")
@@ -536,7 +545,7 @@ function handleNextPageClick() {
   
     var g = circleVis.append("g")
       .attr("class", "legendSize")
-      .attr("transform", "translate(600,40)");
+      .attr("transform", "translate(20,40)");
   
   
     if (sortValue === "totalMsw") {

@@ -134,13 +134,29 @@
 
   circle:hover{
     fill:lightgray;
+    cursor: pointer;
+    color: lightgray
   }
 
   path:hover{
     fill:lightgray;
+    cursor: pointer;
   }
 
+  .intro {
+    text-align: center;
+    align-items: center;
+  }
 
+  #bulldozer {
+    width: 75%;
+    margin-left:auto;
+    margin-right:auto
+  }
+
+  .map:hover {
+    cursor: move;
+  }
   
 </style>
 <body>
@@ -148,6 +164,21 @@
 <button id="nextPage" onclick="handleNextPageClick()">Explore USA Waste &#8594;</button>
 <h1>Pickup Yo Trash World (2018)</h1>
 <br><br>
+<div class="intro">
+  <div>
+    <h2>Did you know that in 2018, the world measured to have generated 1.9 billion TONS of trash?</h2>
+  </div>
+  <br>
+  <div>
+    <h2>If an average bulldozer can push 5 TONS of trash of trash, then it would take 390 million bulldozers to push all that trash out.</h2>
+    <div id="bulldozer"><image width="100%" src="./images/bulldozers.png"></image></div>
+  </div>
+  <br>
+  <div>
+    <h2>Now that's a lot. Imagine how many buildings or infrastructure can be built with that!</h2>
+  </div>
+  <br><br><br>
+</div>
 <div id="overallSelection">
   <span>
     Show Countries By
@@ -167,7 +198,6 @@
       <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
       <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
       <button class="zoomButtons" id="zoom-reset">Reset</button>
-      <br>
       <svg class="map" width="1000" height="800"></svg>
     </div>
     

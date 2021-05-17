@@ -15,6 +15,8 @@ d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePo
             + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
             + "<br>" + d.population.toLocaleString() + " people means"
             + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
+            + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
+            + "<br><br><b>Note: One ton = 2000 lbs"
         Tooltip.html(text)
     }
 
@@ -39,7 +41,7 @@ d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePo
                 .style('z-index', 1001);
             // Add text using the accessor function
             var tooltipText = accessor(d, i) || '';
-
+            tooltipDiv.html(tooltipText);
         })
         .on('mousemove', function(d, i) {
             // change the according hover color to gray
@@ -55,11 +57,11 @@ d3.helper.tooltip = function(accessor, flag, sortValue, colorScale, colorScalePo
             // elt.style("fill", "lightgray")
 
             // Move tooltip
-            var absoluteMousePos = d3.mouse(bodyNode);
-            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
-                .style('top', (absoluteMousePos[1] - 15)+'px');
-            var tooltipText = accessor(d, i) || '';
-            tooltipDiv.html(tooltipText);
+            // var absoluteMousePos = d3.mouse(bodyNode);
+            // tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
+            //     .style('top', (absoluteMousePos[1] - 15)+'px');
+            // var tooltipText = accessor(d, i) || '';
+            // tooltipDiv.html(tooltipText);
         })
         .on("mouseout", function(d, i){
             // change the according hover color back to normal
