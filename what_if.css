@@ -181,3 +181,31 @@ body {
 #transitionView {
   background-color: #fdfdf6;
 }
+
+html, body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  padding: 10px;
+}
+
+#backPage {
+position: absolute;
+right: 0px;
+font-size: 14px;
+width: 180px;
+height: 40px;
+font-family: inherit;
+border-radius: 8px;
+border: none;
+background-color: #794d93;
+color: #f9f9f9;
+margin-bottom: 40px;
+}
+
+p {
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: 16px;
+}
