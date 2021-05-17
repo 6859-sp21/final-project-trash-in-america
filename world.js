@@ -158,6 +158,9 @@ function drawMap() {
       .enter().append("path")
           .attr("fill", function (d){
               // Pull data for this country
+              if (!(d.id in allData)) {
+                return "#f4eeed" // data doesn't exist
+              }
               d.total = allData[d.id] ? allData[d.id].total_msw : 0;
               d.population = allData[d.id] ? allData[d.id].population : 0;
               d.country_name = allData[d.id] ? allData[d.id].country_name : ""
@@ -179,7 +182,11 @@ function drawMap() {
           .attr('id', function (d) { return d.id})
           .attr("d", path)
           .on("click", function(d) {
-            console.log(d)
+            if (!(d.id in allData)) {
+              alert("No 2018 waste data available for that country - Please select another country")
+              return            
+            }
+
             if (circleVisCountryNames.has(d.country_name)) {
               if (sortValue === "totalMsw") {
                 d3.select(this)
@@ -199,7 +206,7 @@ function drawMap() {
           .call(
             d3.helper.tooltip( // toltip
               function(d,i){
-                return "<b>" + d.country_name + "</b>";
+                return "<b>" + (d.country_name ? d.country_name : d.properties.name + " (No data available)") + "</b>";
               }, false, sortValue, colorScale, colorScalePopulation
             )
           )
@@ -262,7 +269,6 @@ function clicked(dAllDataFormat) {
   //   let selection = ".node#" + d.country_code
   //   d3.select(selection).style("fill", color(d.region_name))
   // }
-
   if (circleVisCountryNames.has(d.country_name)) {
     circleVisCountryNames.delete(d.country_name)
     selectedCountries = selectedCountries.filter(c => {return c.country_name !== d.country_name})
@@ -359,7 +365,7 @@ function drawCircularPacking() {
   console.log(sortValue)
   // Color palette for continents?
   d3.select(".circularPackingClass").selectAll("*").remove()
-  circleData = circleData.sort(function(a,b){ return b.region_name - a.region_name; });
+  circleData.sort(function(a,b){ return a.region_name.localeCompare(b.region_name) });
 
   // Size scale for countries
   var size = d3.scaleLinear()
@@ -809,6 +815,11 @@ d3.queue()
 function ready(error, topo) {
     if (error) throw error;
     globalTopo = topo 
+    topoCountries = new Set([])
+    globalTopo.features.forEach(t => {
+      topoCountries.add(t.id)
+    })
+    circleData = circleData.filter(c => topoCountries.has(c.country_code)) // DO NOT INCLUDE CIRCLES FOR COUNTRIES NOT ON THE MAP
     // Draw the map
     console.log(minTotal)
     console.log(maxTotal)
