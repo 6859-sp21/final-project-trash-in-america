@@ -16,167 +16,13 @@
     <script src="https://d3js.org/d3.v4.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="./drag_and_drop.css" />
+    <link rel="stylesheet" href="./world.css" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
   </head>
 
-  <style>
-    .countries {
-      fill: none;
-      stroke: #fff;
-      stroke-linejoin: round;
-    }
-    .legendThreshold {
-        font-size: 12px;
-        font-family: sans-serif;
-    }
-    .mapLegendThreshold {
-        font-size: 12px;
-        font-family: sans-serif;
-    }
-    .legendSize {
-        font-size: 12px;
-        font-family: sans-serif;
-    }
-    .swatch {
-      fill: #afb9c8;
-    }
-    .caption {
-        fill: #000;
-        text-anchor: start;
-        font-weight: bold;
-    }
-    body {
-      font-family: "Open Sans", sans-serif;
-      font-size: 16px;
-      padding: 20px;
-      scroll-behavior: smooth;
-      /* background-color: lightgray */
-    }
-  
-    #selections {
-      display: none;
-    }
-  
-    #zero {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-    }
-    #first {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-  
-    #second {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-  
-    #list {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-  
-    #overallSelection {
-      font-size: 22px;
-      text-align: center;
-    }
-  
-    #selectSort {
-      font-size: 20px;
-    }
-  
-    #selectedText {
-      overflow: auto;
-      height: 50%;
-      padding-bottom: 20px;
-    }
-  
-    .countryButton {
-      background-color: white; /* Green */
-      /* border: none; */
-      color: white;
-      padding: 2px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      color: black;
-      border-radius: 10px;
-      border-width: thin;
-    }
-  
-    .mapTooltip{ 
-      background-color:rgba(0,0,0,0.5);
-      color:#fff;
-      padding: 10px;
-      -webkit-border-radius:10px;
-      -moz-border-radius:10px;
-      border-radius:10px;
-    }
-  
-    button {
-      font-size: 20px;
-      border: none;
-      padding: 15px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  
-    .zoomButtons {
-      border-radius: 50%;
-    }
-  
-    #compare {
-      border-radius: 8px;
-      background-color:#a6dcef;
-    }
-  
-    #clear {
-      border-radius: 8px;
-      background-color:#f2aaaa;
-    }
-  
-    /* circle:hover{
-      fill:lightgray;
-      cursor: pointer;
-      color: lightgray
-    }
-  
-    path:hover{
-      fill:lightgray;
-      cursor: pointer;
-    } */
-  
-    .intro {
-      text-align: center;
-      align-items: center;
-    }
-  
-    #bulldozer {
-      width: 75%;
-      margin-left:auto;
-      margin-right:auto
-    }
-  
-    .map:hover {
-      cursor: move;
-    }
-    
-  </style>
 
   <body>
     <div class="drag-drop-container full-screen" id="dragDropView">
@@ -452,13 +298,14 @@
         <br><br><br>
         <div id="zero">
           <div id="circularPacking"></div>
-          <div id="tooltip"></div>
+          <!-- <div id="tooltip"></div> -->
         </div>
         <div id="first">
             <div>
+              <button class="zoomButtons" id="mapToCircle"><i class="far fa-arrow-alt-circle-up"></i></button>
               <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
               <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
-              <button class="zoomButtons" id="zoom-reset">Reset</button>
+              <button class="zoomButtons" id="zoom-reset">Reset</button><br>
               <svg class="map" width="1000" height="800"></svg>
             </div>
             
@@ -471,6 +318,7 @@
         </div>
 
         <div>
+          <button class="zoomButtons" id="barToMap"><i class="far fa-arrow-alt-circle-up"></i></button>
           <div id="selections">
             Show Top <select name="number" id="selectNumber" onchange="onNumberChange()">
               <option value="3">3</option>

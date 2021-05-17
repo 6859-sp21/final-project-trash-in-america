@@ -1,0 +1,154 @@
+.countries {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+  }
+  .legendThreshold {
+      font-size: 12px;
+      font-family: sans-serif;
+  }
+  .mapLegendThreshold {
+      font-size: 12px;
+      font-family: sans-serif;
+  }
+  .legendSize {
+      font-size: 12px;
+      font-family: sans-serif;
+  }
+  .swatch {
+    fill: #afb9c8;
+  }
+  .caption {
+      fill: #000;
+      text-anchor: start;
+      font-weight: bold;
+  }
+  body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    padding: 20px;
+    scroll-behavior: smooth;
+    /* background-color: lightgray */
+  }
+
+  #selections {
+    display: none;
+  }
+
+  #zero {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+  }
+  #first {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+
+  #second {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+
+  #list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #overallSelection {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  #selectSort {
+    font-size: 20px;
+  }
+
+  #selectedText {
+    overflow: auto;
+    height: 50%;
+    padding-bottom: 20px;
+  }
+
+  .countryButton {
+    background-color: white; /* Green */
+    /* border: none; */
+    color: white;
+    padding: 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    color: black;
+    border-radius: 10px;
+    border-width: thin;
+  }
+
+  .mapTooltip{ 
+    background-color:rgba(0,0,0,0.5);
+    color:#fff;
+    padding: 10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+  }
+
+  button {
+    font-size: 20px;
+    border: none;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .zoomButtons {
+    border-radius: 50%;
+  }
+
+  #compare {
+    border-radius: 8px;
+    background-color:#a6dcef;
+  }
+
+  #clear {
+    border-radius: 8px;
+    background-color:#f2aaaa;
+  }
+
+  /* circle:hover{
+    cursor: pointer;
+  }
+
+  path:hover{
+    fill:lightgray;
+    cursor: pointer;
+  } */
+
+  .intro {
+    text-align: center;
+    align-items: center;
+  }
+
+  #bulldozer {
+    width: 75%;
+    margin-left:auto;
+    margin-right:auto
+  }
+
+  .map:hover {
+    cursor: move;
+  }
+
+  #barToMap {
+    border-radius: 50%;
+    display: none;
+  }

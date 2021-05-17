@@ -340,7 +340,7 @@ function removeCountryFromList(button) {
 
 // set the dimensions and margins of the bar graph
 var width2 = 1000
-var height2 = 1000
+var height2 = 800
 
 // append the svg object to the body of the page
 var circleVis = d3.select("#circularPacking")
@@ -362,7 +362,6 @@ var color = d3.scaleOrdinal()
     .range(d3.schemeSet3)
 
 function drawCircularPacking() {
-  console.log(sortValue)
   // Color palette for continents?
   d3.select(".circularPackingClass").selectAll("*").remove()
   circleData.sort(function(a,b){ return a.region_name.localeCompare(b.region_name) });
