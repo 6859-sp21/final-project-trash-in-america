@@ -73,6 +73,8 @@ window.onload = function () {
   var downFromTransition = document.getElementById("down-from-transition");
   var upFromWorld = document.getElementById("up-from-world");
   var downFromWorld = document.getElementById("down-from-world");
+  var upFromUSA = document.getElementById("up-from-usa");
+  var downFromUSA = document.getElementById("down-from-usa");
   var upFromWhatIf = document.getElementById("up-from-what-if");
   var downFromWhatIf = document.getElementById("down-from-what-if");
   var upFromReview = document.getElementById("up-from-review");
@@ -80,6 +82,7 @@ window.onload = function () {
   var dragDropView = document.getElementById("dragDropView");
   var transitionView = document.getElementById("transitionView");
   var worldView = document.getElementById("worldView");
+  var usaView = document.getElementById("usaView");
   var whatIfView = document.getElementById("whatIfView");
   var reviewView = document.getElementById("reviewView");
 
@@ -100,11 +103,19 @@ window.onload = function () {
   }
 
   downFromWorld.onclick = function goToWhatIf() {
+    usaView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  upFromUSA.onclick = function goToWhatIf() {
+    worldView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  downFromUSA.onclick = function goToWhatIf() {
     whatIfView.scrollIntoView({ behavior: "smooth" });
   }
 
   upFromWhatIf.onclick = function goToWhatIf() {
-    worldView.scrollIntoView({ behavior: "smooth" });
+    usaView.scrollIntoView({ behavior: "smooth" });
   }
 
   downFromWhatIf.onclick = function goToWhatIf() {
