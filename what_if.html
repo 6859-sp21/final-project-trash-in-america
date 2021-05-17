@@ -16,7 +16,167 @@
     <script src="https://d3js.org/d3.v4.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="./drag_and_drop.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
   </head>
+
+  <style>
+    .countries {
+      fill: none;
+      stroke: #fff;
+      stroke-linejoin: round;
+    }
+    .legendThreshold {
+        font-size: 12px;
+        font-family: sans-serif;
+    }
+    .mapLegendThreshold {
+        font-size: 12px;
+        font-family: sans-serif;
+    }
+    .legendSize {
+        font-size: 12px;
+        font-family: sans-serif;
+    }
+    .swatch {
+      fill: #afb9c8;
+    }
+    .caption {
+        fill: #000;
+        text-anchor: start;
+        font-weight: bold;
+    }
+    body {
+      font-family: "Open Sans", sans-serif;
+      font-size: 16px;
+      padding: 20px;
+      scroll-behavior: smooth;
+      /* background-color: lightgray */
+    }
+  
+    #selections {
+      display: none;
+    }
+  
+    #zero {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+    #first {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+  
+    #second {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+  
+    #list {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+  
+    #overallSelection {
+      font-size: 22px;
+      text-align: center;
+    }
+  
+    #selectSort {
+      font-size: 20px;
+    }
+  
+    #selectedText {
+      overflow: auto;
+      height: 50%;
+      padding-bottom: 20px;
+    }
+  
+    .countryButton {
+      background-color: white; /* Green */
+      /* border: none; */
+      color: white;
+      padding: 2px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      color: black;
+      border-radius: 10px;
+      border-width: thin;
+    }
+  
+    .mapTooltip{ 
+      background-color:rgba(0,0,0,0.5);
+      color:#fff;
+      padding: 10px;
+      -webkit-border-radius:10px;
+      -moz-border-radius:10px;
+      border-radius:10px;
+    }
+  
+    button {
+      font-size: 20px;
+      border: none;
+      padding: 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  
+    .zoomButtons {
+      border-radius: 50%;
+    }
+  
+    #compare {
+      border-radius: 8px;
+      background-color:#a6dcef;
+    }
+  
+    #clear {
+      border-radius: 8px;
+      background-color:#f2aaaa;
+    }
+  
+    /* circle:hover{
+      fill:lightgray;
+      cursor: pointer;
+      color: lightgray
+    }
+  
+    path:hover{
+      fill:lightgray;
+      cursor: pointer;
+    } */
+  
+    .intro {
+      text-align: center;
+      align-items: center;
+    }
+  
+    #bulldozer {
+      width: 75%;
+      margin-left:auto;
+      margin-right:auto
+    }
+  
+    .map:hover {
+      cursor: move;
+    }
+    
+  </style>
 
   <body>
     <div class="drag-drop-container full-screen" id="dragDropView">
@@ -235,6 +395,105 @@
     
     <script src="drag_and_drop.js"></script>
 
+
+
+    <div id="transitionView">
+      <div class="arrow-container">
+        <img
+          class="arrows"
+          id="up-from-transition"
+          src="./images/angle-double-up.svg"
+        />
+      </div>
+      <!--<h1>Pickup Yo Trash World (2018)</h1>-->
+        <br><br>
+        <div class="intro">
+          <div>
+            <h2>Did you know that in 2018, the world measured to have generated 1.9 billion TONS of trash?</h2>
+          </div>
+          <br>
+          <div>
+            <h2>If an average bulldozer can push 5 TONS of trash of trash, then it would take 390 million bulldozers to push all that trash out.</h2>
+            <div id="bulldozer"><image width="100%" src="./images/bulldozers.png"></image></div>
+          </div>
+          <br>
+          <div>
+            <h2>Now that's a lot. Imagine how many buildings or infrastructure can be built with that!</h2>
+          </div>
+          <br><br><br>
+        </div>
+        <div class="arrow-container">
+          <img
+            class="arrows"
+            id="down-from-transition"
+            src="./images/angle-double-down.svg"
+          />
+        </div>
+    </div>
+   
+    <div id="worldView">
+      <div class="arrow-container">
+        <img
+          class="arrows"
+          id="up-from-world"
+          src="./images/angle-double-up.svg"
+        />
+      </div>
+
+        <div id="overallSelection">
+          <span>
+            Show Countries By
+            <select name="sort" id="selectSort" onchange="onSortChange()">
+              <option value="totalMsw" >Total Tons of Waste</option>
+              <option value="perPerson">Tons of Waste Per Person</option>
+            </select>
+          </span>
+        </div>
+        <br><br><br>
+        <div id="zero">
+          <div id="circularPacking"></div>
+          <div id="tooltip"></div>
+        </div>
+        <div id="first">
+            <div>
+              <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
+              <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
+              <button class="zoomButtons" id="zoom-reset">Reset</button>
+              <svg class="map" width="1000" height="800"></svg>
+            </div>
+            
+
+            <div id="list">Click on some countries to compare them!<div id="selectedText"></div>
+              <button id="compare" onclick="drawCountryInfoChart()">Compare Countries</button>
+              <br>
+              <button id="clear" onclick="clearList()">Clear List</button>
+            </div>
+        </div>
+
+        <div>
+          <div id="selections">
+            Show Top <select name="number" id="selectNumber" onchange="onNumberChange()">
+              <option value="3">3</option>
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <!-- <option value="all">All</option> -->
+            </select>
+            Countries That You Selected With Most Waste
+
+          </div>
+          <br>
+          <div id="countryInfoChart"></div>
+        </div>
+
+        <div class="arrow-container">
+          <img
+            class="arrows"
+            id="down-from-world"
+            src="./images/angle-double-down.svg"
+          />
+        </div>
+    </div>
+
     <div class="what-if-outer" id="whatIfView">
 
       <div class="arrow-container">
@@ -272,7 +531,7 @@
             <div class="button-container">
               <button class="next-button" id="next-button">Next</button>
             </div>
-            <div id="my_dataviz"></div>
+            <div id="aluminum_dataviz"></div>
             <div class="button-container">
               <button class="next-button" id="next-button2">
                 What does this mean?
@@ -425,86 +684,84 @@
   </body>
 
   <script>
-    var alphabet = "ab".split("");
+    var aluminumPieMargin = 10,
+      aluminumPieWidth = 400,
+      aluminumPieHeight = 400,
+      aluminumRadius = Math.min(aluminumPieWidth, aluminumPieHeight) / 2 - aluminumPieMargin;
 
-    var margin = 10,
-      width = 400,
-      height = 400,
-      radius = Math.min(width, height) / 2 - margin;
-
-    var svg = d3
-      .select("#my_dataviz")
+    var aluminumSvg = d3
+      .select("#aluminum_dataviz")
       .append("svg")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("width", aluminumPieWidth)
+      .attr("height", aluminumPieHeight)
       .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      .attr("transform", "translate(" + aluminumPieWidth / 2 + "," + aluminumPieHeight / 2 + ")");
 
-    var color = d3.scaleOrdinal(["#ff8c94", "#dddddd"]);
+    var aluminumColor = d3.scaleOrdinal(["#ff8c94", "#dddddd"]);
 
-    var pie = d3
+    var aluminumPie = d3
       .pie()
       .sort(null)
       .value(function (d) {
         return d.value;
       });
 
-    var arc = d3.arc().outerRadius(radius).innerRadius(0);
+    var aluminumArc = d3.arc().outerRadius(aluminumRadius).innerRadius(0);
 
-    redraw([
+    aluminumRedraw([
       { name: "a", value: 100 },
       { name: "b", value: 0 },
     ]);
 
-    document.getElementById("next-button").onclick = function changeContent() {
-      var nextButton = document.getElementById("next-button");
+    document.getElementById("next-button").onclick = function aluminumChangeContent() {
+      const nextButton = document.getElementById("next-button");
       nextButton.style.display = "none";
-      var pieTitle = document.getElementById("pie-title");
+      const pieTitle = document.getElementById("pie-title");
       pieTitle.innerText =
         "...in comparison, recycled aluminum generates only 5 percent of the emissions to produce the same amount of new aluminum";
-      redraw([
+      aluminumRedraw([
         { name: "a", value: 5 },
         { name: "b", value: 95 },
       ]);
 
       setTimeout(function () {
-        var button = document.getElementById("next-button2");
-        button.style.display = "block";
+        const aluminumButton = document.getElementById("next-button2");
+        aluminumButton.style.display = "block";
       }, 2000);
     };
 
-    function changeContentBack() {
-      var pieTitle = document.getElementById("pie-title");
+    function aluminumChangeContentBack() {
+      const pieTitle = document.getElementById("pie-title");
       pieTitle.innerText =
         "Imagine this circle as the amount of emissions associated with the production of aluminum from virgin ore";
-      redraw([
+      aluminumRedraw([
         { name: "a", value: 100 },
         { name: "b", value: 0 },
       ]);
       setTimeout(function () {
-        var button = document.getElementById("next-button");
-        button.style.display = "block";
+        const aluminumButton2 = document.getElementById("next-button");
+        aluminumButton2.style.display = "block";
       }, 2000);
     };
 
-    function redraw(data) {
+    function aluminumRedraw(data) {
       // join
-      var arcs = svg.selectAll(".arc").data(pie(data), function (d) {
+      var aluminumArcs = aluminumSvg.selectAll(".arc").data(aluminumPie(data), function (d) {
         return d.data.name;
       });
 
       // update
-      arcs.transition().duration(1500).attrTween("d", arcTween);
+      aluminumArcs.transition().duration(1500).attrTween("d", arcTween);
 
       // enter
-      arcs
+      aluminumArcs
         .enter()
         .append("path")
         .attr("class", "arc")
         .attr("fill", function (d, i) {
-          return color(i);
+          return aluminumColor(i);
         })
-        .attr("d", arc)
+        .attr("d", aluminumArc)
         .each(function (d) {
           this._current = d;
         });
@@ -514,10 +771,16 @@
       var i = d3.interpolate(this._current, a);
       this._current = i(0);
       return function (t) {
-        return arc(i(t));
+        return aluminumArc(i(t));
       };
     }
     // https://www.d3-graph-gallery.com/graph/pie_basic.html
     // https://bl.ocks.org/HarryStevens/e1acaf628b1693f1b32e5f2e1a7f73fb
   </script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+  <script src="./map_tooltip.js"></script> 
+  <script src="./world.js"></script>
 </html>

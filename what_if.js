@@ -65,24 +65,46 @@ window.onload = function () {
     secondButton.style.display = "none";
     monthly.style.display = "none";
     pieDiv.style.display = "block";
-    changeContentBack();
+    aluminumchangeContentBack();
   };
 
   var downFromDragDrop = document.getElementById("down-from-drag-drop");
+  var upFromTransition = document.getElementById("up-from-transition");
+  var downFromTransition = document.getElementById("down-from-transition");
+  var upFromWorld = document.getElementById("up-from-world");
+  var downFromWorld = document.getElementById("down-from-world");
   var upFromWhatIf = document.getElementById("up-from-what-if");
   var downFromWhatIf = document.getElementById("down-from-what-if");
   var upFromReview = document.getElementById("up-from-review");
 
   var dragDropView = document.getElementById("dragDropView");
+  var transitionView = document.getElementById("transitionView");
+  var worldView = document.getElementById("worldView");
   var whatIfView = document.getElementById("whatIfView");
   var reviewView = document.getElementById("reviewView");
 
   downFromDragDrop.onclick = function goToWhatIf() {
+    transitionView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  upFromTransition.onclick = function goToWhatIf() {
+    dragDropView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  downFromTransition.onclick = function goToWhatIf() {
+    worldView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  upFromWorld.onclick = function goToWhatIf() {
+    transitionView.scrollIntoView({ behavior: "smooth" });
+  }
+
+  downFromWorld.onclick = function goToWhatIf() {
     whatIfView.scrollIntoView({ behavior: "smooth" });
   }
 
   upFromWhatIf.onclick = function goToWhatIf() {
-    dragDropView.scrollIntoView({ behavior: "smooth" });
+    worldView.scrollIntoView({ behavior: "smooth" });
   }
 
   downFromWhatIf.onclick = function goToWhatIf() {

@@ -177,3 +177,7 @@ body {
 .arrows {
   height: 50px;
 }
+
+#transitionView {
+  background-color: #fdfdf6;
+}
