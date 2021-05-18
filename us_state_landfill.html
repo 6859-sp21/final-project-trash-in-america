@@ -257,7 +257,9 @@ function dumpster_out() {
     var UserSearchBoxSelection = document.getElementById('state_search_box').value;
     // 1 ton = 2000 pounds
     // max weight for 1 dumpster is 500 lbs = 4 bins per ton
-    var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+    var dumpsters_min = (landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+    var dumpsters_sec = (landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 4);
+
     var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
 
@@ -272,8 +274,15 @@ function dumpster_out() {
     node.querySelectorAll('*').forEach(n => n.remove());
     for(i = 0; i < dumpsters_min; i++){
         listItem.innerHTML += dumpster.outerHTML;  
-    }
+    let num_dumpsters = dumpsters_min >= 150 ? dumpsters_sec : dumpsters_min;
 
+    }
+    if (num_trash_cans == trash_cans_min) {
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_min + " bins of garbage a minute!</strong>";
+        }
+        else {
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_sec + "</strong> bins of garbage every second!</strong>";
+        };
     document.getElementById("trash_dump_container").appendChild(listItem);
 };
 
