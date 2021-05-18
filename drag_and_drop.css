@@ -21,7 +21,7 @@ body {
   display: flex;
   justify-content: center;
   width: 400px;
-  height: 250px;
+  height: 180px;
   position: relative;
   background-color: #fdfdf6;
   border-radius: 8px;
@@ -33,10 +33,12 @@ body {
 p {
   text-align: center;
   margin: 0.5rem;
+  font-size: 0.8em;
 }
 
 .explanation {
-  font-size: 24px;
+  font-size: 20px;
+  margin-top: 20px;
 }
 
 .explanation2 {
@@ -73,8 +75,8 @@ p {
 }
 
 .trash-category {
-  width: 200px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   margin: 0 20px 20px 20px;
   border-radius: 8px;
   position: relative;
@@ -112,13 +114,14 @@ p {
   position: absolute;
   bottom: 0;
   color: #f9f9f9;
-  font-size: 2rem;
   padding: 0 0 1rem 0;
+  font-weight: bold;
+  font-size: 1em;
 }
 
 .trash-item {
   width: 70px;
-  height: 70px;
+  /* height: 70px; */
   /*position: absolute;*/
 }
 
@@ -142,10 +145,10 @@ p {
 }
 
 .check {
-  width: 200px;
-  height: 75px;
-  font-size: 2rem;
+  padding: 16px 48px;
+  margin-top: 20px;
   font-family: inherit;
+  font-weight: bold;
   border-radius: 8px;
   border: none;
   background-color: #3b5360;
