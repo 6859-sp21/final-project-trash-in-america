@@ -161,3 +161,12 @@
     border-radius: 50%;
     display: none;
   }
+
+  #dataNote {
+    font-size: 16px;
+  }
+
+  #data-modal {
+    justify-content: left;
+    text-align: left;
+  }
