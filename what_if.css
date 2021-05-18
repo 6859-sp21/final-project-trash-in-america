@@ -1,5 +1,20 @@
-body {
+/* TEXT STYLING */
+html, body {
   font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  padding: 10px;
+}
+
+
+p {
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: 20px;
+  width: 50%;
+  margin: auto;
+  font-weight: normal;
 }
 
 .what-if-container {
@@ -43,6 +58,10 @@ body {
 
 .can-bin {
   width: 400px;
+}
+
+#bulldozer-fact {
+  width: 100%;
 }
 
 .sub-container {
@@ -169,6 +188,7 @@ body {
   font-size: 2rem;
 }
 
+/* ARROW STYLING */
 .arrow-container {
   display: flex;
   justify-content: center;
@@ -182,11 +202,6 @@ body {
   background-color: #fdfdf6;
 }
 
-html, body {
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  padding: 10px;
-}
 
 #backPage {
 position: absolute;
@@ -202,13 +217,3 @@ color: #f9f9f9;
 margin-bottom: 40px;
 }
 
-p {
-  margin-bottom: 0px;
-}
-
-h2 {
-  font-size: 20px;
-  width: 50%;
-  margin: auto;
-  font-weight: normal;
-}

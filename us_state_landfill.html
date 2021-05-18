@@ -269,16 +269,16 @@ function dumpster_out() {
     
     var node= document.getElementById("trash_dump_container"); 
     node.querySelectorAll('*').forEach(n => n.remove());
+    // loop for adding dumpsters based on dumpsters_min
+    let num_dumpsters = dumpsters_min >= 150 ? dumpsters_sec : dumpsters_min;
     for(i = 0; i < dumpsters_min; i++){
         listItem.innerHTML += dumpster.outerHTML;  
-    let num_dumpsters = dumpsters_min >= 150 ? dumpsters_sec : dumpsters_min;
-
     }
-    if (num_trash_cans == trash_cans_min) {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_min + " bins of garbage a minute!</strong>";
+    if (num_dumpsters == dumpsters_min) {
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <strong>" + dumpsters_min + " full dumpsters every minute!</strong>";
         }
         else {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_sec + "</strong> bins of garbage every second!</strong>";
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <strong>" + dumpsters_sec + "</strong> full dumpsters every second!</strong>";
         };
     document.getElementById("trash_dump_container").appendChild(listItem);
 };
