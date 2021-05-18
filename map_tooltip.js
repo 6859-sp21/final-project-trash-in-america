@@ -3,9 +3,11 @@ d3.helper = {};
 
 d3.helper.tooltip = function(accessor, isCircleFlag){
     return function(selection){
+        console.log(selection)
         var tooltipDiv;
         var bodyNode = d3.select('body').node();
-        selection.on("mouseover", function(d, i){
+        selection
+        .on("mouseover", function(d, i){
             // Clean up lost tooltips
             d3.select('body').selectAll('div.mapTooltip').remove();
             // Append tooltip
@@ -17,8 +19,8 @@ d3.helper.tooltip = function(accessor, isCircleFlag){
                 .style('top', (absoluteMousePos[1] - 15)+'px')
                 .style('position', 'absolute') 
                 .style('z-index', 300000);
-            console.log( (absoluteMousePos[0] + 10))
-            console.log((absoluteMousePos[1] - 15))
+            // console.log( (absoluteMousePos[0] + 10))
+            // console.log((absoluteMousePos[1] - 15))
             // Add text using the accessor function
             var tooltipText = accessor(d, i) || '';
             // Crop text arbitrarily
@@ -30,22 +32,21 @@ d3.helper.tooltip = function(accessor, isCircleFlag){
             var absoluteMousePos = d3.mouse(bodyNode);
             tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
                 .style('top', (absoluteMousePos[1] - 15)+'px');
-            var tooltipText = accessor(d, i) || '';
-            if (isCircleFlag) {
-                tooltipText = '<u>' + d.country_name + '</u>: ' + d.total_msw.toLocaleString() + " tons of waste (" +  d.population.toLocaleString() + " people)"
-                // + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
-                // + "<br>" + d.population.toLocaleString() + " people means"
-                // + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
-                // + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
-            }
-            console.log(tooltipText)
+            tooltipText = accessor(d, i) || '';
+            // if (isCircleFlag) {
+            //     tooltipText = d.country_name 
+            //     + d.total_msw.toLocaleString() + " tons of waste (" +  d.population.toLocaleString() + " people)"
+            //     + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
+            //     + "<br>" + d.population.toLocaleString() + " people means"
+            //     + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
+            //     + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
+            // }
             tooltipDiv.html(tooltipText);
         })
         .on("mouseout", function(d, i){
             // Remove tooltip
-            console.log("hi")
-            // tooltipDiv.remove();
-            tooltipDiv.style("opacity", 0)
+            tooltipDiv.remove();
+            // tooltipDiv.style("opacity", 0)
         });
 
     };

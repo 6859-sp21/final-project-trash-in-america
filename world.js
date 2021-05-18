@@ -1,14 +1,3 @@
-// window.onload = function () {
-//   var bulldozer = document.createElement('img')
-//   bulldozer.setAttribute("src", "images/excavator.svg");
-//   bulldozer.setAttribute("width", "20px")
-//   bulldozer.setAttribute("height", "20px")
-
-//   bulldozerDiv = document.getElementById("bulldozer")
-//   for(let i=0; i<390; i++) {
-//     bulldozerDiv.innerHTML += bulldozer.outerHTML;
-//   }
-// }
 function handleNextPageClick() {
   url = window.location.href
   newurl = url.split('/').slice(0,-1).join('/')+'/us_state_landfill.html'
@@ -20,6 +9,31 @@ function handleBackPageClick() {
   newurl = url.split('/').slice(0,-1).join('/')+'/polar_area_chart.html'
   window.location.href = newurl
 }
+
+/************* DATA NOTE MODAL STUFF STARTS***************/ 
+let dataSpan = document.getElementById("dataNote")
+let dataModal = document.getElementById("data-modal")
+var dataCloseSpan = document.getElementById("close-data-modal");
+
+// When the user clicks on the button, open the modal
+dataSpan.onclick = function () {
+  dataModal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+dataCloseSpan.onclick = function () {
+  dataModal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == dataModal) {
+    dataModal.style.display = "none";
+  }
+};
+
+/************* DATA NOTE MODAL STUFF STARTS***************/ 
+
 
 d3.select("#mapToCircle").on('click', function () {
   document.getElementById('circularPacking').scrollIntoView({
@@ -151,7 +165,7 @@ function drawMap() {
         // .scale(colorScale);
     svg.select(".mapLegendThreshold")
         .call(legend);
-
+    
     countries_g
       .selectAll("path")
       .data(topo.features)
@@ -211,6 +225,7 @@ function drawMap() {
               }, false
             )
           )
+          
 } 
 
 // zoom stuff for map
@@ -308,7 +323,7 @@ function zoomOnCountry(d) {
       y = (bounds[0][1] + bounds[1][1]) / 2,
       scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
       translate = [width / 2 - scale * x, height / 2 - scale * y];
-
+  console.log(translate)
   svg.transition()
       .duration(2000)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ) 
@@ -441,11 +456,13 @@ function drawCircularPacking() {
       .style("fill-opacity", 0.8)
       .attr("stroke", "black")
       .style("stroke-width", 1)
-      .on("mouseover", mouseover) // What to do when hovered
-      .on("mousemove", mousemove)
-      .on("mouseleave", mouseleave)
+      // .on("mouseover", mouseover) // What to do when hovered
+      // .on("mousemove", mousemove)
+      // .on("mouseleave", mouseleave)
       .on("click", function(d) {
-        console.log(d)
+        if (selectedCountryCircle) {
+          console.log(selectedCountryCircle.country_code)
+        }
         if (selectedCountryCircle !== null && selectedCountryCircle.country_code === d.country_code) {
           d3.select(this)
           .style("fill", color(d.region_name));
@@ -463,15 +480,18 @@ function drawCircularPacking() {
           selectedCountries = selectedCountries.filter(c => c.country_name !== d.country_name)
           circleVisCountryNames.delete(d.country_name)
           displayList()
-          document.getElementById('first').scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'center'
-          });
+          // document.getElementById('first').scrollIntoView({
+          //   behavior: 'smooth',
+          //   block: 'center',
+          //   inline: 'center'
+          // });
         } else {
-          if (selectedCountryCircle !== null) { // unselect the current circle selected 
-            country_code_selection = ".node#" + selectedCountryCircle.country_code
-            d3.select(country_code_selection).style("fill", function(d){ return color(selectedCountryCircle.region_name)})
+          if (selectedCountryCircle !== null) { // unselect the current circle selected
+            country_code_selection = "circle#" + selectedCountryCircle.country_code
+            console.log(country_code_selection)
+            console.log(color(selectedCountryCircle.region_name))
+            d3.select(country_code_selection).style("fill", color(selectedCountryCircle.region_name))
+            console.log(d3.select(country_code_selection).style)
             country_code_selection2 = ".countries #" + selectedCountryCircle.country_code //unselect the current country in map selected
             d3.select(country_code_selection2).style("fill", function(d){ 
               if (sortValue === "totalMsw") {
@@ -491,12 +511,9 @@ function drawCircularPacking() {
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended))
-
       .call(d3.helper.tooltip( // toltip
-        function(d,i){ return d.country_name;
-            }, true
+        function(d,i){ return d.country_name; }, true
       ))
-
 
   // Features of the forces applied to the nodes:
   var simulation = d3.forceSimulation()
@@ -677,6 +694,8 @@ function drawCountryInfoChart() {
 
   // append the rectangles for the bar chart
   var bar = chart.selectAll(".bar").data(data)
+  d3.select("barTooltip").remove()
+  var tooltip = d3.select("#countryInfoChart").append("div").attr("class", "barTooltip");
 
   bar.enter().append("rect")
       .attr("class", "bar")
@@ -702,7 +721,15 @@ function drawCountryInfoChart() {
         } else {
           return colorScalePopulation(d.total_per_person)
         }
-      });
+      })
+      .on("mouseover", function(d){
+        tooltip
+          .style("left", d3.event.pageX - 50 + "px")
+          .style("top", d3.event.pageY - 70 + "px")
+          .style("display", "inline-block")
+          .html((d.total_msw).toLocaleString() + " tons of waste<br>population of " + (d.population.toLocaleString()));
+      })
+      .on("mouseleft", function(d){ tooltip.style("display", "none");});;
   
   bar.transition()
       .duration(1500)

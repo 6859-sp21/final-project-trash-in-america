@@ -107,6 +107,20 @@
 
   }
 
+  .barTooltip {
+    position: absolute;
+    display: none;
+    min-width: 80px;
+    height: auto;
+    background: none repeat scroll 0 0 #ffffff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;  
+    border-radius:10px;   
+    padding: 14px;
+    text-align: center;
+  }
+
   button {
     font-size: 20px;
     border: none;
@@ -161,3 +175,13 @@
     border-radius: 50%;
     display: none;
   }
+
+  #dataNote {
+    font-size: 16px;
+  }
+
+  #data-modal {
+    justify-content: left;
+    text-align: left;
+  }
+
