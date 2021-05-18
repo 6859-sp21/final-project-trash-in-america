@@ -93,10 +93,18 @@
   .mapTooltip{ 
     background-color:rgba(0,0,0,0.5);
     color:#fff;
-    padding: 10px;
     -webkit-border-radius:10px;
     -moz-border-radius:10px;
-    border-radius:10px;
+    border-radius:10px; 
+    /* position: absolute;  */
+    /* top: 100%; At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent;
+    opacity: 0;
+
   }
 
   button {
@@ -124,14 +132,15 @@
     background-color:#f2aaaa;
   }
 
-  /* circle:hover{
-    cursor: pointer;
+  .circleCountry:hover{
+    fill:lightgray;
+    cursor: pointer;  
   }
 
-  path:hover{
+  .mapCountry:hover{
     fill:lightgray;
     cursor: pointer;
-  } */
+  } 
 
   .intro {
     text-align: center;

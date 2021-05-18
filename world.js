@@ -180,6 +180,7 @@ function drawMap() {
               }
           })
           .attr('id', function (d) { return d.id})
+          .attr('class', "mapCountry")
           .attr("d", path)
           .on("click", function(d) {
             if (!(d.id in allData)) {
@@ -206,8 +207,8 @@ function drawMap() {
           .call(
             d3.helper.tooltip( // toltip
               function(d,i){
-                return "<b>" + (d.country_name ? d.country_name : d.properties.name + " (No data available)") + "</b>";
-              }, false, sortValue, colorScale, colorScalePopulation
+                return d.country_name ? d.country_name : d.properties.name + " (No data available)";
+              }, false
             )
           )
 } 
@@ -421,6 +422,7 @@ function drawCircularPacking() {
     .append("circle")
       .attr("class", "node")
       .attr("id", function(d) { return d.country_code})
+      .attr("class", "circleCountry")
       .attr("r", function(d){ 
         if (sortValue === "totalMsw") {
           return size(d.total_msw ? d.total_msw : 0)
@@ -443,6 +445,7 @@ function drawCircularPacking() {
       .on("mousemove", mousemove)
       .on("mouseleave", mouseleave)
       .on("click", function(d) {
+        console.log(d)
         if (selectedCountryCircle !== null && selectedCountryCircle.country_code === d.country_code) {
           d3.select(this)
           .style("fill", color(d.region_name));
@@ -490,8 +493,8 @@ function drawCircularPacking() {
             .on("end", dragended))
 
       .call(d3.helper.tooltip( // toltip
-        function(d,i){ return "<b>" + d.country_name + "</b>";
-            }, true, sortValue, color, color
+        function(d,i){ return d.country_name;
+            }, true
       ))
 
 
