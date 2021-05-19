@@ -39,42 +39,54 @@ h2 {
     font-size: 16px;
     color: white;
 }
+
+h3 {
+    margin-top: 0px;
+}
 </style>
 
 <body>
-    <button id="backPage" onclick="handleBackPageClick()">&#8592; Explore Global Waste</button>
     <div id='wrapper'>
         <h1>The State of Waste in the States</h1>
-        <div id='side_bar' >
-            <!-- info box for datavis  -->
-            <div id='title_viz_instruct_text'>About:</div>
-            <div class='viz_instruct_text'> The United States is the 3rd largest producer of trash in the world! This tool is to help you visualize how many tons of trash are being hauled to landfills in each state. To visualize how much trash is being produced per minute, search a state below.  You can click to measure the trash in garbage bins or dumpsters.The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.</div>
-  
-        <!-- input box for state search -->
-            <div id='state_search_container' class='row'>
-                <input id='state_search_box' type="text" placeholder="State" aria-describedby="sizing-addon2">
-                <input id = "state_search_submit" type = "submit">  
+        <!-- info box for datavis  -->
+        <div id = 'context'>
+            <div id = "about-project">
+                <div id='title_viz_instruct_text'>About:</div>
+                <div class='viz_instruct_text'> The United States is the 3rd largest producer of trash in the world! This tool is to help you visualize how many tons of trash are being hauled to landfills in each state. To visualize how much trash is being produced per minute, search a state below.  You can click to measure the trash in garbage bins or dumpsters.The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.</div>    
             </div>
-            <div id="trash_legend">
-                <div id="garbage_bin" class="row">
-                    <a href = '#'><img id= "legend_img" onclick="image_out()" src= "images/trash.svg" alt= "standard garbage bin"></a>
-                    <p> Garbage Bin</p>
-                    <p> 0.02 ton </p>
+            <!-- input box for state search -->
+            <div id='state_search_container' class='row'>
+                <div id = 'search_bar'>
+                    <input id='state_search_box' type="text" placeholder="State" aria-describedby="sizing-addon2">
+                    <input id = "state_search_submit" type = "submit"> 
                 </div>
-                <div id="dumpster" class="row">
-                    <a href = '#'><img id= "dumpster_img" onclick="dumpster_out()" src= "images/dumpster.svg" alt= "standard dumpster"></a>
-                    <p>Dumpster</p>
-                    <p> 0.6 ton  </p>
-                </div>
-            </div> 
+                <div id="trash_legend">
+                    <div id="garbage_bin" class="row">
+                        <a href = '#'><img id= "legend_img" onclick="image_out()" src= "images/trash.svg" alt= "standard garbage bin"></a>
+                        <p> Garbage Bin</p>
+                        <p> 0.02 ton </p>
+                    </div>
+                    <div id="dumpster" class="row">
+                        <a href = '#'><img id= "dumpster_img" onclick="dumpster_out()" src= "images/dumpster.svg" alt= "standard dumpster"></a>
+                        <p>Dumpster</p>
+                        <p> 0.6 ton  </p>
+                    </div>
+                </div> 
+            </div>
         </div>
         
+        <br>
+        <br>
         <!-- TRASH DUMP ZONE -->
+        <div id ="landfill_zone">
+            <img id = "warning" src ="images/warning.png">
+            <h3 id ="landfill_zone_title"> Entering Landfill Zone </h3>
+            <img id = "warning" src ="images/warning.png">
+        </div>
         <div id='trash_dump_container' display="block">
             <div id="svg_id"></div>
         </div>
     </div>  
-    <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </div>
 
     <!-- <p id = "datacite" style= "font-size: 11px;" text-align="center">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p> -->
@@ -221,7 +233,7 @@ function image_out () {
     var listStatement = document.createElement("h2");
     var listItem = document.createElement("div");
     // Adds trash bins based on number count!
-    let num_trash_cans = trash_cans_min >= 300 ? trash_cans_sec : trash_cans_min;
+    let num_trash_cans = trash_cans_min >= 200 ? trash_cans_sec : trash_cans_min;
     console.log(num_trash_cans);
     for(i = 0; i < num_trash_cans; i++){
         listItem.innerHTML += bins.outerHTML;  
@@ -245,7 +257,7 @@ function dumpster_out() {
     var UserSearchBoxSelection = document.getElementById('state_search_box').value;
     // 1 ton = 2000 pounds
     // max weight for 1 dumpster is 500 lbs = 4 bins per ton
-    var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+    // var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
     var dumpsters_sec = parseInt(landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 4);
 
     // listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <b>" + dumpsters_min + "</b> <b>dumpsters of garbage a minute!</b>";
@@ -261,16 +273,13 @@ function dumpster_out() {
     var listItem = document.createElement("div");
 
     // loop for adding dumpsters based on dumpsters_min
-    let num_dumpsters = dumpsters_min >= 50 ? dumpsters_sec : dumpsters_min;
-    for(i = 0; i < dumpsters_min; i++){
-        listItem.innerHTML += dumpster.outerHTML;  
+    // let num_dumpsters = dumpsters_min >= 30 ? dumpsters_sec : dumpsters_min;
+    for(i = 0; i < dumpsters_sec; i++){
+        listItem.innerHTML += dumpster.outerHTML; 
     }
-    if (num_dumpsters == dumpsters_min) {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <b>" + dumpsters_min + " full dumpsters every minute!</b>";
-        }
-        else {
-            listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <strong>" + dumpsters_sec + "</strong> full dumpsters every second!</strong>";
-        };
+    listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <strong>" + dumpsters_sec + "</strong> full dumpsters every second!</strong>";
+
+    console.log(dumpsters_sec)
     document.getElementById("trash_dump_container").appendChild(listStatement);
     document.getElementById("trash_dump_container").appendChild(listItem);
 };

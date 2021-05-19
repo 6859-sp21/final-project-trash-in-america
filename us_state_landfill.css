@@ -28,7 +28,9 @@ h4 {
 }
 
 /* DROPDOWN MENU */
-
+.ui-autocomplete {
+  width: 120px;
+}
 #ui-menu-item {
   border: 1px solid #d4d4d4;
   /* border-bottom: none;
@@ -51,6 +53,7 @@ h4 {
 }
 .ui-helper-hidden-accessible {
   height: 20px;
+  width: 100px;
 }
 
 #side_bar{
@@ -83,8 +86,8 @@ h4 {
   /* the instructions for the visualization should
   look like the input gene list text title*/
 .viz_instruct_text{
-    width:99%;
-    margin: 0 auto;
+    width:80%;
+    /* margin: 0 auto; */
     color:#333;
     text-align: left;
     margin-top:10px;
@@ -95,10 +98,15 @@ h4 {
 
 /*container for state search box*/
 #state_search_container{
-    margin-top: 20px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
 }
 
-
+#search_bar {
+  width: 300px;
+  margin-right: 10px;
+}
 /* GARBAGE LEGEND */
 #trash_legend {
   display: flex;
@@ -128,45 +136,37 @@ h4 {
   margin: 5px;
 }
 
-/* HUMAN HEIGHT INDEX */
-#human-height-index {
+/* CONTEXT  */
+#context {
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
-}
-#human1 {
-  text-align: center;
-  margin: 5px;
 }
 
-#human2{
-  text-align: center;
-  margin: 5px;
-  vertical-align: bottom;
+#about-project {
+  width: 50%;
 }
 
-#black-man {
-  height: 180px;
-}
-
-#white-woman {
-  height: 150px;
-  vertical-align: bottom;
-}
-
+/* THE LANDFILL ZONE */
 #trash_dump_container{
   display: block;
   border-style: solid;
   border-width: 3px;
   border-color: #f5f5f5;
-  margin-top: 30px;
-  margin-left: 260px;
-  padding-left: 20px;
-  height: 85vh;
+  margin-top: 10px;
+  height: 100vh;
   background-color: #372223;
-  opacity: 69%;
 }
 
+#landfill_zone {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+#warning {
+  height: 20px;
+}
 /* AUTOCOMPLETE STYLING */
 /*the container must be positioned relative:*/
 #state_search_box {
@@ -250,7 +250,7 @@ ul.ui-autocomplete {
 .ui-helper-hidden-accessible {
   font-size: 14px;
   padding-left: 10px;
-  width: 245px;
+  width: 100px;
 }
 
 /* STYLING FOR THE DUMPING ZONE  */
