@@ -33,6 +33,7 @@ body {
 
 #selections {
   display: none;
+  text-align: center;
 }
 
 #zero {
@@ -43,13 +44,15 @@ body {
 #first {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: space-around;
 }
 
 #second {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: space-around;
 }
 
 #list {

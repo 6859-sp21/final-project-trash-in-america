@@ -292,8 +292,8 @@ function clickedCircle(d) {
 
   document.getElementById('first').scrollIntoView({
     behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
+    // block: 'center',
+    // inline: 'center'
   });
 }
 
@@ -670,6 +670,7 @@ function drawCountryInfoChart() {
     .attr("height", barGraphHeight)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  chart.selectAll("*").remove()
 
   d3.select('#countryInfoChart').append("div").attr('class', 'barTooltip')
   
@@ -679,12 +680,9 @@ function drawCountryInfoChart() {
     alert("Please select some countries on the map to compare")
     return
   }
-  document.getElementById('countryInfoChart').scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
-  });
-  chart.selectAll("*").remove().transition().duration(1500)
+  console.log("scrolling")
+
+  console.log("done scroll")
   document.getElementById('selections').style.display = 'block';
   sortValue = document.getElementById("selectSort").value
   numberValue = document.getElementById("selectNumber").value
@@ -822,6 +820,12 @@ function drawCountryInfoChart() {
     .attr("transform", "translate(-68," +  ((h+margin.bottom)/2+25) + ") rotate(-90)")
     .text("Total Waste (TONS) per person");
   }
+
+  document.getElementById('barTitle').scrollIntoView({ // SCROLL THIS BAR GRAPH INTO VIEW PLEASE
+    behavior: 'smooth',
+    // block: 'center',
+    // inline: 'center'
+  });
 
   ///////////////////////
   // Title
