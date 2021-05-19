@@ -9,7 +9,7 @@ A lot of waste that could go to compost or recyclables end up in landfill becaus
 
 Paper link: https://github.com/6859-sp21/final-project-trash-in-america/blob/main/final/FinalPaper.pdf
 
-Video link:
+Video link: https://youtu.be/qWDVk8_4spY
 
 Work breakdown:
 
