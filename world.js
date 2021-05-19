@@ -178,7 +178,7 @@ function drawMap() {
       legend.scale(colorScale).labelFormat(d3.format(".2s"))
 
     } else {
-      legend.scale(colorScalePopulation)
+      legend.scale(colorScalePopulation).labelFormat(d3.format(".1f"))
     }
         // .scale(colorScale);
     svg.select(".mapLegendThreshold")
@@ -333,7 +333,6 @@ function zoomOnCountry(d) {
   selection = "path#"+d.country_code
   d = null
   d3.select(selection).attr("class", function (datum) { d = datum})
-  console.log(d)
   var bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
@@ -341,7 +340,6 @@ function zoomOnCountry(d) {
       y = (bounds[0][1] + bounds[1][1]) / 2,
       scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
       translate = [width / 2 - scale * x, height / 2 - scale * y];
-  console.log(translate)
   svg.transition()
       .duration(2000)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ) 
@@ -617,7 +615,7 @@ function drawCircularPacking() {
 
     var legendSize = d3.legendSize()
     .scale(size)
-    .labelFormat(d3.format(".1s"))
+    .labelFormat(d3.format(".2s"))
     // .labels(function (d) { 
     //   console.log(d.generatedLabels[d.i])
     //   return abbreviateNumber(d.generatedLabels[d.i])
@@ -635,6 +633,7 @@ function drawCircularPacking() {
 
     var legendSize = d3.legendSize()
     .scale(sizePopulation)
+    .labelFormat(d3.format(".1f"))
     .shape('circle')
     .shapePadding(25)
     .labelOffset(18)
@@ -758,7 +757,6 @@ function drawCountryInfoChart() {
         }
       })
       .on("mouseover", function(d){
-        console.log("hi")
         let tooltipText = "<u>" + d.country_name +"</u>:"
                 + "<br><i class='far fa-trash-alt'></i>: " + d.total_msw.toLocaleString() + " tons "
                 + "<br><i class='fas fa-users'></i>: " + d.population.toLocaleString()  + " people"
@@ -809,7 +807,7 @@ function drawCountryInfoChart() {
 
   } else {
     chart.append("g")
-    .call(d3.axisLeft(yPopulation));
+    .call(d3.axisLeft(yPopulation).tickFormat(d3.format(".1f")));
 
     chart
     .append("text")
@@ -867,7 +865,10 @@ var circleData = []
 d3.queue()
     .defer(d3.json, "https://raw.githubusercontent.com/enjalot/wwsd/master/data/world/world-110m.geojson")
     .defer(d3.csv, "data_resources/country_level_data.csv", function(d) { 
-      let country_value = d.total_msw_total_msw_generated_tons_year ? parseInt(d.total_msw_total_msw_generated_tons_year) : 0
+      if (!d.total_msw_total_msw_generated_tons_year) {
+        return
+      }
+      let country_value = d.total_msw_total_msw_generated_tons_year ? parseInt(d.total_msw_total_msw_generated_tons_year) : 1
       // country_value = Math.log(country_value)
       let country_code = d.iso3c
       let population = d.population_population_number_of_people ? parseInt(d.population_population_number_of_people) : 1
