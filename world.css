@@ -34,6 +34,7 @@ body {
 #selections {
   display: none;
   text-align: center;
+  background-color: #eff8ff;
 }
 
 #zero {
@@ -206,4 +207,12 @@ button {
   text-align: center;
   align-items: center;
   justify-content: center;
+}
+
+#circleContainerWithArrow {
+  background-color: #eff8ff;
+}
+
+#mapContainWithArrow {
+  background-color: #fffcfc;
 }

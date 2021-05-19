@@ -127,7 +127,6 @@ var colorScale = d3.scaleQuantile()
     .range(["#ffdfd3", "#fec8d8", "#d291bc", "#957dad"])
     // .range(["#ffdfd3", "#fec8d8", "#d291bc", "#957dad"])
   // .range(["white", "pink", "red"])
-console.log(d3.schemePuBuGn)
 var colorScalePopulation = d3.scaleQuantile()
 // var colorScalePopulation = d3.scaleLinear()
 
@@ -680,9 +679,6 @@ function drawCountryInfoChart() {
     alert("Please select some countries on the map to compare")
     return
   }
-  console.log("scrolling")
-
-  console.log("done scroll")
   document.getElementById('selections').style.display = 'block';
   sortValue = document.getElementById("selectSort").value
   numberValue = document.getElementById("selectNumber").value
@@ -693,7 +689,7 @@ function drawCountryInfoChart() {
     countries_sorted.sort(function(a,b) { return b.total_per_person - a.total_per_person; }) 
   }
   data = countries_sorted
-  console.log(data)
+  // console.log(data)
   barMaxTotal = 0;
   barMaxPopulationTotal = 0;
   data.forEach(d => {
@@ -904,10 +900,10 @@ function ready(error, topo) {
     })
     circleData = circleData.filter(c => topoCountries.has(c.country_code)) // DO NOT INCLUDE CIRCLES FOR COUNTRIES NOT ON THE MAP
     // Draw the map
-    console.log(minTotal)
-    console.log(maxTotal)
-    console.log(minPerPerson)
-    console.log(maxPerPerson)
+    // console.log(minTotal)
+    // console.log(maxTotal)
+    // console.log(minPerPerson)
+    // console.log(maxPerPerson)
     drawMap()
     drawCircularPacking()
 }
