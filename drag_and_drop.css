@@ -39,7 +39,6 @@ p {
 .explanation {
   font-size: 16px;
   margin-top: 20px;
-  color: white;
 }
 
 .explanation2 {
@@ -65,10 +64,7 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: #e1f1dd; */
-  /* background-color: #1F0303; */
-  background-color: #372223;
-  opacity: 69%;
+  background-color: #e1f1dd;
 }
 
 .unsorted-region {
