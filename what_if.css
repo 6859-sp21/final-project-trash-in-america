@@ -10,6 +10,12 @@ p {
   margin-bottom: 0px;
 }
 
+h1 {
+  font-family: "Open Sans", sans-serif;
+  font-size: 40px;
+  text-align: center;
+}
+
 h2 {
   font-size: 20px;
   width: 50%;
@@ -86,6 +92,7 @@ li a:hover {
 }
 
 #bulldozer-fact {
+  margin-bottom: 30px;
   width: 100%;
 }
 
