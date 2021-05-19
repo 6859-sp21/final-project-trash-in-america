@@ -194,3 +194,7 @@ button {
   justify-content: left;
   text-align: left;
 }
+
+#mapArrowContainer {
+  align-items: center;
+}

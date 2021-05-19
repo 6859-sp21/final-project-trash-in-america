@@ -80,6 +80,9 @@ window.onload = function () {
   var dragDropView = document.getElementById("dragDropView");
   var transitionView = document.getElementById("transitionView");
   var worldView = document.getElementById("worldView");
+  var barView = document.getElementById("countryInfoChart");
+  var selectionsDropDown = document.getElementById("selections");
+  var mapView = document.getElementById("first");
   var whatIfView = document.getElementById("whatIfView");
   var reviewView = document.getElementById("reviewView");
 
@@ -104,7 +107,12 @@ window.onload = function () {
   }
 
   upFromWhatIf.onclick = function goToWhatIf() {
-    worldView.scrollIntoView({ behavior: "smooth" });
+    let showMap = window.getComputedStyle(selectionsDropDown).display === "none" // show map if not showing bar
+    if (showMap) { // if no bar view, scroll to map view
+      mapView.scrollIntoView({ behavior: "smooth" });
+    } else {
+      barView.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   downFromWhatIf.onclick = function goToWhatIf() {

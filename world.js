@@ -39,6 +39,12 @@ window.onclick = function (event) {
 
 /************* DATA NOTE MODAL STUFF STARTS***************/ 
 
+d3.select("#circleToMap").on('click', function () {
+  document.getElementById('first').scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'center'
+  });})
 
 d3.select("#mapToCircle").on('click', function () {
   document.getElementById('circularPacking').scrollIntoView({
@@ -99,7 +105,7 @@ var svg = d3.select(".map"),
     width = +svg.attr("width"),
     height = +svg.attr("height");    
 var countries_g = svg.append("g").attr("class", "countries")
-var legend_g = svg.append("g").attr("class", "mapLegendThreshold").attr("transform", "translate(700,20)");
+var legend_g = svg.append("g").attr("class", "mapLegendThreshold").attr("transform", "translate(750,20)");
 var zoom = d3.zoom()
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
@@ -612,12 +618,12 @@ function drawCircularPacking() {
     .shape('circle')
     .shapePadding(25)
     .labelOffset(18)
-    .orient('vertical');
+    .orient('horizontal');
   } else {
     g.append("text")
     .attr("class", "caption")
-    // .attr("x", -15)
-    // .attr("y", -10)
+    .attr("x", -15)
+    .attr("y", -10)
     .text("Circle Size (TONS per person)");
 
     var legendSize = d3.legendSize()
