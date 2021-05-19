@@ -426,6 +426,9 @@ function drawCircularPacking() {
     // Tooltip
     //   .style("opacity", 0)
   }
+
+  circleVis.append("div").innerhtml = "hello"
+
   var elemEnter = 
     circleVis.append("g")
       .selectAll("circle")
@@ -635,13 +638,22 @@ var barGraphHeight = 500
 var w = barGraphWidth - margin.left - margin.right;
 var h = barGraphHeight - margin.top - margin.bottom;
 
-var chart = d3.select('#countryInfoChart').append("svg")
-  .attr("width", barGraphWidth)
-  .attr("height", barGraphHeight)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+// var chart = d3.select('#countryInfoChart').append("svg")
+//   .attr("width", barGraphWidth)
+//   .attr("height", barGraphHeight)
+//   .append("g")
+//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 function drawCountryInfoChart() {
+  d3.select('#countryInfoChart').selectAll('*').remove()
+  var chart = d3.select('#countryInfoChart').append("svg")
+    .attr("width", barGraphWidth)
+    .attr("height", barGraphHeight)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  d3.select('#countryInfoChart').append("div").attr('class', 'barTooltip')
+  
   document.getElementById("barToMap").style.display = "block";
   
   if (selectedCountries.length == 0) {
@@ -665,6 +677,16 @@ function drawCountryInfoChart() {
   }
   data = countries_sorted
   console.log(data)
+  barMaxTotal = 0;
+  barMaxPopulationTotal = 0;
+  data.forEach(d => {
+    if (d.total_msw>barMaxTotal) {
+      barMaxTotal = d.total_msw
+    }
+    if (d.total_per_person>barMaxPopulationTotal) {
+      barMaxPopulationTotal = d.total_per_person
+    }
+  })
 
   if (numberValue !== "all") {
     data = countries_sorted.slice(0,numberValue); 
@@ -679,11 +701,11 @@ function drawCountryInfoChart() {
       .padding(0.2);
 
   let y = d3.scaleLinear()
-      .domain([0, maxTotal*1.1])
+      .domain([0, barMaxTotal*1.1])
       .range([h, 0]);
 
   let yPopulation= d3.scaleLinear()
-      .domain([0, maxPerPerson+0.05])
+      .domain([0, barMaxPopulationTotal+0.1])
       .range([h, 0]);
 
   ///////////////////////
@@ -695,7 +717,7 @@ function drawCountryInfoChart() {
   // append the rectangles for the bar chart
   var bar = chart.selectAll(".bar").data(data)
   d3.select("barTooltip").remove()
-  var tooltip = d3.select("#countryInfoChart").append("div").attr("class", "barTooltip");
+  var tooltip = d3.select(".barTooltip");
 
   bar.enter().append("rect")
       .attr("class", "bar")
@@ -723,13 +745,22 @@ function drawCountryInfoChart() {
         }
       })
       .on("mouseover", function(d){
+        console.log("hi")
+        let tooltipText = "<u>" + d.country_name +"</u>:"
+                + "<br><i class='far fa-trash-alt'></i>: " + d.total_msw.toLocaleString() + " tons "
+                + "<br><i class='fas fa-users'></i>: " + d.population.toLocaleString()  + " people"
+                + "<br><i class='fas fa-user'></i>: " + (d.total_msw/d.population).toLocaleString() + " tons per person"
+                + "<br><i class='fas fa-user'></i>: " + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
         tooltip
           .style("left", d3.event.pageX - 50 + "px")
           .style("top", d3.event.pageY - 70 + "px")
           .style("display", "inline-block")
-          .html((d.total_msw).toLocaleString() + " tons of waste<br>population of " + (d.population.toLocaleString()));
+          .html(
+            tooltipText
+            // (d.total_msw).toLocaleString() + " tons of waste<br>population of " + (d.population.toLocaleString())
+            );
       })
-      .on("mouseleft", function(d){ tooltip.style("display", "none");});;
+      .on("mouseout", function(d){ tooltip.style("display", "none");});;
   
   bar.transition()
       .duration(1500)

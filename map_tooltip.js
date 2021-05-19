@@ -30,17 +30,16 @@ d3.helper.tooltip = function(accessor, isCircleFlag){
         .on('mousemove', function(d, i) {
             // Move tooltip
             var absoluteMousePos = d3.mouse(bodyNode);
-            tooltipDiv.style('left', (absoluteMousePos[0] + 10)+'px')
-                .style('top', (absoluteMousePos[1] - 15)+'px');
+            tooltipDiv.style('left', (absoluteMousePos[0] + 30)+'px')
+                .style('top', (absoluteMousePos[1] + 20)+'px');
             tooltipText = accessor(d, i) || '';
-            // if (isCircleFlag) {
-            //     tooltipText = d.country_name 
-            //     + d.total_msw.toLocaleString() + " tons of waste (" +  d.population.toLocaleString() + " people)"
-            //     + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
-            //     + "<br>" + d.population.toLocaleString() + " people means"
-            //     + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
-            //     + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
-            // }
+            if (isCircleFlag) {
+                tooltipText = "<u>" + d.country_name +"</u>:"
+                + "<br><i class='far fa-trash-alt'></i>: " + d.total_msw.toLocaleString() + " tons "
+                + "<br><i class='fas fa-users'></i>: " + d.population.toLocaleString() + " people"
+                + "<br><i class='fas fa-user'></i>: " + (d.total_msw/d.population).toLocaleString() + " tons per person"
+                + "<br><i class='fas fa-user'></i>: " + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
+            }
             tooltipDiv.html(tooltipText);
         })
         .on("mouseout", function(d, i){

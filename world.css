@@ -104,7 +104,9 @@
     border-style: solid;
     border-color: transparent;
     opacity: 0;
-
+    pointer-events: none;
+    text-align: center;
+    padding: 5px;
   }
 
   .barTooltip {
@@ -112,13 +114,19 @@
     display: none;
     min-width: 80px;
     height: auto;
-    background: none repeat scroll 0 0 #ffffff;
-    border-width: 1px;
+    /* background: none repeat scroll 0 0 #ffffff; */
+    background-color:rgba(0,0,0,0.5);
+    color:#fff;
+    border-width: 5px;
     border-style: solid;
-    border-color: black;  
+    border-color: transparent;
+    /* border-width: 1px;
+    border-style: solid;
+    border-color: black;   */
     border-radius:10px;   
     padding: 14px;
     text-align: center;
+    pointer-events: none;
   }
 
   button {
