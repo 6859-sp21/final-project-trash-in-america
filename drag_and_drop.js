@@ -209,7 +209,7 @@ document.getElementById("trash-test-submit").onclick = function checkSorting() {
 // https://ecology.wa.gov/recycleright#:~:text=Recycling%20helps%20reduce%20pollution%2C%20contribute,support%20local%20jobs%20and%20businesses.
 
 // Get the modal
-var modal = document.getElementById("myModal");
+var moreInfoModal = document.getElementById("myModal");
 
 // Get the button that opens the modal
 var btn = document.getElementById("trash-learn-more");
@@ -219,22 +219,22 @@ var span = document.getElementById("close");
 
 // When the user clicks on the button, open the modal
 btn.onclick = function () {
-  modal.style.display = "block";
+  moreInfoModal.style.display = "block";
   const learnDiv = document.getElementById("trash-learn-more");
   learnDiv.style.animation = "none";
 };
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
-  modal.style.display = "none";
+  moreInfoModal.style.display = "none";
 };
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
+// window.onclick = function (event) {
+//   if (event.target == moreInfoModal) {
+//     moreInfoModal.style.display = "none";
+//   }
+// };
 
 // https://www.aluminum.org/industries/production/recycling
 // https://www.greenandgrowing.org/what-if-everyone-recycled-tips/

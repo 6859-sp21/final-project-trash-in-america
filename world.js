@@ -25,8 +25,13 @@ dataCloseSpan.onclick = function () {
   dataModal.style.display = "none";
 };
 
+var moreInfoModal = document.getElementById("myModal");
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
+  if (event.target == moreInfoModal) {
+    moreInfoModal.style.display = "none";
+  }
   if (event.target == dataModal) {
     dataModal.style.display = "none";
   }

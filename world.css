@@ -1,197 +1,196 @@
 .countries {
-    fill: none;
-    stroke: #fff;
-    stroke-linejoin: round;
-  }
-  .legendThreshold {
-      font-size: 12px;
-      font-family: sans-serif;
-  }
-  .mapLegendThreshold {
-      font-size: 12px;
-      font-family: sans-serif;
-  }
-  .legendSize {
-      font-size: 12px;
-      font-family: sans-serif;
-  }
-  .swatch {
-    fill: #afb9c8;
-  }
-  .caption {
-      fill: #000;
-      text-anchor: start;
-      font-weight: bold;
-  }
-  body {
-    font-family: "Open Sans", sans-serif;
-    font-size: 16px;
-    padding: 20px;
-    scroll-behavior: smooth;
-    /* background-color: lightgray */
-  }
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+.legendThreshold {
+    font-size: 12px;
+    font-family: sans-serif;
+}
+.mapLegendThreshold {
+    font-size: 12px;
+    font-family: sans-serif;
+}
+.legendSize {
+    font-size: 12px;
+    font-family: sans-serif;
+}
+.swatch {
+  fill: #afb9c8;
+}
+.caption {
+    fill: #000;
+    text-anchor: start;
+    font-weight: bold;
+}
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  padding: 20px;
+  scroll-behavior: smooth;
+  /* background-color: lightgray */
+}
 
-  #selections {
-    display: none;
-  }
+#selections {
+  display: none;
+}
 
-  #zero {
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-  }
-  #first {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-  }
-
-  #second {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-  }
-
-  #list {
-    display: flex;
+#zero {
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-  }
-
-  #overallSelection {
-    font-size: 20px;
     text-align: center;
-  }
+}
+#first {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
-  #selectSort {
-    font-size: 20px;
-  }
+#second {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
-  #selectedText {
-    overflow: auto;
-    height: 50%;
-    padding-bottom: 20px;
-  }
+#list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-  .countryButton {
-    background-color: white; /* Green */
-    /* border: none; */
-    color: white;
-    padding: 2px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    color: black;
-    border-radius: 10px;
-    border-width: thin;
-  }
+#overallSelection {
+  font-size: 20px;
+  text-align: center;
+}
 
-  .mapTooltip{ 
-    background-color:rgba(0,0,0,0.5);
-    color:#fff;
-    -webkit-border-radius:10px;
-    -moz-border-radius:10px;
-    border-radius:10px; 
-    /* position: absolute;  */
-    /* top: 100%; At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent;
-    opacity: 0;
-    pointer-events: none;
-    text-align: center;
-    padding: 5px;
-  }
+#selectSort {
+  font-size: 20px;
+}
 
-  .barTooltip {
-    position: absolute;
-    display: none;
-    min-width: 80px;
-    height: auto;
-    /* background: none repeat scroll 0 0 #ffffff; */
-    background-color:rgba(0,0,0,0.5);
-    color:#fff;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent;
-    /* border-width: 1px;
-    border-style: solid;
-    border-color: black;   */
-    border-radius:10px;   
-    padding: 14px;
-    text-align: center;
-    pointer-events: none;
-  }
+#selectedText {
+  overflow: auto;
+  height: 50%;
+  padding-bottom: 20px;
+}
 
-  button {
-    font-size: 20px;
-    border: none;
-    padding: 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-  }
+.countryButton {
+  background-color: white; /* Green */
+  /* border: none; */
+  color: white;
+  padding: 2px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  color: black;
+  border-radius: 10px;
+  border-width: thin;
+}
 
-  .zoomButtons {
-    border-radius: 50%;
-  }
+.mapTooltip{ 
+  background-color:rgba(0,0,0,0.5);
+  color:#fff;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px; 
+  /* position: absolute;  */
+  /* top: 100%; At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  padding: 5px;
+}
 
-  #compare {
-    border-radius: 8px;
-    background-color:#a6dcef;
-  }
+.barTooltip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  /* background: none repeat scroll 0 0 #ffffff; */
+  background-color:rgba(0,0,0,0.5);
+  color:#fff;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent;
+  /* border-width: 1px;
+  border-style: solid;
+  border-color: black;   */
+  border-radius:10px;   
+  padding: 14px;
+  text-align: center;
+  pointer-events: none;
+}
 
-  #clear {
-    border-radius: 8px;
-    background-color:#f2aaaa;
-  }
+button {
+  font-size: 20px;
+  border: none;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  .circleCountry:hover{
-    fill:lightgray;
-    cursor: pointer;  
-  }
+.zoomButtons {
+  border-radius: 50%;
+}
 
-  .mapCountry:hover{
-    fill:lightgray;
-    cursor: pointer;
-  } 
+#compare {
+  border-radius: 8px;
+  background-color:#a6dcef;
+}
 
-  .intro {
-    text-align: center;
-    align-items: center;
-  }
+#clear {
+  border-radius: 8px;
+  background-color:#f2aaaa;
+}
 
-  #bulldozer {
-    width: 75%;
-    margin-left:auto;
-    margin-right:auto;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
+.circleCountry:hover{
+  fill:lightgray;
+  cursor: pointer;  
+}
 
-  .map:hover {
-    cursor: move;
-  }
+.mapCountry:hover{
+  fill:lightgray;
+  cursor: pointer;
+} 
 
-  #barToMap {
-    border-radius: 50%;
-    display: none;
-  }
+.intro {
+  text-align: center;
+  align-items: center;
+}
 
-  #dataNote {
-    font-size: 16px;
-  }
+#bulldozer {
+  width: 75%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
 
-  #data-modal {
-    justify-content: left;
-    text-align: left;
-  }
+.map:hover {
+  cursor: move;
+}
 
+#barToMap {
+  border-radius: 50%;
+  display: none;
+}
+
+#dataNote {
+  font-size: 16px;
+}
+
+#data-modal {
+  justify-content: left;
+  text-align: left;
+}
