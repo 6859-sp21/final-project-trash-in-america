@@ -16,6 +16,17 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+.goToUSADiv {
+  display: flex;
+  justify-content: center;
+}
+
+#goToUSAView {
+  font: inherit;
+  background-color: #a6dcef;
+  border-radius: 8px;
+  padding: 1rem;
+}
 
 .trash-container {
   display: flex;
