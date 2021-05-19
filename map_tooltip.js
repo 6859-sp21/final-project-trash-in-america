@@ -35,11 +35,10 @@ d3.helper.tooltip = function(accessor, isCircleFlag){
             tooltipText = accessor(d, i) || '';
             if (isCircleFlag) {
                 tooltipText = "<u>" + d.country_name +"</u>:"
-                + "<br>" + d.total_msw.toLocaleString() + " tons of waste"
-                + "<br>" + d.total_msw.toLocaleString() + " tons of trash among"
-                + "<br>" + d.population.toLocaleString() + " people<i class='far fa-users'></i>"
-                + "<br>" + (d.total_msw/d.population).toLocaleString() + " tons of trash per person"
-                + "<br>" + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
+                + "<br><i class='far fa-trash-alt'></i>: " + d.total_msw.toLocaleString() + " tons "
+                + "<br><i class='fas fa-users'></i>: " + d.population.toLocaleString() + " people"
+                + "<br><i class='fas fa-user'></i>: " + (d.total_msw/d.population).toLocaleString() + " tons per person"
+                + "<br><i class='fas fa-user'></i>: " + Math.round((2000*d.total_msw/d.population)).toLocaleString() + " lbs per person"
             }
             tooltipDiv.html(tooltipText);
         })
