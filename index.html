@@ -323,37 +323,47 @@
           />
         </div>
         <br><br>
-        <div class="arrow-container">
-          <img
-            class="arrows"
-            id="mapToCircle"
-            src="./images/angle-up.svg"
-            draggable="false"
-          />
-        </div>
-        <div id="first">
-          <br><br>
-            <div>
+        <div id="mapContainWithArrow">
+          <div class="arrow-container">
+            <img
+              class="arrows"
+              id="mapToCircle"
+              src="./images/angle-up.svg"
+              draggable="false"
+            />
+          </div>
+          <div id="first">
+            <br><br>
+              <div>
+                
+                <!-- <button class="zoomButtons" id="mapToCircle"><i class="far fa-arrow-alt-circle-up"></i></button> -->
+                <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                <button class="zoomButtons" id="zoom-reset">Reset</button><br>
+                <svg class="map" width="1000" height="800"></svg>
+              </div>
               
-              <!-- <button class="zoomButtons" id="mapToCircle"><i class="far fa-arrow-alt-circle-up"></i></button> -->
-              <button class="zoomButtons" id="zoom-in"><i class="fas fa-search-plus"></i></button>
-              <button class="zoomButtons" id="zoom-out"><i class="fas fa-search-minus"></i></button>
-              <button class="zoomButtons" id="zoom-reset">Reset</button><br>
-              <svg class="map" width="1000" height="800"></svg>
-            </div>
-            
-
-            <div id="list">Click on some countries to compare them!<div id="selectedText"></div>
-              <button id="compare" onclick="drawCountryInfoChart()">Compare Countries</button>
-              <br>
-              <button id="clear" onclick="clearList()">Clear List</button>
-            </div>
+  
+              <div id="list">Click on some countries to compare them!<div id="selectedText"></div>
+                <button id="compare" onclick="drawCountryInfoChart()">Compare Countries</button>
+                <br>
+                <button id="clear" onclick="clearList()">Clear List</button>
+              </div>
+          </div>
+          <div class="arrow-container">
+            <img
+              class="arrows"
+              id="down-from-world"
+              src="./images/angle-down.svg"
+              draggable="false"
+            />
+          </div>
         </div>
 
-        <div>
+        <div id="selections">
           
           <!-- <button class="zoomButtons" id="barToMap"><i class="far fa-arrow-alt-circle-up"></i></button> -->
-          <div id="selections">
+          <div >
             <div class="arrow-container">
               <img
                 class="arrows"
@@ -375,16 +385,19 @@
           <div id="countryInfoChart">
             <div class="barTooltip"></div>
           </div>
+          
+          <div class="arrow-container">
+            <img
+              class="arrows"
+              id="barToWhatIf"
+              src="./images/angle-down.svg"
+              draggable="false"
+            />
+          </div>
+          
         </div>
       <!-- HELEN SECTION 2 END -->
-        <div class="arrow-container">
-          <img
-            class="arrows"
-            id="down-from-world"
-            src="./images/angle-down.svg"
-            draggable="false"
-          />
-        </div>
+        
     </div>
 
     <div class="what-if-outer" id="whatIfView">

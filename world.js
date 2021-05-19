@@ -40,24 +40,32 @@ window.onclick = function (event) {
 /************* DATA NOTE MODAL STUFF STARTS***************/ 
 
 d3.select("#circleToMap").on('click', function () {
-  document.getElementById('first').scrollIntoView({
+  document.getElementById('mapContainWithArrow').scrollIntoView({
     behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
+    // block: 'center',
+    // inline: 'center'
   });})
 
 d3.select("#mapToCircle").on('click', function () {
-  document.getElementById('circularPacking').scrollIntoView({
+  document.getElementById('worldView').scrollIntoView({
     behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
+    // block: 'center',
+    // inline: 'center'
   });})
 
 d3.select("#barToMap").on('click', function () {
-  document.getElementById('first').scrollIntoView({
+  document.getElementById('mapContainWithArrow').scrollIntoView({
     behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
+    // block: 'center',
+    // inline: 'center'
+  });
+})
+
+d3.select("#barToWhatIf").on('click', function () {
+  document.getElementById('whatIfView').scrollIntoView({
+    behavior: 'smooth',
+    // block: 'center',
+    // inline: 'center'
   });
 })
 
