@@ -28,11 +28,11 @@
     <h1>Exploration of Waste Management</h1>
     <p>By: Helen Li, Kalyn Bowen, Yuji Chan</p>
     <div class="drag-drop-container full-screen" id="dragDropView">
-      <p class="explanation">
+      <p class="explanation"><b>
         Drag each trash item in the box below to its appropriate bin.
         <br />
         Once done, click on the "Check" button to see how you did in sorting
-        these trash items!
+        these trash items!</b>
       </p>
       <div class="unsorted-region">
         <div class="trash-container">
@@ -301,7 +301,8 @@
             <div class="modal-content">
               <span id="close-data-modal">&times;</span>
               <p>
-                The dataset for these global waste visualizations are from the world bank. Unfortunately, this dataset is not 100% complete, as 
+                The dataset for these global waste visualizations are from the <a href="https://datacatalog.worldbank.org/dataset/what-waste-global-database">world bank database</a>. 
+                Unfortunately, this dataset is not 100% complete, as 
                 it does not include all countries that exist in the world. For example, we are missing countries: <b>Antartica, North Korea, Nothern Cyrprus, Somaliland, South Sudan, Western Sahara, etc.</b>
                 You will also not be able to select these countries on the map. Moreover, to allow for better integration with
                 our map visualization, we only include circles for countries recognized by the topography map.
@@ -311,6 +312,9 @@
         </div>
 
         <br><br><br>
+        <div class="globalTitles"><h3>A Circular View of Global Waste (2018)</h3>
+          <h5>Hover over or click on a circle to explore more!</h5>
+        </div>
         <div id="zero">
           <div id="circularPacking"></div>
         </div>
@@ -332,6 +336,10 @@
               draggable="false"
             />
           </div>
+          <br><br>
+          <div class="globalTitles"><h3>A World View of Global Waste (2018)</h3>
+            <h5>Select multiple countries here to compare them!</h5>
+          </div>
           <div id="first">
             <br><br>
               <div>
@@ -344,7 +352,7 @@
               </div>
               
   
-              <div id="list">Click on some countries to compare them!<div id="selectedText"></div>
+              <div id="list"><b style="text-align: center;">So Far, You've Selected...</b><div id="selectedText"></div>
                 <button id="compare" onclick="drawCountryInfoChart()">Compare Countries</button>
                 <br>
                 <button id="clear" onclick="clearList()">Clear List</button>
@@ -372,14 +380,15 @@
                 draggable="false"
               />
             </div>
-            Show Top <select name="number" id="selectNumber" onchange="onNumberChange()">
-              <option value="3">3</option>
-              <option value="5" selected>5</option>
-              <option value="10">10</option>
-              <!-- <option value="all">All</option> -->
-            </select>
-            Countries That You Selected With Most Waste
-
+            <div class="globalTitles"><h3>A Bar Comparison View of Global Waste (2018)</h3>
+              <h5>Choose To Show The Top <select name="number" id="selectNumber" onchange="onNumberChange()">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <!-- <option value="all">All</option> -->
+              </select>
+              Worst Countries From The Ones You Selected</h5>
+            </div>
           </div>
           <br>
           <div id="countryInfoChart">
