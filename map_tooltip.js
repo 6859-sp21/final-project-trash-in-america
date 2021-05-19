@@ -3,7 +3,6 @@ d3.helper = {};
 
 d3.helper.tooltip = function(accessor, isCircleFlag){
     return function(selection){
-        console.log(selection)
         var tooltipDiv;
         var bodyNode = d3.select('body').node();
         selection
@@ -19,8 +18,6 @@ d3.helper.tooltip = function(accessor, isCircleFlag){
                 .style('top', (absoluteMousePos[1] - 15)+'px')
                 .style('position', 'absolute') 
                 .style('z-index', 300000);
-            // console.log( (absoluteMousePos[0] + 10))
-            // console.log((absoluteMousePos[1] - 15))
             // Add text using the accessor function
             var tooltipText = accessor(d, i) || '';
             // Crop text arbitrarily
