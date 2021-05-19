@@ -7,7 +7,7 @@ https://6859-sp21.github.io/final-project-trash-in-america/
 
 A lot of waste that could go to compost or recyclables end up in landfill because of people’s negligence. In this project, our group hopes to provide a visualization tool that educates the users about waste management for more responsible waste disposal by using interactive tools and putting the current state of waste into perspective. In addition, we would like to demonstrate what impact responsible trash disposal could have in the future. Furthermore, we want the audience to form small but effective habits of managing trash as the impact of mismanaged trash has a huge potential to harm the environment, wildlife and humans.
 
-Paper link:
+Paper link: https://github.com/6859-sp21/final-project-trash-in-america/blob/main/final/FinalPaper.pdf
 
 Video link:
 
