@@ -104,7 +104,7 @@
     border-style: solid;
     border-color: transparent;
     opacity: 0;
-
+    pointer-events: none;
   }
 
   .barTooltip {
@@ -119,6 +119,7 @@
     border-radius:10px;   
     padding: 14px;
     text-align: center;
+    pointer-events: none;
   }
 
   button {

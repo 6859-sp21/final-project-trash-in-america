@@ -426,6 +426,9 @@ function drawCircularPacking() {
     // Tooltip
     //   .style("opacity", 0)
   }
+
+  circleVis.append("div").innerhtml = "hello"
+
   var elemEnter = 
     circleVis.append("g")
       .selectAll("circle")
@@ -695,7 +698,7 @@ function drawCountryInfoChart() {
   // append the rectangles for the bar chart
   var bar = chart.selectAll(".bar").data(data)
   d3.select("barTooltip").remove()
-  var tooltip = d3.select("#countryInfoChart").append("div").attr("class", "barTooltip");
+  var tooltip = d3.select(".barTooltip");
 
   bar.enter().append("rect")
       .attr("class", "bar")
@@ -723,13 +726,14 @@ function drawCountryInfoChart() {
         }
       })
       .on("mouseover", function(d){
+        console.log("hi")
         tooltip
           .style("left", d3.event.pageX - 50 + "px")
           .style("top", d3.event.pageY - 70 + "px")
           .style("display", "inline-block")
           .html((d.total_msw).toLocaleString() + " tons of waste<br>population of " + (d.population.toLocaleString()));
       })
-      .on("mouseleft", function(d){ tooltip.style("display", "none");});;
+      .on("mouseout", function(d){ tooltip.style("display", "none");});;
   
   bar.transition()
       .duration(1500)
