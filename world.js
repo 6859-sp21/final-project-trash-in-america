@@ -607,12 +607,12 @@ function drawCircularPacking() {
     .shape('circle')
     .shapePadding(25)
     .labelOffset(18)
-    .orient('horizontal');
+    .orient('vertical');
   } else {
     g.append("text")
     .attr("class", "caption")
-    .attr("x", -15)
-    .attr("y", -10)
+    // .attr("x", -15)
+    // .attr("y", -10)
     .text("Circle Size (TONS per person)");
 
     var legendSize = d3.legendSize()
