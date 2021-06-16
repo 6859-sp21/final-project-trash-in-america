@@ -1,0 +1,267 @@
+/* TEXT STYLING */
+p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+h1 {
+    font-size: 45px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.h2 .b
+{
+  font-size: 10px;
+  color: white;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+/*try to get auto height*/
+#wrapper{
+    height:95vh;
+    flex-direction: row;
+}
+
+/* DROPDOWN MENU */
+.ui-autocomplete {
+  width: 120px;
+}
+#ui-menu-item {
+  border: 1px solid #d4d4d4;
+  /* border-bottom: none;
+  border-top: none; */
+  z-index: 99;
+  color: black;
+  width: 80px;
+}
+
+.ul {
+  width: 150px;
+}
+.ui-id-1 {
+  left: 0;
+}
+
+.ui-corner-all {
+  color: black;
+  width: 150px;
+}
+.ui-helper-hidden-accessible {
+  height: 20px;
+  width: 100px;
+}
+
+#side_bar{
+    display: block;
+    padding-left: 10px;
+    border-left: 0px;
+    /*border-style: solid;*/
+    /*border-width: 5px;*/
+    /*border-color: #f5f5f5;*/
+    /*set up fixed positions*/
+    position:absolute;
+    width:245px;
+  }
+
+/*title for instructions*/
+#title_viz_instruct_text{
+    width:99%;
+    margin: 0 auto;
+    color:#333;
+    text-align: left;
+    margin-top: 5px;
+    padding-top:5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    /*clear float left*/
+    clear:both;
+  }
+  
+  /* the instructions for the visualization should
+  look like the input gene list text title*/
+.viz_instruct_text{
+    width:80%;
+    /* margin: 0 auto; */
+    color:#333;
+    text-align: left;
+    margin-top:10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+/*container for state search box*/
+#state_search_container{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+#search_bar {
+  width: 300px;
+  margin-right: 10px;
+}
+/* GARBAGE LEGEND */
+#trash_legend {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+#garbage_bin {
+  display: block;
+  flex-direction: row;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+}
+#dumpster {
+  margin-left: 15px;
+  text-align: center;
+}
+#legend_img {
+  height: 80px;
+  text-align: center;
+  margin: 5px;
+}
+
+#dumpster_img {
+  height: 80px;
+  text-align: center;
+  margin: 5px;
+}
+
+/* CONTEXT  */
+#context {
+  display: flex;
+  flex-direction: row;
+}
+
+#about-project {
+  width: 50%;
+}
+
+/* THE LANDFILL ZONE */
+#trash_dump_container{
+  display: block;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #f5f5f5;
+  margin-top: 10px;
+  height: 100vh;
+  background-color: #372223;
+}
+
+#landfill_zone {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+#warning {
+  height: 20px;
+}
+/* AUTOCOMPLETE STYLING */
+/*the container must be positioned relative:*/
+#state_search_box {
+  position: relative;
+  display: inline-block;
+  width:150px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  margin-left: 10px;
+  border-color: #d4d4d4;
+  color: rgb(0, 0, 0);
+  padding: 3px;
+}
+
+.input {
+  border-radius: 0px;
+  background: #4a4a4a;
+  border: 1px solid #a5a5a5;
+  /* height: 0 0 30px; */
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #ffffff;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+  border-style: none;
+  padding: 5px 10px 5px 10px;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  /* left: 0;
+  right: 0; */
+}
+
+ul.ui-autocomplete {
+  list-style: none; 
+  background-color: white;
+  /* margin-top: 30px; */
+  padding-top: 10px;
+  margin-left: -30px;
+  border-color: #d4d4d4;
+  /* color: rgb(0, 0, 0); */
+  /* to remove the bullets */
+}
+
+.autocomplete-items div {
+  padding: 30px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+  font-size: 14px;
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+  /* color: rgb(0, 0, 0); */
+
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: rgb(0, 0, 0);
+}
+
+.ui-helper-hidden-accessible {
+  font-size: 14px;
+  padding-left: 10px;
+  width: 100px;
+}
+
+/* STYLING FOR THE DUMPING ZONE  */
+.dumpster_spacing {
+  width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.bin_spacing {
+  width: 55px;
+  margin-left: 5px;
+  margin-right: 5px;
+}

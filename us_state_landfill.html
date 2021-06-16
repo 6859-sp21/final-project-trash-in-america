@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="us_state_landfill.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+
+html, body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    padding: 10px;
+}
+
+#backPage {
+  position: absolute;
+  right: 0px;
+  font-size: 14px;
+  width: 180px;
+  height: 40px;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  background-color: #794d93;
+  color: #f9f9f9;
+  margin-bottom: 40px;
+}
+
+p {
+    margin-bottom: 0px;
+}
+
+h2 {
+    font-size: 16px;
+    color: white;
+}
+
+h3 {
+    margin-top: 0px;
+}
+</style>
+
+<body>
+    <div id='wrapper'>
+        <h1>The State of Waste in the States</h1>
+        <!-- info box for datavis  -->
+        <div id = 'context'>
+            <div id = "about-project">
+                <div id='title_viz_instruct_text'>About:</div>
+                <div class='viz_instruct_text'> The United States is the 3rd largest producer of trash in the world! This tool is to help you visualize how many tons of trash are being hauled to landfills in each state. To visualize how much trash is being produced per minute, search a state below.  You can click to measure the trash in garbage bins or dumpsters.The data used in this visualization is provided by the <a href= 'https://www.epa.gov/lmop/landfill-technical-data'>EPA</a> from March 2021.</div>    
+            </div>
+            <!-- input box for state search -->
+            <div id='state_search_container' class='row'>
+                <div id = 'search_bar'>
+                    <input id='state_search_box' type="text" placeholder="State" aria-describedby="sizing-addon2">
+                    <input id = "state_search_submit" type = "submit"> 
+                </div>
+                <div id="trash_legend">
+                    <div id="garbage_bin" class="row">
+                        <a href = '#'><img id= "legend_img" onclick="image_out()" src= "images/trash.svg" alt= "standard garbage bin"></a>
+                        <p> Garbage Bin</p>
+                        <p> 0.02 ton </p>
+                    </div>
+                    <div id="dumpster" class="row">
+                        <a href = '#'><img id= "dumpster_img" onclick="dumpster_out()" src= "images/dumpster.svg" alt= "standard dumpster"></a>
+                        <p>Dumpster</p>
+                        <p> 0.6 ton  </p>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        
+        <br>
+        <br>
+        <!-- TRASH DUMP ZONE -->
+        <div id ="landfill_zone">
+            <img id = "warning" src ="images/warning.png">
+            <h3 id ="landfill_zone_title"> Entering Landfill Zone </h3>
+            <img id = "warning" src ="images/warning.png">
+        </div>
+        <div id='trash_dump_container' display="block">
+            <div id="svg_id"></div>
+        </div>
+    </div>  
+    </div>
+
+    <!-- <p id = "datacite" style= "font-size: 11px;" text-align="center">Created by: Helen Li, Kalyn Bowen and Yuji Chan.</p> -->
+
+   
+<!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-1.9.1.js"
+  integrity="sha256-e9gNBsAcA0DBuRWbm0oZfbiCyhjLrI6bmqAl5o+ZjUA="
+  crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"
+  integrity="sha256-ugED92WALymbx9ylw12aADWaCrsQysE29DyvnAv5i3w="
+  crossorigin="anonymous"></script>
+  
+<script>
+
+state_id_to_name = {
+    AL: "Alabama",
+    AK: "Alaska",
+    AS: "American Samoa",
+    AZ: "Arizona",
+    AR: "Arkansas",
+    CA: "California",
+    CO: "Colorado",
+    CT: "Connecticut",
+    DE: "Delaware",
+    DC: "District Of Columbia",
+    FL: "Florida",
+    GA: "Georgia",
+    GU: "Guam",
+    HI: "Hawaii",
+    ID: "Idaho",
+    IL: "Illinois",
+    IN: "Indiana",
+    IA: "Iowa",
+    kS: "Kansas",
+    KY: "Kentucky",
+    LA: "Louisiana",
+    ME: "Maine",
+    MD: "Maryland",
+    MA: "Massachusetts",
+    MI: "Michigan",
+    MN: "Minnesota",
+    MS: "Mississippi",
+    MO: "Missouri",
+    MT: "Montana",
+    NE: "Nebraska",
+    NV: "Nevada",
+    NH: "New Hampshire",
+    NJ: "New Jersey",
+    NM: "New Mexico",
+    NY: "New York",
+    NC: "North Carolina",
+    ND: "North Dakota",
+    OH: "Ohio",
+    OK: "Oklahoma",
+    OR: "Oregon",
+    PW: "Palau",
+    PA: "Pennsylvania",
+    PR: "Puerto Rico",
+    RI: "Rhode Island",
+    SC: "South Carolina",
+    SD: "South Dakota",
+    TN: "Tennessee",
+    TX: "Texas",
+    UT: "Utah",
+    VT: "Vermont",
+    VI: "Virgin Islands",
+    VA: "Virginia",
+    WA: "Washington",
+    WV: "West Virginia",
+    WI: "Wisconsin",
+    WY: "Wyoming"
+}
+
+function handleBackPageClick() { // handling the back button to the global page
+  url = window.location.href
+  newurl = url.split('/').slice(0,-1).join('/')+'/polar_area_chart.html'
+  window.location.href = newurl
+}
+
+/************* general GLOBAL variables here *************/
+landfill_by_state = {} //total landfills in each state (Arkansas: 4)
+
+var width = 1200, height = 600;
+barHeight = height / 2 - 40
+total_waste = 0
+continue_display = true
+
+/************* PROCESS DATA ***********/
+d3.csv("data_resources/state_landfill_mar2021.csv", function(error, data) {
+  data.forEach(d => {
+    let state_name = state_id_to_name[d.us_state]
+    let landfill = d.landfill_name
+    if (!(state_name in landfill_by_state)) {
+      landfill_by_state[state_name] = {total_waste: 0, landfills: new Array(0)};
+    } 
+    landfill_by_state[state_name]['total_waste'] += d.annual_waste_acceptance.replace(/,/g, "") ? parseInt(d.annual_waste_acceptance.replace(/,/g, "")) : 0;
+    landfill_by_state[state_name]['daily_waste'] =  (landfill_by_state[state_name]['total_waste'] / 365);
+    landfill_by_state[state_name]['hourly_waste'] = (landfill_by_state[state_name]['total_waste'] / 8760);
+    landfill_by_state[state_name]['minute_waste'] = (landfill_by_state[state_name]['hourly_waste'] / 60);
+    landfill_by_state[state_name]['secondly_waste'] = (landfill_by_state[state_name]['minute_waste'])/60;
+    
+    landfill_by_state[state_name]['landfills'].push(d);
+
+    d3.select('#state_search_box').on("keyup", function() {
+        gSearch();
+        });
+    });
+});
+
+/************* SEARCH BOX ***********/
+// jQuery-ui auto-complete;
+function gSearch() {
+    state_list = Object.keys(landfill_by_state);
+    $('#state_search_box').autocomplete({
+        source: state_list,
+        minLength: 1,      // begin auto-complete after (x) characters
+        scroll: true
+    })
+    window.search = function () {
+        var a = document.getElementById('input').value;
+    }
+}
+
+function image_out () {
+    var UserSearchBoxSelection = document.getElementById('state_search_box').value;
+    // 1 ton = 2000 pounds
+    // 31 gallons per bin = 35 lbs per bin = 57 bins per ton
+    var trash_cans_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 57);
+    var trash_cans_sec = parseInt(landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 57);
+    // creating bin imgs   
+    var bins = document.createElement('img')
+        bins.setAttribute("src", "images/trash.svg");
+        bins.setAttribute("class", "bin_spacing");
+
+    // delete all child trash cans of this parent div
+    var node= document.getElementById("trash_dump_container"); 
+    node.querySelectorAll('*').forEach(n => n.remove());
+    var listStatement = document.createElement("h2");
+    var listItem = document.createElement("div");
+    // Adds trash bins based on number count!
+    let num_trash_cans = trash_cans_min >= 200 ? trash_cans_sec : trash_cans_min;
+    console.log(num_trash_cans);
+    for(i = 0; i < num_trash_cans; i++){
+        listItem.innerHTML += bins.outerHTML;  
+    }
+    if (num_trash_cans == trash_cans_min) {
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_min + " bins of garbage a minute!</strong>";
+        }
+        else {
+            listStatement.innerHTML += document.getElementById('state_search_box').value + " produces <strong>" + trash_cans_sec + " bins of garbage every second!</strong>";
+        };
+    document.getElementById("trash_dump_container").appendChild(listStatement);
+    document.getElementById("trash_dump_container").appendChild(listItem);
+}
+
+/************* ADD IMAGES BASED ON STATE LANDFILLS NUM ***********/
+d3.select("#state_search_submit").on("click", function() {  
+    image_out();
+}); 
+
+function dumpster_out() {
+    var UserSearchBoxSelection = document.getElementById('state_search_box').value;
+    // 1 ton = 2000 pounds
+    // max weight for 1 dumpster is 500 lbs = 4 bins per ton
+    // var dumpsters_min = parseInt(landfill_by_state[UserSearchBoxSelection]['minute_waste'] * 4);
+    var dumpsters_sec = parseInt(landfill_by_state[UserSearchBoxSelection]['secondly_waste'] * 4);
+
+    // listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <b>" + dumpsters_min + "</b> <b>dumpsters of garbage a minute!</b>";
+    // creating dumpster imgs
+    var dumpster = document.createElement('img')
+        dumpster.setAttribute("src", "images/dumpster.svg");
+        dumpster.setAttribute("class", "dumpster_spacing");
+    
+    var node= document.getElementById("trash_dump_container"); 
+    node.querySelectorAll('*').forEach(n => n.remove());
+
+    var listStatement = document.createElement("h2");
+    var listItem = document.createElement("div");
+
+    // loop for adding dumpsters based on dumpsters_min
+    // let num_dumpsters = dumpsters_min >= 30 ? dumpsters_sec : dumpsters_min;
+    for(i = 0; i < dumpsters_sec; i++){
+        listItem.innerHTML += dumpster.outerHTML; 
+    }
+    listStatement.innerHTML += document.getElementById('state_search_box').value + " fills <strong>" + dumpsters_sec + "</strong> full dumpsters every second!</strong>";
+
+    console.log(dumpsters_sec)
+    document.getElementById("trash_dump_container").appendChild(listStatement);
+    document.getElementById("trash_dump_container").appendChild(listItem);
+};
+
+
+</script>
+
+</body>
+</html>
